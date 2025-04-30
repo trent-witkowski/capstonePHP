@@ -3,11 +3,58 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Book Lister - PDO (PHP Data Object)</title>
+  <title>Resumate</title>
 
-  <link rel="stylesheet" href="css/bookLister.css">
 </head>
 <body>
+    <div class="banner">
+        <h1>Resumate</h1>
+        <span><a href="login.php?pageType=login">Login/Sign up</a></span>
+    </div>
+    <div class="navDiv">
+        <table>
+            <tbody>
+<!--            This is the nav, painted by using a table-->
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td colspan="2">
+                    <span><a href="index.php">Home</a></span>
+                </td>
+                <td colspan="2">
+                    <span><a href="#">Help</a></span>
+                </td>
+<!--                TODO This may need to be hidden/changed for the business/viewing account type-->
+                <td colspan="2">
+                    <span><a href="#">Resume</a></span>
+                </td>
+                <td colspan="2">
+                    <span><a href="#">Account</a></span>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
   <h2>works</h2>
   <div class="main"><?php  // TODO - Remove the following two lines of code from
   // our production code.
@@ -56,13 +103,40 @@
             FROM User;";
 // had to quote $newBookTitle as it contains a string value
 
-  $errorMsg = 'Error fetching User infomrmation';
+  $errorMsg = 'Error fetching User information';
 
-  $user = callQuery($pdo, $query, $errorMsg)->fetchColumn();
+  $out = "Added random book. L";
+  $thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
+  $user = callQuery($pdo, $query, $errorMsg);
 
-  echo $user;
-    ?>    
+      while ($row = $user->fetch()) {
+        echo $row['userLastName'];
+      }
 
+    if (sanitizeString(INPUT_GET, 'out')) {
+
+    ?>
+<!--            HTML START-->
+      <span> <?php echo sanitizeString(INPUT_GET, 'out'); ?></span>
+<!--        HTML END-->
+    <?php
+    }
+    else {
+    ?>
+<!--            HTML START-->
+      <a href="<?= $thisPage ?>?out= <?= $out ?>">Add new book title!</a>
+<!--        HTML END-->
+    <?php }
+    // TODO
+//      check to see if user is signed in when clicking the "Get STarted!" btn.
+//      If yes they either go to user account or resume browsing depending on type of account.
+//      If the user isn't signed in, bring them to login page'.
+
+//      Maybe can put the check on the user account/browse pages and if you are not signed in then you have to sign in.
+//      This would be a security check and prevent people from accessing random pages using url.
+
+
+    ?>
 
   </div>
 </body>
