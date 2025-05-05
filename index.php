@@ -27,10 +27,10 @@
                 </td>
 <!--                TODO This may need to be hidden/changed for the business/viewing account type-->
                 <td colspan="2">
-                    <span><a href="#">Resume</a></span>
+                    <span><a href="resume.php?pageType=view">Resume</a></span>
                 </td>
                 <td colspan="2">
-                    <span><a href="userAccount.php?pageType=edit">Account</a></span>
+                    <span><a href="userAccount.php?pageType=view">Account</a></span>
                 </td>
             </tr>
             <tr>
