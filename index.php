@@ -30,7 +30,7 @@
                     <span><a href="#">Resume</a></span>
                 </td>
                 <td colspan="2">
-                    <span><a href="#">Account</a></span>
+                    <span><a href="userAccount.php?pageType=edit">Account</a></span>
                 </td>
             </tr>
             <tr>
