@@ -54,16 +54,16 @@
     $resumeUser = "Robo Cop";
     $thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
     ?>
-<!--    HTML START-->
-<!--
-    TODO Add HTML to display the resume and its details
-         Add Nav Above the h1
+    <!--    HTML START-->
+    <!--
+        TODO Add HTML to display the resume and its details
+             Add Nav Above the h1
 
 
--->
+    -->
     <h1>Viewing <?= $resumeUser?>'s Resume</h1>
     <br>
-<!--    HTML END  -->
+    <!--    HTML END  -->
     <?php
 
     if (sanitizeString(INPUT_GET, 'pageType') == 'view') {
@@ -71,12 +71,12 @@
 
         ?>
         <!--        HTML START-->
-<!--            TODO Add HTML to show the resume and its details
-                     - Additionally add buttons to allow user to edit or add
-                     - Open small textbox/form to fill out or edit resume details
+        <!--            TODO Add HTML to show the resume and its details
+                             - Additionally add buttons to allow user to edit or add
+                             - Open small textbox/form to fill out or edit resume details
 
-                 TODO Maybe remove the add feature and just amke it edit.
-                      One record per person. Means not add or delete would be needed-->
+                         TODO Maybe remove the add feature and just amke it edit.
+                              One record per person. Means not add or delete would be needed-->
         <!--        HTML END  -->
 
         <div id="userInfoMain" class="userInfo">
@@ -105,7 +105,7 @@
 
         </form>
         <!--        HTML END  -->
-    <?php
+        <?php
     }
     ?>
 </div>
