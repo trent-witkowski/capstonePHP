@@ -77,6 +77,8 @@
             <input type="submit" value="Submit" name="login">
 
         </form>
+        <br>
+        <span><a href="login.php?pageType=signUp">Don't have an Account?</a></span>
 
 <!--        HTML END  -->
 
@@ -99,16 +101,18 @@
             <br><br>
 
             <input type="submit" value="Submit" name="signUp">
+            <br>
+            <span><a href="login.php?pageType=login">Already have an Account?</a></span>
 
         </form>
 <!--        HTML END  -->
 
     <?php
     }
-    if (sanitizeString(INPUT_POST, 'loginUsername')) {
-        echo "<p>" . sanitizeString(INPUT_POST, 'loginUsername') . "</p>";
-        echo "<p>" . sanitizeString(INPUT_POST, 'loginPassword') . "</p>";
-    }
+//    if (sanitizeString(INPUT_POST, 'loginUsername')) {
+//        echo "<p>" . sanitizeString(INPUT_POST, 'loginUsername') . "</p>";
+//        echo "<p>" . sanitizeString(INPUT_POST, 'loginPassword') . "</p>";
+//    }
 
     ?>
 
