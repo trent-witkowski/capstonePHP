@@ -4,10 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-
+    <link rel="stylesheet" href="css/user.css">
 </head>
 <body>
-<h2>works</h2>
 <div class="main"><?php  // TODO - Remove the following two lines of code from
     // our production code.
     ini_set('display_errors', '1');
@@ -52,10 +51,8 @@
     // require 'dbConnect.php';
 
     $errorMsg = 'Error fetching User information';
-
-    $out = "Added random book. L";
     $thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
-    echo sanitizeString(INPUT_GET, 'pageType');
+
     if (sanitizeString(INPUT_GET, 'pageType') == 'edit') {
 
 
@@ -66,7 +63,15 @@
                    of that field to be added to the account.
                  - This should open a small text box/form the user fills in and submits
 -->
-
+        <div id="userInfoMain" class="userInfo">
+            <div id="educationDiv" class="fieldDiv">
+                <h2>Education</h2>
+                <button><img src="garbage/pencil.png" alt="Edit"></button>
+                <button><img src="garbage/plus.png" alt="Add"></button>
+            </div>
+            <h3>Institution</h3>
+            <p><span>Chippewa Valley Technical College, University of Wisconsin Eau Claire</span></p>
+        </div>
         <!--        HTML END  -->
 
         <?php
