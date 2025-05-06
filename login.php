@@ -4,9 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-
+    <link rel="stylesheet" href="css/header.css">
 </head>
 <body>
+    <div class="banner">
+        <h1>Resumate</h1>
+        <span><a href="login.php?pageType=login">Login/Sign up</a></span>
+    </div>
+    <div class="navDiv">
+        <table class="navTable">
+            <tbody>
+            <!--            This is the nav, painted by using a table-->
+            <tr>
+                <td></td>
+                <td class="navCell">
+                    <span><a href="index.php">Home</a></span>
+                </td>
+                <td class="navCell">
+                    <span><a href="help.php">Help</a></span>
+                </td>
+                <td class="navCell">
+                    <span><a href="resume.php?pageType=view">Resume</a></span>
+                </td>
+                <td colspan="2" class="navCell">
+                    <span><a href="userAccount.php?pageType=view">Account</a></span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 <h2>works</h2>
 <div class="main"><?php  // TODO - Remove the following two lines of code from
     // our production code.

@@ -1,0 +1,45 @@
+body {
+    margin: 0 auto;
+    font-family: Helvetica, sans-serif, serif;
+}
+.banner {
+    display: flex;
+    padding: 5px 5px 0 5px;
+}
+.banner h1{
+    flex: 2 0 500px;
+}
+.banner span{
+    flex: 0 0 150px;
+    align-content: start;
+    text-align: end;
+    font-size: 13px;
+}
+
+.navDiv {
+    background: cornflowerblue;
+}
+
+.navTable {
+    table-layout: fixed;
+    width: 100%;
+    border-collapse: collapse;
+}
+.navTable tr {
+    height: 20px;
+    width: 100%;
+}
+
+.navTable td {
+    width: 100px;
+}
+
+.navTable td:first-child {
+    width: 90%;
+}
+.navCell > span > a {
+    color: white;
+    text-decoration: none;
+    text-shadow: 1px 1px 1px black;
+    font-weight: 600;
+}

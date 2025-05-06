@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resumate</title>
-
+    <link rel="stylesheet" href="css/home.css">
+    <link rel="stylesheet" href="css/header.css">
 </head>
 <body>
     <div class="banner">
@@ -12,50 +13,28 @@
         <span><a href="login.php?pageType=login">Login/Sign up</a></span>
     </div>
     <div class="navDiv">
-        <table>
+        <table class="navTable">
             <tbody>
 <!--            This is the nav, painted by using a table-->
             <tr>
                 <td></td>
-                <td></td>
-                <td></td>
-                <td colspan="2">
+                <td class="navCell">
                     <span><a href="index.php">Home</a></span>
                 </td>
-                <td colspan="2">
-                    <span><a href="#">Help</a></span>
+                <td class="navCell">
+                    <span><a href="help.php">Help</a></span>
                 </td>
-<!--                TODO This may need to be hidden/changed for the business/viewing account type-->
-                <td colspan="2">
+                <td class="navCell">
                     <span><a href="resume.php?pageType=view">Resume</a></span>
                 </td>
-                <td colspan="2">
+                <td colspan="2" class="navCell">
                     <span><a href="userAccount.php?pageType=view">Account</a></span>
                 </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td colspan="2"></td>
-                <td colspan="2"></td>
-                <td colspan="2"></td>
-                <td colspan="2"></td>
-            </tr>
-            <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td colspan="2"></td>
-                <td colspan="2"></td>
-                <td colspan="2"></td>
-                <td colspan="2"></td>
             </tr>
             </tbody>
         </table>
     </div>
 
-  <h2>works</h2>
   <div class="main"><?php  // TODO - Remove the following two lines of code from
   // our production code.
   ini_set('display_errors', '1');
@@ -109,18 +88,31 @@
   $thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
   $user = callQuery($pdo, $query, $errorMsg);
 
-      while ($row = $user->fetch()) {
-        echo $row['userLastName'];
-      }
+//  while ($row = $user->fetch()) {
+//    echo $row['userLastName'];
+//  }
 
     if (sanitizeString(INPUT_GET, 'out')) {
 
     ?>
 <!--            HTML START-->
-      <span> <?php echo sanitizeString(INPUT_GET, 'out'); ?></span>
+          <p is="missionStatement">At Resumate, our mission is to empower individuals to take control of their professional journey by
+              providing a dynamic platform that connects talent with opportunity. We strive to simplify career growth
+              through intelligent networking, streamlined resume building, and meaningful connections that drive
+              success in the modern workforce.
+          </p>
+          <div class="btnDiv">
+              <form action="#" method="post">
+                  <button class="button-19" type="submit" >Begin Viewing Candidates</button>
+              </form>
+              <form action="login.php?pageType=signUp" method="post">
+                  <button class="button-19" type="submit" >Begin Creating Resume</button>
+              </form>
+          </div>
 <!--        HTML END-->
     <?php
     }
+
     else {
     ?>
 <!--            HTML START-->
@@ -137,7 +129,9 @@
 
 
     ?>
-
+  </div>
+  <div class="footerDiv">
+  
   </div>
 </body>
 </html>
