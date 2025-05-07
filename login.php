@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
     <div class="banner">
@@ -33,7 +34,6 @@
             </tbody>
         </table>
     </div>
-<h2>works</h2>
 <div class="main"><?php  // TODO - Remove the following two lines of code from
     // our production code.
     ini_set('display_errors', '1');
@@ -81,30 +81,27 @@
 
     $out = "Added random book. L";
     $thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
-    echo sanitizeString(INPUT_GET, 'pageType');
+    
     if (sanitizeString(INPUT_GET, 'pageType') == 'login') {
 
 
         ?>
 <!--        HTML START-->
+        <div class="loginDiv">
+            <form action=<?=$thisPage?> method="post">
+                <h2>Login</h2>
+                <label for="loginUsername" class="inputLbl">Username: </label>
+                <input type="text" name="loginUsername" id="loginUsername">
+                <br><br>
+                <label for="loginPassword" class="inputLbl">Password: </label>
+                <input type="text" name="loginPassword" id="loginPassword">
+                <br><br>
 
-        <form action=<?=$thisPage?> method="post">
-
-            <h2>Login</h2>
-            <label for="loginUsername" id="loginUsernameLbl">Username: </label>
-            <input type="text" name="loginUsername" id="loginUsername">
-            <br><br>
-
-            <label for="loginPassword">Password: </label>
-            <input type="text" name="loginPassword" id="loginPassword">
-
-            <br><br>
-
-            <input type="submit" value="Submit" name="login">
-
-        </form>
-        <br>
-        <span><a href="login.php?pageType=signUp">Don't have an Account?</a></span>
+                <input type="submit" value="Login" name="login">
+            </form>
+            <br>
+            <span><a href="login.php?pageType=signUp">Don't have an Account?</a></span>
+        </div>
 
 <!--        HTML END  -->
 
@@ -113,24 +110,26 @@
     else { // Sign Up
         ?>
 <!--        HTML START-->
+        <div class="loginDiv">
+            <form action=<?=$thisPage?> method="post">
 
-        <form action=<?=$thisPage?> method="post">
+                <h2>Sign Up</h2>
+                <label for="signUpUsername" class="inputLbl">Username: </label>
+                <input type="text" name="signUpUsername" id="signUpUsername">
+                <br><br>
 
-            <h2>Sign Up</h2>
-            <label for="signUpUsername" id="signUpUsernameLbl">Username: </label>
-            <input type="text" name="signUpUsername" id="signUpUsername">
-            <br><br>
+                <label for="signUpPassword" class="inputLbl">Password: </label>
+                
+                <input type="text" name="signUpPassword" id="signUpPassword">
 
-            <label for="signUpPassword">Password: </label>
-            <input type="text" name="signUpPassword" id="signUpPassword">
-
-            <br><br>
-
-            <input type="submit" value="Submit" name="signUp">
+                <br><br>
+                <div>
+                    <input type="submit" value="Sign Up" name="signUp">
+                </div>
+            </form>
             <br>
             <span><a href="login.php?pageType=login">Already have an Account?</a></span>
-
-        </form>
+        </div>
 <!--        HTML END  -->
 
     <?php

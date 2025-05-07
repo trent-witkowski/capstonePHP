@@ -1,0 +1,28 @@
+.loginDiv {
+    width: 300px;
+    margin-left: calc(50vw - 150px); /* calc(half the window - half the width of the div)*/
+    padding: 0 10px;
+    top: 5px;
+    text-align: center;
+    box-shadow: 1px 1px 2px black;
+}
+
+.loginDiv h2,
+.inputDiv div{
+    text-align: center;
+}
+
+.loginDiv input[type="submit"] {
+    height: 24px;
+    width: 96px;
+}
+
+.loginDiv > span > a {
+    text-decoration: none;
+}
+
+.inputLbl {
+    display: inline-block;
+    width: 85px;
+    text-align: end;
+}
