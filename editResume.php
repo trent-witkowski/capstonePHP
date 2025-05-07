@@ -71,39 +71,24 @@
 
         ?>
         <!--        HTML START-->
-        <!--            TODO Add HTML to show the resume and its details
-                             - Additionally add buttons to allow user to edit or add
-                             - Open small textbox/form to fill out or edit resume details
+        <form action=<?=$thisPage?> method="post">
+            <div id="userInfoMain" class="userInfo">
+                <div id="educationDiv" class="fieldDiv">
+                    <h2>Education</h2>
+                </div>
+                <h3><label for="editFirstName" id="editFirstNameLbl">First Name</label></h3>
+                <input type="text" name="firstName" id="editFirstName" value="">
+                <br><br>
 
-                         TODO Maybe remove the add feature and just amke it edit.
-                              One record per person. Means not add or delete would be needed-->
-        <!--        HTML END  -->
-
-        <div id="userInfoMain" class="userInfo">
-            <div id="educationDiv" class="fieldDiv">
-                <h2>Education</h2>
-                <button><img src="garbage/pencil.png" alt="Edit"></button>
-                <button><img src="garbage/plus.png" alt="Add"></button>
+                <input type="submit" value="Submit" name="signUp">
+                <button>Cancel</button>
             </div>
-            <h3>Institution</h3>
-            <p><span>Chippewa Valley Technical College, University of Wisconsin Eau Claire</span></p>
-        </div>
+        </form>
+        <!--        HTML END  -->
         <?php
     } else {
         ?>
         <!--        HTML START-->
-
-        <form action=<?=$thisPage?> method="post">
-
-            <h2>Welcome, place username here !</h2>
-            <label for="signUpUsername" id="bookArea">Username: </label>
-            <input type="text" name="signUpUsername" id="signUpUsername">
-            <br><br>
-            <!--        TODO Place a bunch of forms here  -->
-            <br><br>
-            <input type="submit" value="Submit" name="signUp">
-
-        </form>
         <!--        HTML END  -->
         <?php
     }
