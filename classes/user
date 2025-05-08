@@ -1,0 +1,7 @@
+<?php
+
+class user {
+
+  // userid int(11), userType int(11), userFirstName varChar(50), userLastName varChar(50), age int(11), email varChar(50), phoneNumber varChar(11), country varChar(40), state varChar(2), street varChar(50), zip varChar(10), password varChar(50), createdOn date
+
+}
