@@ -22,10 +22,10 @@ try {
 $thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
 $userID = $_SESSION['user_id'] ?? null;
 
-if (!$userId) {
-    header('Location: login.php');
-    exit();
-}
+// if (!$userId) {
+//     header('Location: login.php');
+//     exit();
+// }
 
 $stmt = $pdo->prepare("SELECT * FROM User WHERE userId = ?");
 $stmt->execute([$userID]);
