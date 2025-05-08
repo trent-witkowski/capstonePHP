@@ -3,9 +3,11 @@ body {
     font-family: Helvetica, sans-serif, serif;
 }
 
-#userInfoMain {
+#resumeInfoMain {
     background: lightgray;
-    padding: 5px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
 }
 
 .fieldDiv{
@@ -16,17 +18,24 @@ body {
     height: 10px;
     background: transparent;
 }
-.userInfo h2 {
-    margin:  0;
+.resumeInfo h2 {
+    margin: 10px 0;
 }
 
-.userInfo h3 {
-    margin:  0;
-    padding: 5px 5px 0 5px;
-    text-decoration: underline;
+.resumeInfo label{
+    display: inline-block;
+    font-size: 12px;
+    width: 120px;
 }
 
-.userInfo p > span{
+.resumeInfo input[type="text"] {
+    width: 400px;
+    font-size: 16px;
+    padding: 5px 10px 5px 10px;
+    border-radius: 5px;
+}
+
+.resumeInfo p > span{
     background: white;
     border: 1px solid black;
     border-radius: 5px;

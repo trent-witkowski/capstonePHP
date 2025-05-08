@@ -106,14 +106,14 @@
                       One record per person. Means not add or delete would be needed-->
         <!--        HTML END  -->
 
-        <div id="userInfoMain" class="userInfo">
-            <div id="educationDiv" class="fieldDiv">
+        <div id="resumeInfoMain" class="resumeInfo">
+            <div class="fieldDiv">
                 <h2>Education</h2>
                 <button><img src="garbage/pencil.png" alt="Edit"></button>
-                <button><img src="garbage/plus.png" alt="Add"></button>
             </div>
-            <h3>Institution</h3>
-            <p><span>Chippewa Valley Technical College, University of Wisconsin Eau Claire</span></p>
+            <label for="institution" >Institution</label>
+            <input type="text" name="institution" id="institution">
+            <br>
         </div>
         <?php
     } else {
