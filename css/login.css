@@ -26,3 +26,16 @@
     width: 85px;
     text-align: end;
 }
+.selectorDiv {
+    text-align: start;
+}
+.selectorDiv label{
+    align-self: start;
+    width: 102px;
+}
+
+.selectorDiv select {
+    width: 177px;
+    height: 24px;
+    padding: 1px 2px 1px 2px;
+}
