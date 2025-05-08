@@ -1,0 +1,33 @@
+.footerDiv {
+    display: flex;
+    height: 20px;
+    background: cornflowerblue;
+    color: white;
+    text-shadow: 1px 1px 1px black;
+    text-decoration: none;
+    text-align: start;
+}
+.footerDiv p {
+    margin: 0;
+    font-size: 14px;
+    flex: 1 0 100px;
+    padding: 0 50px;
+}
+.footerDiv > p > span {
+    margin: 0 5px 0 1px;
+}
+
+.footerDiv > span{
+    flex: 1 0 100px;
+    text-align: end;
+    padding: 0 50px;
+}
+
+.footerDiv a{
+    font-size: 14px;
+    color: white;
+    text-shadow: 1px 1px 1px black;
+    text-decoration: none;
+}
+
+

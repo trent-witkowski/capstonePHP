@@ -119,10 +119,13 @@
                 <br><br>
 
                 <label for="signUpPassword" class="inputLbl">Password: </label>
-                
                 <input type="text" name="signUpPassword" id="signUpPassword">
-
                 <br><br>
+
+                <label for="userType" id="userTypeLbl">Select the Type of account to create: </label><br>
+                <select name="userType" id="userTypeSelect">
+                      <option value="0">User </option>
+                </select>
                 <div>
                     <input type="submit" value="Sign Up" name="signUp">
                 </div>

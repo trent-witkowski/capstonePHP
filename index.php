@@ -6,6 +6,7 @@
   <title>Resumate</title>
     <link rel="stylesheet" href="css/home.css">
     <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/footer.css">
 </head>
 <body>
     <div class="banner">
@@ -94,11 +95,14 @@
 
     ?>
 <!--            HTML START-->
-          <p is="missionStatement">At Resumate, our mission is to empower individuals to take control of their professional journey by
-              providing a dynamic platform that connects talent with opportunity. We strive to simplify career growth
-              through intelligent networking, streamlined resume building, and meaningful connections that drive
-              success in the modern workforce.
-          </p>
+        <div class="missionDiv">
+            <p id="missionStatement">At Resumate, our mission is to empower individuals to take control of their professional journey by
+                providing a dynamic platform that connects talent with opportunity. We strive to simplify career growth
+                through intelligent networking, streamlined resume building, and meaningful connections that drive
+                success in the modern workforce.
+            </p>
+            <span>- Previously Employed Resumate HR Coordinator 2025</span>
+        </div>
           <div class="btnDiv">
               <form action="#" method="post">
                   <button class="button-19" type="submit" >Begin Viewing Candidates</button>
@@ -125,7 +129,8 @@
     ?>
   </div>
   <div class="footerDiv">
-  
+    <p>Copyright 2025<span>&copy;</span>Resumate</p>
+    <span><a href="#">totalyReal@resumate.com</a></span>
   </div>
 </body>
 </html>

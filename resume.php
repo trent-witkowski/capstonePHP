@@ -114,6 +114,10 @@
             <label for="institution" >Institution</label>
             <input type="text" name="institution" id="institution">
             <br>
+            <div class="btnDiv">
+                <input type="submit" value="Submit" name="submit">
+                <input type="submit" value="Cancel" name="cancel">
+            </div>
         </div>
         <?php
     } else {

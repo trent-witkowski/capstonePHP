@@ -1,10 +1,32 @@
 .main {
     border: 1px solid black;
     text-align: center;
+    height: calc(100vh - 132px);
+    display: flex;
+    flex-direction: column;
+}
+
+
+.missionDiv {
+    display: flex;
+    flex-direction: column;
+    width: 600px;
+    align-self: center;
+    padding: 25px;
+    margin: 15px 0;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    box-shadow: 2px 2px 3px lightgray;
+}
+
+.missionDiv span {
+    font-size: 14px;
+    align-self: end;
 }
 
 #missionStatement {
-
+    font-size: 30px;
+    font-weight: 550;
 }
 
 .btnDiv {
