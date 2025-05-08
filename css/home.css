@@ -14,9 +14,17 @@
 
 .btnDiv form{
     padding: 0 15px;
+    text-align: start;
+    flex: 1 0 200px
+}
+.btnDiv form:first-child {
+    text-align: end;
 }
 
-.btnDiv
+.btnDiv button{
+    width: 400px;
+}
+
 /* CSS : FROM https://getcssscan.com/css-buttons-examples */
 .button-19 {
     background-color: #1899D6;

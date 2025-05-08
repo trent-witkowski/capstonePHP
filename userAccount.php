@@ -80,7 +80,7 @@
     $errorMsg = 'Error fetching User information';
     $thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
 
-    if (sanitizeString(INPUT_GET, 'pageType') == 'view') {
+    if (sanitizeString(INPUT_GET, 'pageType') == 'new') {
 
 
         ?>
@@ -92,30 +92,10 @@
                  - Maybe change Address to area so actual adresses are not out there
                  - Add image to input if possible
 -->
-        <form>
-            <div id="userInfoMain">
-                <h2>Account Information</h2>
-                <input type="submit" name="pageType" value="edit" >
-                <div class="userInfo">
-                    <p>Robo Cop</p>
-                    <p><span>Age: </span>31</p>
-                    <p>fakeemaillol</p>
-                    <p><span>Phone:</span> 111-111-1111</p>
-                    <p><span>Address:</span> 123 State St</p>
-                    <p><span>Account Created On:</span> 5/5/2025</p>
-                </div>
-            </div>
-        </form>
-        <!--        HTML END  -->
 
-        <?php
-    }
-    else if (sanitizeString(INPUT_GET, 'pageType') == 'edit') { // New
-        ?>
-        <!--        HTML START-->
 
-        <form action="<?=$thisPage?>?pageType=view" method="post">
-            <div class="userInfoEdit">
+        <form action="<?php echo $thisPage?>?pageType=view" method="post">
+            <div class="userInfo">
 
                 <h2>Edit Account Information</h2>
                 <label for="editFirstName" id="editFirstNameLbl">First Name</label>
@@ -148,6 +128,54 @@
 
                 <input type="submit" value="Submit" name="submit">
                 <input type="submit" value="Cancel" name="cancel">
+
+            </div>
+        </form>
+        <!--        HTML END  -->
+
+        <?php
+    }
+    else if (sanitizeString(INPUT_GET, 'pageType') == 'view') { // New
+        ?>
+        <!--        HTML START-->
+
+        <form action="<?php echo $thisPage?>?pageType=view" method="post">
+            <div class="userInfo">
+                <div class="infoTitle">
+                    <h2>Account Information</h2>
+                    <button><img src="garbage/pencil.png" alt="Edit"></button>
+                </div>
+                <label for="editFirstName" id="editFirstNameLbl">First Name</label>
+                <input type="text" name="firstName" id="editFirstName">
+                <br>
+                <label for="editLastName" id="editLastNameLbl">Last Name</label>
+                <input type="text" name="lastName" id="editLastName">
+                <br>
+                <label for="editAge" id="editAgeLbl">Age</label>
+                <input type="text" name="age" id="editAge">
+                <br>
+                <label for="editEmail" id="editEmailLbl">Email</label>
+                <input type="text" name="email" id="editEmail">
+                <br>
+                <label for="editPhoneNumber" id="editPhoneNumberLbl">Phone Number</label>
+                <input type="text" name="phoneNumber" id="editPhoneNumber">
+                <br>
+                <label for="editStreet" id="editStreetLbl">Street</label>
+                <input type="text" name="street" id="editStreet">
+                <br>
+                <label for="editCountry" id="editCountryLbl">Country</label>
+                <input type="text" name="country" id="editCountry">
+                <br>
+                <label for="editState" id="editStateLbl">State</label>
+                <input type="text" name="state" id="editState">
+                <br>
+                <label for="editZip" id="editZipLbl">Zip Code</label>
+                <input type="text" name="zip" id="editZip">
+                <br><br>
+                <div class="btnDiv">
+                    <input type="submit" value="Submit" name="submit">
+                    <input type="submit" value="Cancel" name="cancel">
+                </div>
                 
             </div>
         </form>

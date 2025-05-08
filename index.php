@@ -84,15 +84,13 @@
 
   $errorMsg = 'Error fetching User information';
 
-  $out = "Added random book. L";
   $thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
   $user = callQuery($pdo, $query, $errorMsg);
 
 //  while ($row = $user->fetch()) {
 //    echo $row['userLastName'];
 //  }
-
-    if (sanitizeString(INPUT_GET, 'out')) {
+    
 
     ?>
 <!--            HTML START-->
@@ -109,16 +107,12 @@
                   <button class="button-19" type="submit" >Begin Creating Resume</button>
               </form>
           </div>
-<!--        HTML END-->
+<!--            HTML END  -->
     <?php
-    }
-
-    else {
     ?>
 <!--            HTML START-->
-      <a href="<?= $thisPage ?>?out= <?= $out ?>">Add new book title!</a>
-<!--        HTML END-->
-    <?php }
+<!--            HTML END  -->
+    <?php
     // TODO
 //      check to see if user is signed in when clicking the "Get STarted!" btn.
 //      If yes they either go to user account or resume browsing depending on type of account.
