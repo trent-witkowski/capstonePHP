@@ -1,7 +1,95 @@
 <?php
+// ---------- Start session ----------
+session_start();
 
-class user {
-
-  // userid int(11), userType int(11), userFirstName varChar(50), userLastName varChar(50), age int(11), email varChar(50), phoneNumber varChar(11), country varChar(40), state varChar(2), street varChar(50), zip varChar(10), password varChar(50), createdOn date
-
+// ---------- Database connection ----------
+try {
+  $pdo = new PDO('mysql:host=sql111.infinityfree.com;dbname=if0_38758969_XXX;port=3306', 'if0_38758969', 'CVTCit2025'
+  );
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $ex) {
+    die('Database connection failed.');
 }
+
+// ---------- User class ----------
+class User {
+  private $userId, $userType, $userFirstName, $userLastName, $age, $email, $phoneNumber, $country, $state, $street, $zip, $password, $createdOn;
+
+  public function __construct($userId, $userType, $userFirstName, $userLastName, $age, $email, $phoneNumber, $country, $state, $street, $zip, $password, $createdOn) {
+    $this->userId = $userId;
+    $this->userType = $userType;
+    $this->userFirstName = $userFirstName;
+    $this->userLastName = $userLastName;
+    $this->age = $age;
+    $this->email = $email;
+    $this->phoneNumber = $phoneNumber;
+    $this->country = $country;
+    $this->state = $state;
+    $this->street = $street;
+    $this->zip = $zip;
+    $this->password = $password;
+    $this->createdOn = $createdOn;
+  }
+
+  public function getUserFirstName() { return $this->userFirstName; }
+  public function getUserLastName() { return $this->userLastName; }
+  public function getEmail() { return $this->email; }
+  public function getPhoneNumber() { return $this->phoneNumber; }
+  public function getCountry() { return $this->country; }
+  public function getState() { return $this->state; }
+  public function getStreet() { return $this->street; }
+  public function getZip() { return $this->zip; }
+  public function getAge() { return $this->age; }
+  public function getCreatedOn() { return $this->createdOn; }
+
+  public function __toString() {
+    return "{$this->userFirstName} {$this->userLastName} ({$this->email})";
+  }
+}
+
+// ---------- Load user from database ----------
+if (!isset($_SESSION['user_id'])) {
+  header('Location: login.php');
+  exit();
+}
+
+$stmt = $pdo->prepare("SELECT * FROM users WHERE userId = ?");
+$stmt->execute([$_SESSION['user_id']]);
+$userData = $stmt->fetch();
+
+if ($userData) {
+  $user = new User(
+    $userData['userId'],
+    $userData['userType'],
+    $userData['userFirstName'],
+    $userData['userLastName'],
+    $userData['age'],
+    $userData['email'],
+    $userData['phoneNumber'],
+    $userData['country'],
+    $userData['state'],
+    $userData['street'],
+    $userData['zip'],
+    $userData['password'],
+    $userData['createdOn']
+  );
+} else {
+    die('User not found.');
+}
+
+// ---------- Display user info ----------
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Dashboard</title>
+</head>
+<body>
+  <h1>Welcome, <?= htmlspecialchars($user->getUserFirstName()) ?> <?= htmlspecialchars($user->getUserLastName()) ?></h1>
+  <p>Email: <?= htmlspecialchars($user->getEmail()) ?></p>
+  <p>Phone: <?= htmlspecialchars($user->getPhoneNumber()) ?></p>
+  <p>Age: <?= htmlspecialchars($user->getAge()) ?></p>
+  <p>Address: <?= htmlspecialchars($user->getStreet()) ?>, <?= htmlspecialchars($user->getState()) ?> <?= htmlspecialchars($user->getZip()) ?>, <?= htmlspecialchars($user->getCountry()) ?></p>
+  <p>Joined: <?= htmlspecialchars($user->getCreatedOn()) ?></p>
+</body>
+</html>
