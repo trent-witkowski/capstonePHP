@@ -1,3 +1,7 @@
+.main {
+    height: calc(100vh - 132px);
+}
+
 .loginDiv {
     width: 300px;
     margin-left: calc(50vw - 150px); /* calc(half the window - half the width of the div)*/

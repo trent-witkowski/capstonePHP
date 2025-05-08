@@ -6,6 +6,7 @@
     <title>Login</title>
     <link rel="stylesheet" href="css/resume.css">
     <link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/footer.css">
 </head>
 <body>
     <div class="banner">
@@ -140,5 +141,9 @@
     }
     ?>
 </div>
+    <div class="footerDiv">
+        <p>Copyright 2025<span>&copy;</span>Resumate</p>
+        <span><a href="#">totalyReal@resumate.com</a></span>
+    </div>
 </body>
 </html>

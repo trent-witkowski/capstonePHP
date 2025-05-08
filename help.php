@@ -7,6 +7,7 @@
 	<title>Resumate</title>
 	<link rel="stylesheet" href="css/home.css">
 	<link rel="stylesheet" href="css/header.css">
+    <link rel="stylesheet" href="css/footer.css">
 </head>
 <body>
 <div class="banner">
@@ -40,7 +41,8 @@
 	<p>No help here. Figure it out yourself</p>
 </div>
 <div class="footerDiv">
-
+    <p>Copyright 2025<span>&copy;</span>Resumate</p>
+    <span><a href="#">totalyReal@resumate.com</a></span>
 </div>
 </body>
 </html>

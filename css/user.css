@@ -2,7 +2,9 @@ body {
     margin: 0 auto;
     font-family: Helvetica, sans-serif, serif;
 }
-
+.main {
+    height: calc(100vh - 132px);
+}
 #userInfoMain {
     background: lightgray;
     padding: 5px;
