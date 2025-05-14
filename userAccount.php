@@ -1,47 +1,47 @@
 <?php
-session_start();
-ini_set('display_errors', '1');
-error_reporting(-1);
-
-require 'sanitize.php';
-require 'callQuery.php';
-
-try {
-    $pdo = new PDO(
-        'mysql:host=sql111.infinityfree.com;dbname=if0_38758969_resumatedb;port=3306',
-        'if0_38758969',
-        'CVTCit2025'
-    );
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $ex) {
-    $error = 'Unable to connect to the database server<br><br>' . $ex->getMessage();
-    include 'error.html.php';
-    throw $ex;
-}
-
-$thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
-$userID = $_SESSION['user_id'] ?? null;
-
-// if (!$userId) {
-//     header('Location: login.php');
-//     exit();
-// }
-
-$stmt = $pdo->prepare("SELECT * FROM User WHERE userId = ?");
-$stmt->execute([$userID]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-    $updateStmt = $pdo->prepare("UPDATE users SET userFirstName=?, userLastName=?, age=?, email=?, phoneNumber=?, street=?, country=?, state=?, zip=? WHERE userId=?");
-    $updateStmt->execute([
-        $_POST['firstName'], $_POST['lastName'], $_POST['age'], $_POST['email'],
-        $_POST['phoneNumber'], $_POST['street'], $_POST['country'], $_POST['state'],
-        $_POST['zip'], $userId
-    ]);
-    header("Location: userAccount.php?pageType=view");
-    exit();
-}
-?>
+//session_start();
+//ini_set('display_errors', '1');
+//error_reporting(-1);
+//
+//require 'sanitize.php';
+//require 'callQuery.php';
+//
+//try {
+//    $pdo = new PDO(
+//        'mysql:host=sql111.infinityfree.com;dbname=if0_38758969_resumatedb;port=3306',
+//        'if0_38758969',
+//        'CVTCit2025'
+//    );
+//    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+//} catch (PDOException $ex) {
+//    $error = 'Unable to connect to the database server<br><br>' . $ex->getMessage();
+//    include 'error.html.php';
+//    throw $ex;
+//}
+//
+//$thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
+//$userID = $_SESSION['user_id'] ?? null;
+//
+//// if (!$userId) {
+////     header('Location: login.php');
+////     exit();
+//// }
+//
+//$stmt = $pdo->prepare("SELECT * FROM User WHERE userId = ?");
+//$stmt->execute([$userID]);
+//$user = $stmt->fetch(PDO::FETCH_ASSOC);
+//
+//if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+//    $updateStmt = $pdo->prepare("UPDATE users SET userFirstName=?, userLastName=?, age=?, email=?, phoneNumber=?, street=?, country=?, state=?, zip=? WHERE userId=?");
+//    $updateStmt->execute([
+//        $_POST['firstName'], $_POST['lastName'], $_POST['age'], $_POST['email'],
+//        $_POST['phoneNumber'], $_POST['street'], $_POST['country'], $_POST['state'],
+//        $_POST['zip'], $userId
+//    ]);
+//    header("Location: userAccount.php?pageType=view");
+//    exit();
+//}
+//?>
 
 
 <!DOCTYPE html>
@@ -179,6 +179,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 
                 </div>
             </form>
+            <br>
+            <span><a href="resume.php?pageType=view">Don't have a Resume yet?</a></span>
             <!--        HTML END  -->
 
         <?php
@@ -226,6 +228,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 
                 </div>
             </form>
+            <span><a href="resume.php?pageType=view">Don't have a Resume yet?</a></span>
             <!--        HTML END  -->
 
         <?php

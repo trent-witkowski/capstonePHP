@@ -3,10 +3,22 @@ body {
     font-family: Helvetica, sans-serif, serif;
 }
 .main {
-    height: calc(100vh - 151px);
-}
-#userInfoMain {
+    height: calc(100vh - 130px);
     background: lightgray;
+    display: flex;
+    flex-direction: column;
+}
+.main > span {
+    text-align: start;
+    width: 400px;
+    padding-left: 75px;
+}
+
+.main > span > a {
+    text-decoration: none;
+}
+
+#userInfoMain {
     padding: 5px;
 }
 
