@@ -10,7 +10,9 @@
 </head>
 <body>
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 ini_set('display_errors', '1');
 error_reporting(-1);
@@ -61,7 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             $_SESSION['userID'] = $user['userID'];
             $_SESSION['userName'] = $user['userName'];
             $_SESSION['userType'] = $user['userType'];
-            header("Location: userAccount.php?pageType=view");
+
+            if ($user['userType'] == 0) {
+                header("Location: resume.php?pageType=view");
+            } else {
+                header("Location: userAccount.php?pageType=view");
+            }
             exit();
         } else {
             echo "<p style='text-align:center; color:red;'>Incorrect username or password.</p>";
