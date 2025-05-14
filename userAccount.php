@@ -23,7 +23,7 @@ $thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
 $userID = $_SESSION['user_id'] ?? null;
 
 if (!$userID) {
-    header('Location: login.php');
+    header('Location: login.php?pageType=login');
     exit();
 }
 
