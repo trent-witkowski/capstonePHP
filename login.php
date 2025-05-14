@@ -9,6 +9,68 @@
     <link rel="stylesheet" href="css/footer.css">
 </head>
 <body>
+<?php
+session_start();
+
+ini_set('display_errors', '1');
+error_reporting(-1);
+
+require 'sanitize.php';
+require 'callQuery.php';
+
+try {
+    $pdo = new PDO('mysql:host=sql111.infinityfree.com:3306;dbname=if0_38758969_resumatedb', 'if0_38758969', 'CVTCit2025');
+} catch(PDOException $ex) {
+    $error = 'Unable to connect to the database server<br><br>' . $ex->getMessage();
+    include 'error.html.php';
+    throw $ex;
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
+    $username = sanitizeString(INPUT_POST, 'signUpUsername');
+    $password = sanitizeString(INPUT_POST, 'signUpPassword');
+    $userType = sanitizeString(INPUT_POST, 'userType');
+
+    if (!empty($username) && !empty($password)) {
+        $checkStmt = $pdo->prepare("SELECT COUNT(*) FROM User WHERE userName = ?");
+        $checkStmt->execute([$username]);
+        $userExists = $checkStmt->fetchColumn();
+
+        if ($userExists) {
+            echo "<p style='text-align:center; color:red;'>Username already exists. Please choose a different one.</p>";
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO User (userName, password, userType) VALUES (?, ?, ?)");
+            $stmt->execute([$username, $password, $userType]);
+            echo "<p style='text-align:center;'>Account created successfully. <a href='login.php?pageType=login'>Login here</a>.</p>";
+        }
+    } else {
+        echo "<p style='text-align:center; color:red;'>Please fill out all fields.</p>";
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
+    $username = sanitizeString(INPUT_POST, 'loginUsername');
+    $password = sanitizeString(INPUT_POST, 'loginPassword');
+
+    if (!empty($username) && !empty($password)) {
+        $stmt = $pdo->prepare("SELECT * FROM User WHERE userName = ? AND password = ?");
+        $stmt->execute([$username, $password]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user) {
+            $_SESSION['userID'] = $user['userID'];
+            $_SESSION['userName'] = $user['userName'];
+            $_SESSION['userType'] = $user['userType'];
+            header("Location: userAccount.php?pageType=view");
+            exit();
+        } else {
+            echo "<p style='text-align:center; color:red;'>Incorrect username or password.</p>";
+        }
+    } else {
+        echo "<p style='text-align:center; color:red;'>Please fill out all fields.</p>";
+    }
+}
+?>
     <div class="banner">
         <h1>Resumate</h1>
         <span><a href="login.php?pageType=login">Login/Sign up</a></span>
@@ -16,7 +78,6 @@
     <div class="navDiv">
         <table class="navTable">
             <tbody>
-            <!--            This is the nav, painted by using a table-->
             <tr>
                 <td></td>
                 <td class="navCell">
@@ -35,58 +96,11 @@
             </tbody>
         </table>
     </div>
-<div class="main"><?php  // TODO - Remove the following two lines of code from
-    // our production code.
-    ini_set('display_errors', '1');
-    error_reporting(-1);  // level value of -1 says to display all PHP errors
-
-    // Include the sanitizeString function (sanitize.php)
-    //
-    // include vs require
-    //
-    // include imports code from a file giving a warning message
-    // if the file cannot be opened for any reason.
-    //
-    // require also imports code from a file, but gives a fatal
-    // program-ending error if the file cannot be opened.
-    //
-    require 'sanitize.php';
-
-    // Define callQuery() helper function to run a passed-in
-    // query string.
-    require 'callQuery.php';
-
-    try {
-
-        // Create an instance of the PDO class
-        // $pdo = new PDO('connectionString', 'userName', 'password');
-        $pdo = new PDO('mysql:host=sql111.infinityfree.com:3306;dbname=if0_38758969_resumatedb', 'if0_38758969', 'CVTCit2025');
-
-    } catch(PDOException $ex) {
-
-        // Note: remove $ex->getMessage() from production code so we don't
-        // reveal too much detailed information.  TODO for production mode
-        $error = 'Unable to connect to the database server<br><br>' . $ex->getMessage();
-
-        include 'error.html.php';
-        throw $ex;
-        //exit();
-
-    }
-    //
-    // Include the code to connect to our DB and login to it
-    //
-    // require 'dbConnect.php';
-
-    $errorMsg = 'Error fetching User information';
-
-    $out = "Added random book. L";
-    $thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
-    
+<div class="main">
+    <?php
+     $thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
     if (sanitizeString(INPUT_GET, 'pageType') == 'login') {
-
-
-        ?>
+    ?>
 <!--        HTML START-->
         <div class="loginDiv">
             <form action=<?=$thisPage?> method="post">
@@ -97,15 +111,12 @@
                 <label for="loginPassword" class="inputLbl">Password: </label>
                 <input type="text" name="loginPassword" id="loginPassword">
                 <br><br>
-
                 <input type="submit" value="Login" name="login">
             </form>
             <br>
             <span><a href="login.php?pageType=signUp">Don't have an Account?</a></span>
         </div>
-
 <!--        HTML END  -->
-
     <?php
     }
     else { // Sign Up
@@ -125,7 +136,8 @@
                 <div class="selectorDiv">
                     <label for="userType" class="inputLbl">Account Type: </label>
                     <select name="userType" id="userTypeSelect">
-                        <option value="0">User </option>
+                    <option value="0">Business</option>
+                    <option value="1">User</option>
                     </select>
                 </div>
                 <br><br>
@@ -140,10 +152,6 @@
 
     <?php
     }
-//    if (sanitizeString(INPUT_POST, 'loginUsername')) {
-//        echo "<p>" . sanitizeString(INPUT_POST, 'loginUsername') . "</p>";
-//        echo "<p>" . sanitizeString(INPUT_POST, 'loginPassword') . "</p>";
-//    }
 
     ?>
 
@@ -154,3 +162,4 @@
     </div>
 </body>
 </html>
+
