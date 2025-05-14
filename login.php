@@ -27,7 +27,7 @@ try {
     include 'error.html.php';
     throw $ex;
 }
-
+print_r($_POST);
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
     $username = sanitizeString(INPUT_POST, 'signUpUsername');
     $password = sanitizeString(INPUT_POST, 'signUpPassword');
@@ -53,23 +53,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     $username = sanitizeString(INPUT_POST, 'loginUsername');
     $password = sanitizeString(INPUT_POST, 'loginPassword');
-
     if (!empty($username) && !empty($password)) {
         $stmt = $pdo->prepare("SELECT * FROM User WHERE userName = ? AND password = ?");
         $stmt->execute([$username, $password]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
+			
+			echo "<p style='text-align:center;'>Password: <strong>" . $user['userName'] . "</strong></p>";
         if ($user) {
-            $_SESSION['userID'] = $user['userID'];
+            $_SESSION['userID'] = $user['userid'];
             $_SESSION['userName'] = $user['userName'];
             $_SESSION['userType'] = $user['userType'];
 
-            if ($user['userType'] == 0) {
-                header("Location: resume.php?pageType=view");
-            } else {
-                header("Location: userAccount.php?pageType=view");
-            }
-            exit();
+//            if ($user['userType'] == 0) {
+//                header("Location: resume.php?pageType=view");
+//            } else {
+//                header("Location: userAccount.php?pageType=view");
+//            }
+//            exit();
         } else {
             echo "<p style='text-align:center; color:red;'>Incorrect username or password.</p>";
         }
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     ?>
 <!--        HTML START-->
         <div class="loginDiv">
-            <form action=<?=$thisPage?> method="post">
+            <form action="<?=$thisPage?>" method="post">
                 <h2>Login</h2>
                 <label for="loginUsername" class="inputLbl">Username: </label>
                 <input type="text" name="loginUsername" id="loginUsername">
@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         ?>
 <!--        HTML START-->
         <div class="loginDiv">
-            <form action=<?=$thisPage?> method="post">
+            <form action="<?=$thisPage?>" method="post">
 
                 <h2>Sign Up</h2>
                 <label for="signUpUsername" class="inputLbl">Username: </label>
