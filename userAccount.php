@@ -42,16 +42,6 @@ $stmt->execute([$userID]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-    ?>
-    <script>
-        let inputs = document.querySelectorAll("div.userInfo input");
-        inputs.forEach(e => {
-           if (e.length === 0 ) {
-               alert("All fields must be filled in before submitting. \nPlease fill in all fields and try again.");
-           }
-        });
-    </script>
-    <?php
     
     $updateStmt = $pdo->prepare("UPDATE User SET userFirstName=?, userLastName=?, age=?, email=?, phoneNumber=?, street=?, country=?, state=?, zip=? WHERE userid=?");
     $updateStmt->execute([
@@ -62,6 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     header("Location: userAccount.php?pageType=view");
     exit();
 }
+
+print_r($_POST);
 ?>
 
 
@@ -140,7 +132,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                     </div>
                 </div>
             </form>
-            <span><a href="resume.php?pageType=view">Don't have a Resume yet?</a></span>
+            <span>
+            
+        <?php
+            $stmt = $pdo->prepare("SELECT * FROM Resume WHERE userid = ?");
+            $stmt->execute([$userID]);
+            $resume = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (!$resume) {
+                ?><a href="resume.php?pageType=view">Don't have a Resume yet?</a><?php
+            }
+        ?>
+            </span>
             <!--        HTML END  -->
 
             <script>
@@ -167,15 +169,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                     btnDiv.style.display = "none";
                     editBtn.style.display = "inline-block";
                 });
-                
-                <?php
-					if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
-                        ?>
-                        editBtn.click();
-                        <?php
-                    }
-                ?>
-            </>
+								
+				<?php
+				if ($_SESSION['prevPage'] == "signUp") {
+				?>
+                    editBtn.click();
+                    cancelBtn.style.display = "none";
+				<?php } ?>
+            </script>
         <?php } ?>
     </div>
     <div class="footerDiv">
