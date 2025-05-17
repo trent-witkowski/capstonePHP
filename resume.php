@@ -34,35 +34,76 @@ if (!$userID) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['createResume'])) {
-    $check = $pdo->prepare("SELECT resumeId FROM Resume WHERE userId = ?");
-    $check->execute([$userID]);
-    $existingResume = $check->fetch(PDO::FETCH_ASSOC);
-
-    if ($existingResume) {
-        $existingId = $existingResume['resumeId'];
-        header("Location: resume.php?pageType=view&resumeId=$existingId");
-        exit();
-    } else {
-        $stmt = $pdo->prepare("INSERT INTO Resume (userId, mainContext, createdOn, updatedOn) VALUES (?, ?, NOW(), NOW())");
-        $stmt->execute([$userID, 'New Resume']);
-        $newResumeId = $pdo->lastInsertId();
-        header("Location: resume.php?pageType=view&resumeId=$newResumeId");
-        exit();
-    }
-}
-
-$stmt = $pdo->prepare("SELECT userFirstName, userLastName FROM User WHERE userid = ?");
-$stmt->execute([$userID]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
-$fullName = $user ? $user['userFirstName'] . ' ' . $user['userLastName'] : "Unknown";
-
-$resumesStmt = $pdo->prepare("SELECT resumeId, mainContext, createdOn FROM Resume WHERE userid = ?");
-$resumesStmt->execute([$userID]);
-$resumes = $resumesStmt->fetchAll(PDO::FETCH_ASSOC);
-
-$thisPage = htmlspecialchars($_SERVER['PHP_SELF']);
 $selectedResumeId = sanitizeString(INPUT_GET, 'resumeId');
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+    $selectedResumeId = $_POST['resumeId'];
+
+    // Handle Education
+    $eduIds = $_POST['educationId'] ?? [];
+    $institutions = $_POST['institution'] ?? [];
+    $degrees = $_POST['degree'] ?? [];
+    $fields = $_POST['fieldOfStudy'] ?? [];
+    $starts = $_POST['startDate'] ?? [];
+    $ends = $_POST['endDate'] ?? [];
+
+    $existingEduStmt = $pdo->prepare("SELECT educationId FROM Education WHERE resumeId = ?");
+    $existingEduStmt->execute([$selectedResumeId]);
+    $existingEduIds = $existingEduStmt->fetchAll(PDO::FETCH_COLUMN);
+
+    $postedEduIds = array_filter($eduIds);
+    $toDelete = array_diff($existingEduIds, $postedEduIds);
+
+    foreach ($toDelete as $id) {
+        $del = $pdo->prepare("DELETE FROM Education WHERE educationId = ?");
+        $del->execute([$id]);
+    }
+
+    for ($i = 0; $i < count($institutions); $i++) {
+        $id = $eduIds[$i];
+        if ($id) {
+            $update = $pdo->prepare("UPDATE Education SET institutionName=?, Degree=?, fieldOfStudy=?, startDate=?, endDate=? WHERE educationId=?");
+            $update->execute([$institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i], $id]);
+        } else {
+            $insert = $pdo->prepare("INSERT INTO Education (resumeId, institutionName, Degree, fieldOfStudy, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
+            $insert->execute([$selectedResumeId, $institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i]]);
+        }
+    }
+
+    // Handle Work
+    $workIds = $_POST['workId'] ?? [];
+    $jobTitles = $_POST['jobTitle'] ?? [];
+    $companies = $_POST['companyName'] ?? [];
+    $descs = $_POST['jobDescription'] ?? [];
+    $wstarts = $_POST['startDate'] ?? [];
+    $wends = $_POST['endDate'] ?? [];
+
+    $existingWorkStmt = $pdo->prepare("SELECT workId FROM Work WHERE resumeId = ?");
+    $existingWorkStmt->execute([$selectedResumeId]);
+    $existingWorkIds = $existingWorkStmt->fetchAll(PDO::FETCH_COLUMN);
+
+    $postedWorkIds = array_filter($workIds);
+    $toDeleteWork = array_diff($existingWorkIds, $postedWorkIds);
+
+    foreach ($toDeleteWork as $id) {
+        $del = $pdo->prepare("DELETE FROM Work WHERE workId = ?");
+        $del->execute([$id]);
+    }
+
+    for ($i = 0; $i < count($jobTitles); $i++) {
+        $id = $workIds[$i];
+        if ($id) {
+            $update = $pdo->prepare("UPDATE Work SET jobTitle=?, companyName=?, jobDescription=?, startDate=?, endDate=? WHERE workId=?");
+            $update->execute([$jobTitles[$i], $companies[$i], $descs[$i], $wstarts[$i], $wends[$i], $id]);
+        } else {
+            $insert = $pdo->prepare("INSERT INTO Work (resumeId, jobTitle, companyName, jobDescription, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
+            $insert->execute([$selectedResumeId, $jobTitles[$i], $companies[$i], $descs[$i], $wstarts[$i], $wends[$i]]);
+        }
+    }
+
+    header("Location: resume.php?pageType=view&resumeId=$selectedResumeId");
+    exit();
+}
 ?>
 
 
@@ -135,7 +176,8 @@ $selectedResumeId = sanitizeString(INPUT_GET, 'resumeId');
         <?php foreach ($resumes as $resume): ?>
             <form method="get" action="<?= $thisPage ?>">
                 <input type="hidden" name="pageType" value="view">
-                <input type="hidden" name="resumeId" value="<?= $resume['resumeId'] ?>">
+                <input type="hidden" name="resumeId" value="<?= htmlspecialchars($selectedResumeId) ?>">
+
                 <button type="submit">
                     <?= htmlspecialchars($resume['mainContext']) ?> (Created: <?= date("M Y", strtotime($resume['createdOn'])) ?>)
                 </button>
@@ -224,80 +266,102 @@ $selectedResumeId = sanitizeString(INPUT_GET, 'resumeId');
 </html>
 
 <script>
-let educationOriginalValues = [];
-let workOriginalValues = [];
+    let originalValues = [];
 
-document.querySelector('#addEducationBtn').addEventListener('click', () => {
-    let container = document.querySelector('#educationSection');
-    let blocks = container.querySelectorAll('.educationBlock');
-
-    let block = blocks[0].cloneNode(true);
-    block.querySelectorAll('input').forEach(input => input.value = '');
-    block.querySelectorAll('input').forEach(input => input.setAttribute('readonly', true));
-    addRemoveButton(block, 'education');
-    container.appendChild(block);
-});
-
-document.querySelector('#addWorkBtn').addEventListener('click', () => {
-    let container = document.querySelector('#workSection');
-    let blocks = container.querySelectorAll('.workBlock');
-
-    let block = blocks[0].cloneNode(true);
-    block.querySelectorAll('input, textarea').forEach(input => input.value = '');
-    block.querySelectorAll('input, textarea').forEach(input => input.setAttribute('readonly', true));
-    addRemoveButton(block, 'work');
-    container.appendChild(block);
-});
-
-function addRemoveButton(block, type) {
-    if (!block.querySelector('.removeBtn')) {
-        let btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'removeBtn';
-        btn.textContent = 'Remove';
-        btn.addEventListener('click', () => {
-            let container = document.querySelector(`#${type}Section`);
-            let blocks = container.querySelectorAll(`.${type}Block`);
-            if (blocks.length > 1) {
-                block.remove();
-            } else {
-                block.querySelectorAll('input, textarea').forEach(input => input.value = '');
-            }
+    function storeOriginalValues() {
+        originalValues = [];
+        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+            originalValues.push({
+                element: input,
+                value: input.value
+            });
         });
-        block.appendChild(btn);
     }
-}
 
-function toggleEditMode(sectionSelector, enable) {
-    let section = document.querySelector(sectionSelector);
-    let inputs = section.querySelectorAll('input, textarea');
-    let submitBtns = document.querySelectorAll('.btnDiv');
-    if (enable) {
-        inputs.forEach(input => input.removeAttribute('readonly'));
-        submitBtns.forEach(div => div.style.display = 'block');
-    } else {
-        inputs.forEach(input => {
-            input.value = input.getAttribute('data-original') || '';
+    function restoreOriginalValues() {
+        originalValues.forEach(item => {
+            item.element.value = item.value;
+        });
+    }
+
+    document.querySelector('.editBtn').addEventListener('click', () => {
+        storeOriginalValues();
+        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+            input.removeAttribute('readonly');
+        });
+        document.querySelector('.btnDiv').style.display = 'block';
+        document.querySelector('.editBtn').style.display = 'none';
+    });
+
+    document.querySelector('.cancelBtn').addEventListener('click', () => {
+        restoreOriginalValues();
+        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
             input.setAttribute('readonly', true);
         });
-        submitBtns.forEach(div => div.style.display = 'none');
-    }
-}
+        document.querySelector('.btnDiv').style.display = 'none';
+        document.querySelector('.editBtn').style.display = 'inline-block';
+    });
 
-document.querySelectorAll('.editBtn').forEach(editBtn => {
-    editBtn.addEventListener('click', () => {
-        toggleEditMode('.resumeInfo', true);
-        document.querySelectorAll('input, textarea').forEach(input => {
-            input.setAttribute('data-original', input.value);
+    function createRemoveButton(containerSelector, blockClass) {
+        document.querySelectorAll(`${containerSelector} .${blockClass}`).forEach(block => {
+            let btn = block.querySelector('.removeBtn');
+            if (!btn) {
+                btn = document.createElement('button');
+                btn.type = 'button';
+                btn.textContent = 'Remove';
+                btn.classList.add('removeBtn');
+                block.appendChild(btn);
+            }
+
+            btn.onclick = () => {
+                let container = document.querySelector(containerSelector);
+                let blocks = container.querySelectorAll(`.${blockClass}`);
+                if (blocks.length > 1) {
+                    block.remove();
+                } else {
+                    block.querySelectorAll('input, textarea').forEach(input => {
+                        if (input.type === 'hidden') {
+                            input.value = '';
+                        } else {
+                            input.value = '';
+                        }
+                    });
+                }
+            };
         });
-        editBtn.style.display = 'none';
-    });
-});
+    }
 
-document.querySelectorAll('.cancelBtn').forEach(cancelBtn => {
-    cancelBtn.addEventListener('click', () => {
-        toggleEditMode('.resumeInfo', false);
-        document.querySelectorAll('.editBtn').forEach(btn => btn.style.display = 'inline-block');
+    document.querySelector('#addEducationBtn').addEventListener('click', () => {
+        let container = document.querySelector('#educationSection');
+        let first = container.querySelector('.educationBlock');
+        let clone = first.cloneNode(true);
+
+        clone.querySelectorAll('input, textarea').forEach(input => {
+            input.value = '';
+            input.removeAttribute('readonly');
+        });
+
+        clone.querySelector('input[name="educationId[]"]').value = ''; // clear ID
+        container.appendChild(clone);
+        createRemoveButton('#educationSection', 'educationBlock');
     });
-});
+
+    document.querySelector('#addWorkBtn').addEventListener('click', () => {
+        let container = document.querySelector('#workSection');
+        let first = container.querySelector('.workBlock');
+        let clone = first.cloneNode(true);
+
+        clone.querySelectorAll('input, textarea').forEach(input => {
+            input.value = '';
+            input.removeAttribute('readonly');
+        });
+
+        clone.querySelector('input[name="workId[]"]').value = ''; // clear ID
+        container.appendChild(clone);
+        createRemoveButton('#workSection', 'workBlock');
+    });
+
+    // Attach remove buttons to all blocks on initial page load
+    createRemoveButton('#educationSection', 'educationBlock');
+    createRemoveButton('#workSection', 'workBlock');
 </script>
