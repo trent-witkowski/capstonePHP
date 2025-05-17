@@ -120,147 +120,98 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 </head>
 
 <body>
-    <div class="banner">
-        <h1>Resumate</h1>
-        <span>
-            <?php if (isset($_SESSION['userID'])): ?>
-                <a href="index.php?logout=true">Log Out</a>
-            <?php else: ?>
-                <a href="login.php?pageType=login">Login/Sign up</a>
-            <?php endif; ?>
-        </span>
-    </div>
-    <div class="navDiv">
-        <table class="navTable">
-            <tbody>
-                <tr>
-                    <td></td>
-                    <td class="navCell">
-                        <span><a href="index.php">Home</a></span>
-                    </td>
-                    <td class="navCell">
-                        <span><a href="help.php">Help</a></span>
-                    </td>
-                    <td class="navCell">
-                        <span><a href="resume.php?pageType=view">Resume</a></span>
-                    </td>
-                    <td colspan="2" class="navCell">
-                        <span><a href="userAccount.php?pageType=view">Account</a></span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <?php
+    $stmt = $pdo->prepare("SELECT userFirstName, userLastName FROM User WHERE userid = ?");
+    $stmt->execute([$userID]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+    $fullName = $user ? $user['userFirstName'] . ' ' . $user['userLastName'] : "Unknown";
 
-    <div class="main">
-        <h1>Viewing <?= htmlspecialchars($fullName) ?>'s Resume</h1>
-        <br>
+    $eduStmt = $pdo->prepare("SELECT * FROM Education WHERE resumeId = ?");
+    $eduStmt->execute([$selectedResumeId]);
+    $educations = $eduStmt->fetchAll(PDO::FETCH_ASSOC);
 
-        <h2>Your Resumes</h2>
+    $workStmt = $pdo->prepare("SELECT * FROM Work WHERE resumeId = ?");
+    $workStmt->execute([$selectedResumeId]);
+    $workHistory = $workStmt->fetchAll(PDO::FETCH_ASSOC);
+    ?>
 
-        <?php if (count($resumes) === 0): ?>
-            <form method="post" action="<?= $thisPage ?>">
-                <input type="hidden" name="createResume" value="1">
-                <button type="submit">Create New Resume</button>
-            </form>
-        <?php else: ?>
-            <p>You already have a resume.</p>
-        <?php endif; ?>
-        <br>
+    <h1>Viewing <?= htmlspecialchars($fullName) ?>'s Resume</h1>
 
-        <!-- List O'resumes -->
-        <?php if (count($resumes) === 0): ?>
-            <p>You don't have any resumes yet.</p>
-        <?php endif; ?>
+    <form method="post">
+        <input type="hidden" name="resumeId" value="<?= htmlspecialchars($selectedResumeId) ?>">
 
-        <?php foreach ($resumes as $resume): ?>
-            <form method="get" action="<?= $thisPage ?>">
-                <input type="hidden" name="pageType" value="view">
-                <input type="hidden" name="resumeId" value="<?= htmlspecialchars($selectedResumeId) ?>">
+        <div class="infoTitle">
+            <h2>Resume Sections</h2>
+            <button type="button" class="editBtn"><img src="garbage/pencil.png" alt="Edit"></button>
+        </div>
 
-                <button type="submit">
-                    <?= htmlspecialchars($resume['mainContext']) ?> (Created: <?= date("M Y", strtotime($resume['createdOn'])) ?>)
-                </button>
-            </form>
-        <?php endforeach; ?>
-        <hr>
+        <!-- === EDUCATION SECTION === -->
+        <div id="educationSection" class="resumeInfo">
+            <div class="fieldDiv">
+                <h3>Education</h3>
+                <button type="button" id="addEducationBtn">Add More</button>
+            </div>
 
-        <?php if ($selectedResumeId): ?>
             <?php
-            $eduStmt = $pdo->prepare("SELECT * FROM Education WHERE resumeId = ?");
-            $eduStmt->execute([$selectedResumeId]);
-            $educations = $eduStmt->fetchAll(PDO::FETCH_ASSOC);
-
-            $workStmt = $pdo->prepare("SELECT * FROM Work WHERE resumeId = ?");
-            $workStmt->execute([$selectedResumeId]);
-            $workHistory = $workStmt->fetchAll(PDO::FETCH_ASSOC);
+            $eduCount = count($educations) ?: 1;
+            for ($i = 0; $i < $eduCount; $i++):
+                $edu = $educations[$i] ?? ['educationId' => '', 'institutionName' => '', 'Degree' => '', 'fieldOfStudy' => '', 'startDate' => '', 'endDate' => ''];
             ?>
-            <form method="post" action="#">
-                <div id="educationSection" class="resumeInfo">
-                    <div class="fieldDiv">
-                        <h2>Education</h2>
-                        <button type="button" id="addEducationBtn"><img src="garbage/pencil.png" alt="Add More"></button>
-                    </div>
-                    <?php
-                    $eduCount = count($educations);
-                    if ($eduCount === 0) $eduCount = 1;
-                    for ($i = 0; $i < $eduCount; $i++):
-                        $edu = $educations[$i] ?? ['institutionName' => '', 'Degree' => '', 'fieldOfStudy' => '', 'startDate' => '', 'endDate' => ''];
-                    ?>
-                        <div class="educationBlock">
-                            <label>Institution</label>
-                            <input type="text" name="institution[]" value="<?= htmlspecialchars($edu['institutionName']) ?>">
-                            <label>Degree</label>
-                            <input type="text" name="degree[]" value="<?= htmlspecialchars($edu['degree']) ?>">
-                            <label>Field of Study</label>
-                            <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($edu['fieldOfStudy']) ?>">
-                            <label>Start Date</label>
-                            <input type="date" name="startDate[]" value="<?= $edu['startDate'] ?>">
-                            <label>End Date</label>
-                            <input type="date" name="endDate[]" value="<?= $edu['endDate'] ?>">
-                            <hr>
-                        </div>
-                    <?php endfor; ?>
+                <div class="educationBlock">
+                    <input type="hidden" name="educationId[]" value="<?= htmlspecialchars($edu['educationId']) ?>">
+                    <label>Institution</label>
+                    <input type="text" name="institution[]" value="<?= htmlspecialchars($edu['institutionName']) ?>" readonly>
+                    <label>Degree</label>
+                    <input type="text" name="degree[]" value="<?= htmlspecialchars($edu['Degree']) ?>" readonly>
+                    <label>Field of Study</label>
+                    <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($edu['fieldOfStudy']) ?>" readonly>
+                    <label>Start Date</label>
+                    <input type="date" name="startDate[]" value="<?= $edu['startDate'] ?>" readonly>
+                    <label>End Date</label>
+                    <input type="date" name="endDate[]" value="<?= $edu['endDate'] ?>" readonly>
+                    <button type="button" class="removeBtn">Remove</button>
+                    <hr>
                 </div>
+            <?php endfor; ?>
+        </div>
 
-                <div id="workSection" class="resumeInfo">
-                    <div class="fieldDiv">
-                        <h2>Work Experience</h2>
-                        <button type="button" id="addWorkBtn"><img src="garbage/pencil.png" alt="Add More"></button>
-                    </div>
-                    <?php
-                    $workCount = count($workHistory);
-                    if ($workCount === 0) $workCount = 1;
-                    for ($i = 0; $i < $workCount; $i++):
-                        $job = $workHistory[$i] ?? ['jobTitle' => '', 'companyName' => '', 'jobDescription' => '', 'startDate' => '', 'endDate' => ''];
-                    ?>
-                        <div class="workBlock">
-                            <label>Job Title</label>
-                            <input type="text" name="jobTitle[]" value="<?= htmlspecialchars($job['jobTitle']) ?>">
-                            <label>Company Name</label>
-                            <input type="text" name="companyName[]" value="<?= htmlspecialchars($job['companyName']) ?>">
-                            <label>Job Description</label>
-                            <textarea name="jobDescription[]"><?= htmlspecialchars($job['jobDescription']) ?></textarea>
-                            <label>Start Date</label>
-                            <input type="date" name="workStartDate[]" value="<?= $job['startDate'] ?>">
-                            <label>End Date</label>
-                            <input type="date" name="workEndDate[]" value="<?= $job['endDate'] ?>">
-                            <hr>
-                        </div>
-                    <?php endfor; ?>
-                </div>
+        <!-- === WORK SECTION === -->
+        <div id="workSection" class="resumeInfo">
+            <div class="fieldDiv">
+                <h3>Work Experience</h3>
+                <button type="button" id="addWorkBtn">Add More</button>
+            </div>
 
-                <div class="btnDiv">
-                    <input type="submit" value="Submit" name="submit">
-                    <input type="submit" value="Cancel" name="cancel">
+            <?php
+            $workCount = count($workHistory) ?: 1;
+            for ($i = 0; $i < $workCount; $i++):
+                $job = $workHistory[$i] ?? ['workId' => '', 'jobTitle' => '', 'companyName' => '', 'jobDescription' => '', 'startDate' => '', 'endDate' => ''];
+            ?>
+                <div class="workBlock">
+                    <input type="hidden" name="workId[]" value="<?= htmlspecialchars($job['workId']) ?>">
+                    <label>Job Title</label>
+                    <input type="text" name="jobTitle[]" value="<?= htmlspecialchars($job['jobTitle']) ?>" readonly>
+                    <label>Company Name</label>
+                    <input type="text" name="companyName[]" value="<?= htmlspecialchars($job['companyName']) ?>" readonly>
+                    <label>Job Description</label>
+                    <textarea name="jobDescription[]" readonly><?= htmlspecialchars($job['jobDescription']) ?></textarea>
+                    <label>Start Date</label>
+                    <input type="date" name="startDate[]" value="<?= $job['startDate'] ?>" readonly>
+                    <label>End Date</label>
+                    <input type="date" name="endDate[]" value="<?= $job['endDate'] ?>" readonly>
+                    <button type="button" class="removeBtn">Remove</button>
+                    <hr>
                 </div>
-            </form>
-        <?php endif; ?>
-    </div>
-    <div class="footerDiv">
-        <p>Copyright 2025<span>&copy;</span>Resumate</p>
-        <span><a href="#">totalyReal@resumate.com</a></span>
-    </div>
+            <?php endfor; ?>
+        </div>
+
+        <!-- SUBMIT -->
+        <div class="btnDiv" style="display: none;">
+            <input type="submit" name="submit" value="Submit">
+            <button type="button" class="cancelBtn">Cancel</button>
+        </div>
+    </form>
+
 </body>
 
 </html>
