@@ -169,7 +169,7 @@ $selectedResumeId = sanitizeString(INPUT_GET, 'resumeId');
                             <label>Institution</label>
                             <input type="text" name="institution[]" value="<?= htmlspecialchars($edu['institutionName']) ?>">
                             <label>Degree</label>
-                            <input type="text" name="degree[]" value="<?= htmlspecialchars($edu['Degree']) ?>">
+                            <input type="text" name="degree[]" value="<?= htmlspecialchars($edu['degree']) ?>">
                             <label>Field of Study</label>
                             <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($edu['fieldOfStudy']) ?>">
                             <label>Start Date</label>
