@@ -2,6 +2,14 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
+if (isset($_GET['logout'])) {
+	session_unset();
+	session_destroy();
+	header("Location: index.php");
+	exit();
+}
+
 ini_set('display_errors', '1');
 error_reporting(-1);
 
