@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                         <button type="button" class="editBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                     </div>
                     <label for="editFirstName" id="editFirstNameLbl">First Name</label>
-                    <input type="text" name="firstName" id="editFirstName" value="<?= htmlspecialchars($user['userFirstName']) ?>" readonly>
+                    <input type="text" name="firstName" id="editFirstName" value="<?= htmlspecialchars($user['userFIrstName']) ?>" readonly>
                     <br>
                     <label for="editLastName" id="editLastNameLbl">Last Name</label>
                     <input type="text" name="lastName" id="editLastName" value="<?= htmlspecialchars($user['userLastName']) ?>" readonly>
