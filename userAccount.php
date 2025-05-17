@@ -100,12 +100,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                 <label for="editFirstName" id="editFirstNameLbl">First Name</label>
                 <input type="text" name="firstName" id="editFirstName" value="<?= htmlspecialchars($user['userFIrstName']) ?>" readonly>
                 <br>
-                <label for="editLastName" id="editLastNameLbl">Last Name</label>
-                <input type="text" name="lastName" id="editLastName" value="<?= htmlspecialchars($user['userLastName']) ?>" readonly>
-                <br>
-                <label for="editAge" id="editAgeLbl">Age</label>
-                <input type="text" name="age" id="editAge" value="<?= htmlspecialchars($user['age']) ?>" readonly>
-                <br>
+                <label for="editLastName" id="editLastNameLbl" class="userOnly">Last Name</label>
+                <input type="text" name="lastName" id="editLastName" class="userOnly" value="<?= htmlspecialchars($user['userLastName']) ?>" readonly>
+                <br class="userOnly">
+                <label for="editAge" id="editAgeLbl" class="userOnly" >Age</label>
+                <input type="text" name="age" id="editAge" class="userOnly" value="<?= htmlspecialchars($user['age']) ?>" readonly>
+                <br class="userOnly">
                 <label for="editEmail" id="editEmailLbl">Email</label>
                 <input type="text" name="email" id="editEmail" value="<?= htmlspecialchars($user['email']) ?>" readonly>
                 <br>
@@ -170,19 +170,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             });
             
             <?php
-            if (isset($_SESSION['prevPage']) == "signUp") {
+            if (isset($_SESSION['prevPage']) && $_SESSION['prevPage'] == "signUp") {
             ?>
                 editBtn.click();
                 document.querySelector('#editAge').value = null;
                 cancelBtn.style.display = "none";
             <?php
             }
-            if (isset($_SESSION['userType']) == 0) {
+            if (isset($_SESSION['userType']) && $_SESSION['userType'] == 0) {
                 ?>
-            document.querySelector('#editLastNameLbl').style.display = 'none';
-            document.querySelector('#editLastName').style.display = 'none';
-            document.querySelector('#editFirstNameLbl').innerHTML = 'Company Name';
-            
+                console.log('whatever0');
+                document.querySelectorAll('.userOnly').forEach(e => {
+                    e.style.display = "none";
+                });
+                document.querySelector('#editFirstNameLbl').innerHTML = "Company Name";
+                document.querySelector('#editAge').value = null;
+                
                 <?php
             }
             ?>
