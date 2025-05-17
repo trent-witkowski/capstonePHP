@@ -1,3 +1,15 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (isset($_GET['logout'])) {
+    session_unset();
+    session_destroy();
+    header("Location: index.php");
+    exit();
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +24,13 @@
 <body>
 <div class="banner">
 	<h1>Resumate</h1>
-	<span><a href="login.php?pageType=login">Login/Sign up</a></span>
+	<span>
+    <?php if (isset($_SESSION['userID'])): ?>
+        <a href="index.php?logout=true">Log Out</a>
+    <?php else: ?>
+        <a href="login.php?pageType=login">Login/Sign up</a>
+    <?php endif; ?>
+</span>
 </div>
 <div class="navDiv">
 	<table class="navTable">
