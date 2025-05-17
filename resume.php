@@ -35,11 +35,21 @@ if (!$userID) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['createResume'])) {
-    $stmt = $pdo->prepare("INSERT INTO Resume (userId, mainContext, createdOn, updatedOn) VALUES (?, ?, NOW(), NOW())");
-    $stmt->execute([$userID, 'New Resume']);
-    $newResumeId = $pdo->lastInsertId();
-    header("Location: resume.php?pageType=view&resumeId=$newResumeId");
-    exit();
+    $check = $pdo->prepare("SELECT resumeId FROM Resume WHERE userId = ?");
+    $check->execute([$userID]);
+    $existingResume = $check->fetch(PDO::FETCH_ASSOC);
+
+    if ($existingResume) {
+        $existingId = $existingResume['resumeId'];
+        header("Location: resume.php?pageType=view&resumeId=$existingId");
+        exit();
+    } else {
+        $stmt = $pdo->prepare("INSERT INTO Resume (userId, mainContext, createdOn, updatedOn) VALUES (?, ?, NOW(), NOW())");
+        $stmt->execute([$userID, 'New Resume']);
+        $newResumeId = $pdo->lastInsertId();
+        header("Location: resume.php?pageType=view&resumeId=$newResumeId");
+        exit();
+    }
 }
 
 $stmt = $pdo->prepare("SELECT userFirstName, userLastName FROM User WHERE userid = ?");
@@ -145,7 +155,7 @@ $selectedResumeId = sanitizeString(INPUT_GET, 'resumeId');
                 <?php foreach ($educations as $edu): ?>
                     <div class="resumeEntry">
                         <strong><?= htmlspecialchars($edu['institutionName']) ?></strong><br>
-                        <?= htmlspecialchars($edu['Degree']) ?> in <?= htmlspecialchars($edu['fieldOfStudy']) ?><br>
+                        <?= htmlspecialchars($edu['degree']) ?> in <?= htmlspecialchars($edu['fieldOfStudy']) ?><br>
                         <?= date("M Y", strtotime($edu['startDate'])) ?> - <?= date("M Y", strtotime($edu['endDate'])) ?>
                         <hr>
                     </div>
