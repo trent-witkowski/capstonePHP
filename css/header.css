@@ -9,6 +9,8 @@ body {
 }
 .banner h1{
     flex: 2 0 500px;
+    letter-spacing: 21px;
+    font-size: 46px;
 }
 .banner span{
     flex: 0 0 150px;

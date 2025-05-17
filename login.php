@@ -34,7 +34,7 @@ try {
     include 'error.html.php';
     throw $ex;
 }
-print_r($_POST);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
     $username = sanitizeString(INPUT_POST, 'signUpUsername');
     $password = sanitizeString(INPUT_POST, 'signUpPassword');

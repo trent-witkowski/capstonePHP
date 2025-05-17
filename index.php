@@ -124,7 +124,7 @@ if (isset($_GET['logout'])) {
             <span>- Previously Employed Resumate HR Coordinator 2025</span>
         </div>
         <div class="btnDiv">
-            <form action="#" method="post">
+            <form action="resume.php" method="post">
                 <button class="button-19" type="submit">Begin Viewing Candidates</button>
             </form>
             <form action="login.php?pageType=signUp" method="post">
