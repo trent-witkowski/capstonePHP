@@ -9,6 +9,50 @@ if (isset($_GET['logout'])) {
     header("Location: index.php");
     exit();
 }
+
+ini_set('display_errors', '1');
+error_reporting(-1);
+
+require 'sanitize.php';
+require 'callQuery.php';
+
+try {
+    $pdo = new PDO(
+        'mysql:host=sql111.infinityfree.com:3306;dbname=if0_38758969_resumatedb',
+        'if0_38758969',
+        'CVTCit2025'
+    );
+} catch (PDOException $ex) {
+    $error = 'Unable to connect to the database server<br><br>' . $ex->getMessage();
+    include 'error.html.php';
+    throw $ex;
+}
+
+$userID = $_SESSION['userID'] ?? null;
+if (!$userID) {
+    header("Location: login.php?pageType=login");
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['createResume'])) {
+    $stmt = $pdo->prepare("INSERT INTO Resume (userId, mainContext, createdOn, updatedOn) VALUES (?, ?, NOW(), NOW())");
+    $stmt->execute([$userID, 'New Resume']);
+    $newResumeId = $pdo->lastInsertId();
+    header("Location: resume.php?pageType=view&resumeId=$newResumeId");
+    exit();
+}
+
+$stmt = $pdo->prepare("SELECT userFirstName, userLastName FROM User WHERE userid = ?");
+$stmt->execute([$userID]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+$fullName = $user ? $user['userFirstName'] . ' ' . $user['userLastName'] : "Unknown";
+
+$resumesStmt = $pdo->prepare("SELECT resumeId, mainContext, createdOn FROM Resume WHERE userid = ?");
+$resumesStmt->execute([$userID]);
+$resumes = $resumesStmt->fetchAll(PDO::FETCH_ASSOC);
+
+$thisPage = htmlspecialchars($_SERVER['PHP_SELF']);
+$selectedResumeId = sanitizeString(INPUT_GET, 'resumeId');
 ?>
 
 
@@ -38,7 +82,6 @@ if (isset($_GET['logout'])) {
     <div class="navDiv">
         <table class="navTable">
             <tbody>
-                <!--            This is the nav, painted by using a table-->
                 <tr>
                     <td></td>
                     <td class="navCell">
@@ -57,110 +100,68 @@ if (isset($_GET['logout'])) {
             </tbody>
         </table>
     </div>
-    <div class="main"><?php  // TODO - Remove the following two lines of code from
-                        // our production code.
-                        ini_set('display_errors', '1');
-                        error_reporting(-1);  // level value of -1 says to display all PHP errors
 
-                        // Include the sanitizeString function (sanitize.php)
-                        //
-                        // include vs require
-                        //
-                        // include imports code from a file giving a warning message
-                        // if the file cannot be opened for any reason.
-                        //
-                        // require also imports code from a file, but gives a fatal
-                        // program-ending error if the file cannot be opened.
-                        //
-                        require 'sanitize.php';
-
-                        // Define callQuery() helper function to run a passed-in
-                        // query string.
-                        require 'callQuery.php';
-
-                        try {
-
-                            // Create an instance of the PDO class
-                            // $pdo = new PDO('connectionString', 'userName', 'password');
-                            $pdo = new PDO('mysql:host=sql111.infinityfree.com:3306;dbname=if0_38758969_resumatedb', 'if0_38758969', 'CVTCit2025');
-                        } catch (PDOException $ex) {
-
-                            // Note: remove $ex->getMessage() from production code so we don't
-                            // reveal too much detailed information.  TODO for production mode
-                            $error = 'Unable to connect to the database server<br><br>' . $ex->getMessage();
-
-                            include 'error.html.php';
-                            throw $ex;
-                            //exit();
-
-                        }
-                        //
-                        // Include the code to connect to our DB and login to it
-                        //
-                        // require 'dbConnect.php';
-
-                        $errorMsg = 'Error fetching User information';
-                        $resumeUser = "Robo Cop";
-                        $thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
-                        ?>
-        <!--    HTML START-->
-        <!--
-    TODO Add HTML to display the resume and its details
-         Add Nav Above the h1
-
-
--->
-        <h1>Viewing <?= $resumeUser ?>'s Resume</h1>
+    <div class="main">
+        <h1>Viewing <?= htmlspecialchars($fullName) ?>'s Resume</h1>
         <br>
-        <!--    HTML END  -->
-        <?php
 
-        if (sanitizeString(INPUT_GET, 'pageType') == 'view') {
+        <h2>Your Resumes</h2>
 
+        <!-- Create new resume button -->
+        <form method="post" action="<?= $thisPage ?>">
+            <input type="hidden" name="createResume" value="1">
+            <button type="submit">Create New Resume</button>
+        </form>
+        <br>
 
-        ?>
-            <!--        HTML START-->
-            <!--            TODO Add HTML to show the resume and its details
-                     - Additionally add buttons to allow user to edit or add
-                     - Open small textbox/form to fill out or edit resume details
+        <!-- List O'resumes -->
+        <?php if (count($resumes) === 0): ?>
+            <p>You don't have any resumes yet.</p>
+        <?php endif; ?>
 
-                 TODO Maybe remove the add feature and just amke it edit.
-                      One record per person. Means not add or delete would be needed-->
-            <!--        HTML END  -->
-
-            <div id="resumeInfoMain" class="resumeInfo">
-                <div class="fieldDiv">
-                    <h2>Education</h2>
-                    <button><img src="garbage/pencil.png" alt="Edit"></button>
-                </div>
-                <label for="institution">Institution</label>
-                <input type="text" name="institution" id="institution">
-                <br>
-                <div class="btnDiv">
-                    <input type="submit" value="Submit" name="submit">
-                    <input type="submit" value="Cancel" name="cancel">
-                </div>
-            </div>
-        <?php
-        } else {
-        ?>
-            <!--        HTML START-->
-
-            <form action=<?= $thisPage ?> method="post">
-
-                <h2>Welcome, place username here !</h2>
-                <label for="signUpUsername" id="bookArea">Username: </label>
-                <input type="text" name="signUpUsername" id="signUpUsername">
-                <br><br>
-                <!--        TODO Place a bunch of forms here  -->
-                <br><br>
-                <input type="submit" value="Submit" name="signUp">
-
+        <?php foreach ($resumes as $resume): ?>
+            <form method="get" action="<?= $thisPage ?>">
+                <input type="hidden" name="pageType" value="view">
+                <input type="hidden" name="resumeId" value="<?= $resume['resumeId'] ?>">
+                <button type="submit">
+                    <?= htmlspecialchars($resume['mainContext']) ?> (Created: <?= date("M Y", strtotime($resume['createdOn'])) ?>)
+                </button>
             </form>
-            <!--        HTML END  -->
-        <?php
-        }
-        ?>
+        <?php endforeach; ?>
+        <hr>
+
+        <?php if ($selectedResumeId): ?>
+            <?php
+            $eduStmt = $pdo->prepare("SELECT * FROM Education WHERE resumeId = ?");
+            $eduStmt->execute([$selectedResumeId]);
+            $educations = $eduStmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $workStmt = $pdo->prepare("SELECT * FROM Work WHERE resumeId = ?");
+            $workStmt->execute([$selectedResumeId]);
+            $workHistory = $workStmt->fetchAll(PDO::FETCH_ASSOC);
+            ?>
+            <div class="resumeInfo">
+                <h2>Education</h2>
+                <?php foreach ($educations as $edu): ?>
+                    <div class="resumeEntry">
+                        <strong><?= htmlspecialchars($edu['institutionName']) ?></strong><br>
+                        <?= htmlspecialchars($edu['Degree']) ?> in <?= htmlspecialchars($edu['fieldOfStudy']) ?><br>
+                        <?= date("M Y", strtotime($edu['startDate'])) ?> - <?= date("M Y", strtotime($edu['endDate'])) ?>
+                        <hr>
+                    </div>
+                <?php endforeach; ?>
+
+                <h2>Work Experience</h2>
+                <?php foreach ($workHistory as $job): ?>
+                    <div class="resumeEntry">
+                        <strong><?= htmlspecialchars($job['jobTitle']) ?></strong> at <?= htmlspecialchars($job['companyName']) ?><br>
+                        <?= date("M Y", strtotime($job['startDate'])) ?> - <?= date("M Y", strtotime($job['endDate'])) ?><br>
+                        <em><?= htmlspecialchars($job['jobDescription']) ?></em>
+                        <hr>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
     </div>
     <div class="footerDiv">
         <p>Copyright 2025<span>&copy;</span>Resumate</p>
