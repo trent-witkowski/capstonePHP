@@ -66,17 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 </head>
 <body>
     <div class="banner">
-        <h1>Resumate</h1><?php
-      if (isset($_SESSION['userID'])) {
-          ?>
-          <span><a href="index.php">Logout</a></span>
-        <?php
-      } else {
-      ?>
-        <span><a href="login.php?pageType=login">Login/Sign up</a></span>
-      <?php
-      }
-      ?>
+        <h1>Resumate</h1>
+        <span>
+            <?php if (isset($_SESSION['userID'])): ?>
+                <a href="login.php?logout=true">Log Out</a>
+			<?php else: ?>
+                <a href="login.php?pageType=login">Login/Sign up</a>
+			<?php endif; ?>
+        </span>
     </div>
     <div class="navDiv">
         <table class="navTable">
