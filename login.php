@@ -52,13 +52,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
             $stmt->execute([$username, $password, $userType]);
             echo "<p style='text-align:center;'>Account created successfully. <a href='login.php?pageType=login'>Login here</a>.</p>";
         }
-        
-        if ($userType == 0) {
-            header("Location: resume.php?pageType=view");
+			
+		$stmt = $pdo->prepare("SELECT * FROM User WHERE userName = ? AND password = ?");
+		$stmt->execute([$username, $password]);
+		$user = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($user) {
+            if ($userType == 0) {
+                header("Location: resume.php?pageType=view");
+            } else {
+                header("Location: userAccount.php?pageType=view");
+            }
+            exit();
         } else {
-            header("Location: userAccount.php?pageType=view");
+            echo "<p style='text-align:center; color:red;'>Account creation failed. Oh no, try again!</p>";
         }
-        exit();
+        
+        
         
     } else {
         echo "<p style='text-align:center; color:red;'>Please fill out all fields.</p>";
