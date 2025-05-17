@@ -156,6 +156,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                     btnDiv.style.display = "none";
                     editBtn.style.display = "inline-block";
                 });
+                
+                <?php
+					if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
+                        ?>
+                        editBtn.click();
+                        <?php
+                    }
+                ?> 
             </script>
         <?php } ?>
     </div>
