@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 <body>
     <div class="banner">
         <h1>Resumate</h1><?php
-      if (session_status() === PHP_SESSION_ACTIVE) {
+      if (isset($_SESSION['userID'])) {
           ?>
           <span><a href="index.php">Logout</a></span>
         <?php
