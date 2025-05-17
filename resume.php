@@ -117,11 +117,14 @@ $selectedResumeId = sanitizeString(INPUT_GET, 'resumeId');
 
         <h2>Your Resumes</h2>
 
-        <!-- Create new resume button -->
-        <form method="post" action="<?= $thisPage ?>">
-            <input type="hidden" name="createResume" value="1">
-            <button type="submit">Create New Resume</button>
-        </form>
+        <?php if (count($resumes) === 0): ?>
+            <form method="post" action="<?= $thisPage ?>">
+                <input type="hidden" name="createResume" value="1">
+                <button type="submit">Create New Resume</button>
+            </form>
+        <?php else: ?>
+            <p>You already have a resume.</p>
+        <?php endif; ?>
         <br>
 
         <!-- List O'resumes -->
@@ -150,27 +153,66 @@ $selectedResumeId = sanitizeString(INPUT_GET, 'resumeId');
             $workStmt->execute([$selectedResumeId]);
             $workHistory = $workStmt->fetchAll(PDO::FETCH_ASSOC);
             ?>
-            <div class="resumeInfo">
-                <h2>Education</h2>
-                <?php foreach ($educations as $edu): ?>
-                    <div class="resumeEntry">
-                        <strong><?= htmlspecialchars($edu['institutionName']) ?></strong><br>
-                        <?= htmlspecialchars($edu['degree']) ?> in <?= htmlspecialchars($edu['fieldOfStudy']) ?><br>
-                        <?= date("M Y", strtotime($edu['startDate'])) ?> - <?= date("M Y", strtotime($edu['endDate'])) ?>
-                        <hr>
+            <form method="post" action="#">
+                <div id="educationSection" class="resumeInfo">
+                    <div class="fieldDiv">
+                        <h2>Education</h2>
+                        <button type="button" id="addEducationBtn"><img src="garbage/pencil.png" alt="Add More"></button>
                     </div>
-                <?php endforeach; ?>
+                    <?php
+                    $eduCount = count($educations);
+                    if ($eduCount === 0) $eduCount = 1;
+                    for ($i = 0; $i < $eduCount; $i++):
+                        $edu = $educations[$i] ?? ['institutionName' => '', 'Degree' => '', 'fieldOfStudy' => '', 'startDate' => '', 'endDate' => ''];
+                    ?>
+                        <div class="educationBlock">
+                            <label>Institution</label>
+                            <input type="text" name="institution[]" value="<?= htmlspecialchars($edu['institutionName']) ?>">
+                            <label>Degree</label>
+                            <input type="text" name="degree[]" value="<?= htmlspecialchars($edu['Degree']) ?>">
+                            <label>Field of Study</label>
+                            <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($edu['fieldOfStudy']) ?>">
+                            <label>Start Date</label>
+                            <input type="date" name="startDate[]" value="<?= $edu['startDate'] ?>">
+                            <label>End Date</label>
+                            <input type="date" name="endDate[]" value="<?= $edu['endDate'] ?>">
+                            <hr>
+                        </div>
+                    <?php endfor; ?>
+                </div>
 
-                <h2>Work Experience</h2>
-                <?php foreach ($workHistory as $job): ?>
-                    <div class="resumeEntry">
-                        <strong><?= htmlspecialchars($job['jobTitle']) ?></strong> at <?= htmlspecialchars($job['companyName']) ?><br>
-                        <?= date("M Y", strtotime($job['startDate'])) ?> - <?= date("M Y", strtotime($job['endDate'])) ?><br>
-                        <em><?= htmlspecialchars($job['jobDescription']) ?></em>
-                        <hr>
+                <div id="workSection" class="resumeInfo">
+                    <div class="fieldDiv">
+                        <h2>Work Experience</h2>
+                        <button type="button" id="addWorkBtn"><img src="garbage/pencil.png" alt="Add More"></button>
                     </div>
-                <?php endforeach; ?>
-            </div>
+                    <?php
+                    $workCount = count($workHistory);
+                    if ($workCount === 0) $workCount = 1;
+                    for ($i = 0; $i < $workCount; $i++):
+                        $job = $workHistory[$i] ?? ['jobTitle' => '', 'companyName' => '', 'jobDescription' => '', 'startDate' => '', 'endDate' => ''];
+                    ?>
+                        <div class="workBlock">
+                            <label>Job Title</label>
+                            <input type="text" name="jobTitle[]" value="<?= htmlspecialchars($job['jobTitle']) ?>">
+                            <label>Company Name</label>
+                            <input type="text" name="companyName[]" value="<?= htmlspecialchars($job['companyName']) ?>">
+                            <label>Job Description</label>
+                            <textarea name="jobDescription[]"><?= htmlspecialchars($job['jobDescription']) ?></textarea>
+                            <label>Start Date</label>
+                            <input type="date" name="workStartDate[]" value="<?= $job['startDate'] ?>">
+                            <label>End Date</label>
+                            <input type="date" name="workEndDate[]" value="<?= $job['endDate'] ?>">
+                            <hr>
+                        </div>
+                    <?php endfor; ?>
+                </div>
+
+                <div class="btnDiv">
+                    <input type="submit" value="Submit" name="submit">
+                    <input type="submit" value="Cancel" name="cancel">
+                </div>
+            </form>
         <?php endif; ?>
     </div>
     <div class="footerDiv">
@@ -180,3 +222,45 @@ $selectedResumeId = sanitizeString(INPUT_GET, 'resumeId');
 </body>
 
 </html>
+
+<script>
+    document.querySelector('#addEducationBtn').addEventListener('click', () => {
+        const container = document.querySelector('#educationSection');
+        const block = document.createElement('div');
+        block.classList.add('educationBlock');
+        block.innerHTML = `
+        <label>Institution</label>
+        <input type="text" name="institution[]">
+        <label>Degree</label>
+        <input type="text" name="degree[]">
+        <label>Field of Study</label>
+        <input type="text" name="fieldOfStudy[]">
+        <label>Start Date</label>
+        <input type="date" name="startDate[]">
+        <label>End Date</label>
+        <input type="date" name="endDate[]">
+        <hr>
+    `;
+        container.appendChild(block);
+    });
+
+    document.querySelector('#addWorkBtn').addEventListener('click', () => {
+        const container = document.querySelector('#workSection');
+        const block = document.createElement('div');
+        block.classList.add('workBlock');
+        block.innerHTML = `
+        <label>Job Title</label>
+        <input type="text" name="jobTitle[]">
+        <label>Company Name</label>
+        <input type="text" name="companyName[]">
+        <label>Job Description</label>
+        <textarea name="jobDescription[]"></textarea>
+        <label>Start Date</label>
+        <input type="date" name="workStartDate[]">
+        <label>End Date</label>
+        <input type="date" name="workEndDate[]">
+        <hr>
+    `;
+        container.appendChild(block);
+    });
+</script>
