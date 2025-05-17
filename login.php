@@ -61,11 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
                 $_SESSION['userType'] = $user['userType'];
                 $_SESSION['prevPage'] = 'signUp';
                 
-                if ($userType == 0) {
-                    header("Location: resume.php?pageType=view");
-                } else {
-                    header("Location: userAccount.php?pageType=view");
-                }
+                header("Location: userAccount.php?pageType=view");
                 exit();
             } else {
                 echo "<p style='text-align:center; color:red;'>Account creation failed. Oh no, try again!</p>";
@@ -89,11 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             $_SESSION['userName'] = $user['userName'];
             $_SESSION['userType'] = $user['userType'];
 
-            if ($user['userType'] == 0) {
-                header("Location: resume.php?pageType=view");
-            } else {
-                header("Location: userAccount.php?pageType=view");
-            }
+            header("Location: userAccount.php?pageType=view");
             exit();
         } else {
             echo "<p style='text-align:center; color:red;'>Incorrect username or password.</p>";

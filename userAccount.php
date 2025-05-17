@@ -91,92 +91,102 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         </table>
     </div>
     <div class="main">
-        <?php if (sanitizeString(INPUT_GET, 'pageType') === 'view') { ?>
-            <form action="<?= $thisPage ?>?pageType=view" method="post">
-                <div class="userInfo">
-                    <div class="infoTitle">
-                        <h2>Account Information</h2>
-                        <button type="button" class="editBtn"><img src="garbage/pencil.png" alt="Edit"></button>
-                    </div>
-                    <label for="editFirstName" id="editFirstNameLbl">First Name</label>
-                    <input type="text" name="firstName" id="editFirstName" value="<?= htmlspecialchars($user['userFIrstName']) ?>" readonly>
-                    <br>
-                    <label for="editLastName" id="editLastNameLbl">Last Name</label>
-                    <input type="text" name="lastName" id="editLastName" value="<?= htmlspecialchars($user['userLastName']) ?>" readonly>
-                    <br>
-                    <label for="editAge" id="editAgeLbl">Age</label>
-                    <input type="text" name="age" id="editAge" value="<?= htmlspecialchars($user['age']) ?>" readonly>
-                    <br>
-                    <label for="editEmail" id="editEmailLbl">Email</label>
-                    <input type="text" name="email" id="editEmail" value="<?= htmlspecialchars($user['email']) ?>" readonly>
-                    <br>
-                    <label for="editPhoneNumber" id="editPhoneNumberLbl">Phone Number</label>
-                    <input type="text" name="phoneNumber" id="editPhoneNumber" value="<?= htmlspecialchars($user['phoneNumber']) ?>" readonly>
-                    <br>
-                    <label for="editStreet" id="editStreetLbl">Street</label>
-                    <input type="text" name="street" id="editStreet" value="<?= htmlspecialchars($user['street']) ?>" readonly>
-                    <br>
-                    <label for="editCountry" id="editCountryLbl">Country</label>
-                    <input type="text" name="country" id="editCountry" value="<?= htmlspecialchars($user['country']) ?>" readonly>
-                    <br>
-                    <label for="editState" id="editStateLbl">State</label>
-                    <input type="text" name="state" id="editState" value="<?= htmlspecialchars($user['state']) ?>" readonly>
-                    <br>
-                    <label for="editZip" id="editZipLbl">Zip Code</label>
-                    <input type="text" name="zip" id="editZip" value="<?= htmlspecialchars($user['zip']) ?>" readonly>
-                    <br><br>
-                    <div class="btnDiv" style="display: none;">
-                        <input type="submit" value="Submit" name="submit">
-                        <input type="button" value="Cancel" class="cancelBtn">
-                    </div>
+        <form action="<?= $thisPage ?>?pageType=view" method="post">
+            <div class="userInfo">
+                <div class="infoTitle">
+                    <h2>Account Information</h2>
+                    <button type="button" class="editBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                 </div>
-            </form>
-            <span>
-            
+                <label for="editFirstName" id="editFirstNameLbl">First Name</label>
+                <input type="text" name="firstName" id="editFirstName" value="<?= htmlspecialchars($user['userFIrstName']) ?>" readonly>
+                <br>
+                <label for="editLastName" id="editLastNameLbl">Last Name</label>
+                <input type="text" name="lastName" id="editLastName" value="<?= htmlspecialchars($user['userLastName']) ?>" readonly>
+                <br>
+                <label for="editAge" id="editAgeLbl">Age</label>
+                <input type="text" name="age" id="editAge" value="<?= htmlspecialchars($user['age']) ?>" readonly>
+                <br>
+                <label for="editEmail" id="editEmailLbl">Email</label>
+                <input type="text" name="email" id="editEmail" value="<?= htmlspecialchars($user['email']) ?>" readonly>
+                <br>
+                <label for="editPhoneNumber" id="editPhoneNumberLbl">Phone Number</label>
+                <input type="text" name="phoneNumber" id="editPhoneNumber" value="<?= htmlspecialchars($user['phoneNumber']) ?>" readonly>
+                <br>
+                <label for="editStreet" id="editStreetLbl">Street</label>
+                <input type="text" name="street" id="editStreet" value="<?= htmlspecialchars($user['street']) ?>" readonly>
+                <br>
+                <label for="editCountry" id="editCountryLbl">Country</label>
+                <input type="text" name="country" id="editCountry" value="<?= htmlspecialchars($user['country']) ?>" readonly>
+                <br>
+                <label for="editState" id="editStateLbl">State</label>
+                <input type="text" name="state" id="editState" value="<?= htmlspecialchars($user['state']) ?>" readonly>
+                <br>
+                <label for="editZip" id="editZipLbl">Zip Code</label>
+                <input type="text" name="zip" id="editZip" value="<?= htmlspecialchars($user['zip']) ?>" readonly>
+                <br><br>
+                <div class="btnDiv" style="display: none;">
+                    <input type="submit" value="Submit" name="submit">
+                    <input type="button" value="Cancel" class="cancelBtn">
+                </div>
+            </div>
+        </form>
+        <span>
         <?php
-            $stmt = $pdo->prepare("SELECT * FROM Resume WHERE userid = ?");
-            $stmt->execute([$userID]);
-            $resume = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (!$resume) {
-                ?><a href="resume.php?pageType=view">Don't have a Resume yet?</a><?php
+            if (isset($_SESSION['userType']) != 0) {
+                $stmt = $pdo->prepare("SELECT * FROM Resume WHERE userid = ?");
+                $stmt->execute([$userID]);
+                $resume = $stmt->fetch(PDO::FETCH_ASSOC);
+                if (!$resume) {
+                    ?><a href="resume.php?pageType=view">Don't have a Resume yet?</a><?php
+                }
             }
         ?>
-            </span>
-            <!--        HTML END  -->
+        </span>
+        <!--        HTML END  -->
 
-            <script>
-                let editBtn = document.querySelector(".editBtn");
-                let cancelBtn = document.querySelector(".cancelBtn");
-                let btnDiv = document.querySelector(".btnDiv");
-                let inputs = document.querySelectorAll("input[type='text']");
-                let originalValues = {};
+        <script>
+            let editBtn = document.querySelector(".editBtn");
+            let cancelBtn = document.querySelector(".cancelBtn");
+            let btnDiv = document.querySelector(".btnDiv");
+            let inputs = document.querySelectorAll("input[type='text']");
+            let originalValues = {};
 
-                editBtn.addEventListener("click", () => {
-                    inputs.forEach(input => {
-                        originalValues[input.name] = input.value;
-                        input.removeAttribute("readonly");
-                    });
-                    btnDiv.style.display = "block";
-                    editBtn.style.display = "none";
+            editBtn.addEventListener("click", () => {
+                inputs.forEach(input => {
+                    originalValues[input.name] = input.value;
+                    input.removeAttribute("readonly");
                 });
+                btnDiv.style.display = "block";
+                editBtn.style.display = "none";
+            });
 
-                cancelBtn.addEventListener("click", () => {
-                    inputs.forEach(input => {
-                        input.value = originalValues[input.name];
-                        input.setAttribute("readonly", true);
-                    });
-                    btnDiv.style.display = "none";
-                    editBtn.style.display = "inline-block";
+            cancelBtn.addEventListener("click", () => {
+                inputs.forEach(input => {
+                    input.value = originalValues[input.name];
+                    input.setAttribute("readonly", true);
                 });
-								
-				<?php
-				if (isset($_SESSION['prevPage']) == "signUp") {
-				?>
-                    editBtn.click();
-                    cancelBtn.style.display = "none";
-				<?php } ?>
-            </script>
-        <?php } ?>
+                btnDiv.style.display = "none";
+                editBtn.style.display = "inline-block";
+            });
+            
+            <?php
+            if (isset($_SESSION['prevPage']) == "signUp") {
+            ?>
+                editBtn.click();
+                document.querySelector('#editAge').value = null;
+                cancelBtn.style.display = "none";
+            <?php
+            }
+            if (isset($_SESSION['userType']) == 0) {
+                ?>
+            document.querySelector('#editLastNameLbl').style.display = 'none';
+            document.querySelector('#editLastName').style.display = 'none';
+            document.querySelector('#editFirstNameLbl').innerHTML = 'Company Name';
+            
+                <?php
+            }
+            ?>
+        </script>
     </div>
     <div class="footerDiv">
         <p>Copyright 2025<span>&copy;</span>Resumate</p>
