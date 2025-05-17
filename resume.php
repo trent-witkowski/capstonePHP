@@ -224,43 +224,80 @@ $selectedResumeId = sanitizeString(INPUT_GET, 'resumeId');
 </html>
 
 <script>
-    document.querySelector('#addEducationBtn').addEventListener('click', () => {
-        const container = document.querySelector('#educationSection');
-        const block = document.createElement('div');
-        block.classList.add('educationBlock');
-        block.innerHTML = `
-        <label>Institution</label>
-        <input type="text" name="institution[]">
-        <label>Degree</label>
-        <input type="text" name="degree[]">
-        <label>Field of Study</label>
-        <input type="text" name="fieldOfStudy[]">
-        <label>Start Date</label>
-        <input type="date" name="startDate[]">
-        <label>End Date</label>
-        <input type="date" name="endDate[]">
-        <hr>
-    `;
-        container.appendChild(block);
-    });
+let educationOriginalValues = [];
+let workOriginalValues = [];
 
-    document.querySelector('#addWorkBtn').addEventListener('click', () => {
-        const container = document.querySelector('#workSection');
-        const block = document.createElement('div');
-        block.classList.add('workBlock');
-        block.innerHTML = `
-        <label>Job Title</label>
-        <input type="text" name="jobTitle[]">
-        <label>Company Name</label>
-        <input type="text" name="companyName[]">
-        <label>Job Description</label>
-        <textarea name="jobDescription[]"></textarea>
-        <label>Start Date</label>
-        <input type="date" name="workStartDate[]">
-        <label>End Date</label>
-        <input type="date" name="workEndDate[]">
-        <hr>
-    `;
-        container.appendChild(block);
+document.querySelector('#addEducationBtn').addEventListener('click', () => {
+    let container = document.querySelector('#educationSection');
+    let blocks = container.querySelectorAll('.educationBlock');
+
+    let block = blocks[0].cloneNode(true);
+    block.querySelectorAll('input').forEach(input => input.value = '');
+    block.querySelectorAll('input').forEach(input => input.setAttribute('readonly', true));
+    addRemoveButton(block, 'education');
+    container.appendChild(block);
+});
+
+document.querySelector('#addWorkBtn').addEventListener('click', () => {
+    let container = document.querySelector('#workSection');
+    let blocks = container.querySelectorAll('.workBlock');
+
+    let block = blocks[0].cloneNode(true);
+    block.querySelectorAll('input, textarea').forEach(input => input.value = '');
+    block.querySelectorAll('input, textarea').forEach(input => input.setAttribute('readonly', true));
+    addRemoveButton(block, 'work');
+    container.appendChild(block);
+});
+
+function addRemoveButton(block, type) {
+    if (!block.querySelector('.removeBtn')) {
+        let btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'removeBtn';
+        btn.textContent = 'Remove';
+        btn.addEventListener('click', () => {
+            let container = document.querySelector(`#${type}Section`);
+            let blocks = container.querySelectorAll(`.${type}Block`);
+            if (blocks.length > 1) {
+                block.remove();
+            } else {
+                block.querySelectorAll('input, textarea').forEach(input => input.value = '');
+            }
+        });
+        block.appendChild(btn);
+    }
+}
+
+function toggleEditMode(sectionSelector, enable) {
+    let section = document.querySelector(sectionSelector);
+    let inputs = section.querySelectorAll('input, textarea');
+    let submitBtns = document.querySelectorAll('.btnDiv');
+    if (enable) {
+        inputs.forEach(input => input.removeAttribute('readonly'));
+        submitBtns.forEach(div => div.style.display = 'block');
+    } else {
+        inputs.forEach(input => {
+            input.value = input.getAttribute('data-original') || '';
+            input.setAttribute('readonly', true);
+        });
+        submitBtns.forEach(div => div.style.display = 'none');
+    }
+}
+
+document.querySelectorAll('.editBtn').forEach(editBtn => {
+    editBtn.addEventListener('click', () => {
+        toggleEditMode('.resumeInfo', true);
+        document.querySelectorAll('input, textarea').forEach(input => {
+            input.setAttribute('data-original', input.value);
+        });
+        editBtn.style.display = 'none';
     });
+});
+
+document.querySelectorAll('.cancelBtn').forEach(cancelBtn => {
+    cancelBtn.addEventListener('click', () => {
+        toggleEditMode('.resumeInfo', false);
+        document.querySelectorAll('.editBtn').forEach(btn => btn.style.display = 'inline-block');
+    });
+});
 </script>
