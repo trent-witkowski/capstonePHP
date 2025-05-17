@@ -51,24 +51,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
             $stmt = $pdo->prepare("INSERT INTO User (userName, password, userType) VALUES (?, ?, ?)");
             $stmt->execute([$username, $password, $userType]);
             echo "<p style='text-align:center;'>Account created successfully. <a href='login.php?pageType=login'>Login here</a>.</p>";
-        }
-			
-		$stmt = $pdo->prepare("SELECT * FROM User WHERE userName = ? AND password = ?");
-		$stmt->execute([$username, $password]);
-		$user = $stmt->fetch(PDO::FETCH_ASSOC);
-        if ($user) {
-            if ($userType == 0) {
-                header("Location: resume.php?pageType=view");
+            
+            $stmt = $pdo->prepare("SELECT * FROM User WHERE userName = ? AND password = ?");
+            $stmt->execute([$username, $password]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($user) {
+				$_SESSION['userID']   = $user['userid'];
+				$_SESSION['userName'] = $user['userName'];
+				$_SESSION['userType'] = $user['userType'];
+                
+                if ($userType == 0) {
+                    header("Location: resume.php?pageType=view");
+                } else {
+                    header("Location: userAccount.php?pageType=view");
+                }
+                exit();
             } else {
-                header("Location: userAccount.php?pageType=view");
+                echo "<p style='text-align:center; color:red;'>Account creation failed. Oh no, try again!</p>";
             }
-            exit();
-        } else {
-            echo "<p style='text-align:center; color:red;'>Account creation failed. Oh no, try again!</p>";
         }
-        
-        
-        
     } else {
         echo "<p style='text-align:center; color:red;'>Please fill out all fields.</p>";
     }
@@ -82,7 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         $stmt->execute([$username, $password]);
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 			
-			echo "<p style='text-align:center;'>Password: <strong>" . $user['userName'] . "</strong></p>";
         if ($user) {
             $_SESSION['userID'] = $user['userid'];
             $_SESSION['userName'] = $user['userName'];
@@ -172,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                 <br><br>
                 <div class="selectorDiv">
                     <label for="userType" class="inputLbl">Account Type: </label>
-                    <select name="userType" id="userTypeSelect">
+                    <select name="userType" id="userType">
                         <option value="1">User</option>
                         <option value="0">Business</option>
                     </select>
