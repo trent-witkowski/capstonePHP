@@ -52,6 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
             $stmt->execute([$username, $password, $userType]);
             echo "<p style='text-align:center;'>Account created successfully. <a href='login.php?pageType=login'>Login here</a>.</p>";
         }
+        
+        if ($userType == 0) {
+            header("Location: resume.php?pageType=view");
+        } else {
+            header("Location: userAccount.php?pageType=view");
+        }
+        exit();
+        
     } else {
         echo "<p style='text-align:center; color:red;'>Please fill out all fields.</p>";
     }
@@ -156,8 +164,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                 <div class="selectorDiv">
                     <label for="userType" class="inputLbl">Account Type: </label>
                     <select name="userType" id="userTypeSelect">
-                    <option value="0">Business</option>
-                    <option value="1">User</option>
+                        <option value="1">User</option>
+                        <option value="0">Business</option>
                     </select>
                 </div>
                 <br><br>
