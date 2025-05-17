@@ -53,7 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     exit();
 }
 
-print_r($_POST);
 ?>
 
 
@@ -171,7 +170,7 @@ print_r($_POST);
                 });
 								
 				<?php
-				if ($_SESSION['prevPage'] == "signUp") {
+				if (isset($_SESSION['prevPage']) == "signUp") {
 				?>
                     editBtn.click();
                     cancelBtn.style.display = "none";
