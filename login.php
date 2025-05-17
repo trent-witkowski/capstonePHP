@@ -58,7 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
             if ($user) {
 				$_SESSION['userID']   = $user['userid'];
 				$_SESSION['userName'] = $user['userName'];
-				$_SESSION['userType'] = $user['userType'];
+                $_SESSION['userType'] = $user['userType'];
+                $_SESSION['prevPage'] = 'signUp';
                 
                 if ($userType == 0) {
                     header("Location: resume.php?pageType=view");
