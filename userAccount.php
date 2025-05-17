@@ -1,5 +1,7 @@
 <?php
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 ini_set('display_errors', '1');
 error_reporting(-1);
 
@@ -20,19 +22,19 @@ try {
 }
 
 $thisPage = sanitizeString(INPUT_SERVER, 'PHP_SELF');
-$userID = $_SESSION['user_id'] ?? null;
+$userID = $_SESSION['userID'] ?? null;
 
 if (!$userID) {
     header('Location: login.php?pageType=login');
     exit();
 }
 
-$stmt = $pdo->prepare("SELECT * FROM User WHERE userId = ?");
+$stmt = $pdo->prepare("SELECT * FROM User WHERE userid = ?");
 $stmt->execute([$userID]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-    $updateStmt = $pdo->prepare("UPDATE users SET userFirstName=?, userLastName=?, age=?, email=?, phoneNumber=?, street=?, country=?, state=?, zip=? WHERE userId=?");
+    $updateStmt = $pdo->prepare("UPDATE User SET userFirstName=?, userLastName=?, age=?, email=?, phoneNumber=?, street=?, country=?, state=?, zip=? WHERE userid=?");
     $updateStmt->execute([
         $_POST['firstName'], $_POST['lastName'], $_POST['age'], $_POST['email'],
         $_POST['phoneNumber'], $_POST['street'], $_POST['country'], $_POST['state'],
@@ -74,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     </div>
     <div class="main">
         <?php if (sanitizeString(INPUT_GET, 'pageType') === 'view') { ?>
-            <form action="<?php echo $thisPage ?>?pageType=view" method="post">
+            <form action="<?= $thisPage ?>?pageType=view" method="post">
                 <div class="userInfo">
                     <div class="infoTitle">
                         <h2>Account Information</h2>

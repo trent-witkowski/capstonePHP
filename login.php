@@ -64,12 +64,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             $_SESSION['userName'] = $user['userName'];
             $_SESSION['userType'] = $user['userType'];
 
-//            if ($user['userType'] == 0) {
-//                header("Location: resume.php?pageType=view");
-//            } else {
-//                header("Location: userAccount.php?pageType=view");
-//            }
-//            exit();
+            if ($user['userType'] == 0) {
+                header("Location: resume.php?pageType=view");
+            } else {
+                header("Location: userAccount.php?pageType=view");
+            }
+            exit();
         } else {
             echo "<p style='text-align:center; color:red;'>Incorrect username or password.</p>";
         }
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     ?>
 <!--        HTML START-->
         <div class="loginDiv">
-            <form action="<?=$thisPage?>" method="post">
+            <form action="<?= htmlspecialchars($thisPage) ?>" method="post">
                 <h2>Login</h2>
                 <label for="loginUsername" class="inputLbl">Username: </label>
                 <input type="text" name="loginUsername" id="loginUsername">
