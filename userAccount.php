@@ -42,6 +42,17 @@ $stmt->execute([$userID]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+    ?>
+    <script>
+        let inputs = document.querySelectorAll("div.userInfo input");
+        inputs.forEach(e => {
+           if (e.length === 0 ) {
+               alert("All fields must be filled in before submitting. \nPlease fill in all fields and try again.");
+           }
+        });
+    </script>
+    <?php
+    
     $updateStmt = $pdo->prepare("UPDATE User SET userFirstName=?, userLastName=?, age=?, email=?, phoneNumber=?, street=?, country=?, state=?, zip=? WHERE userid=?");
     $updateStmt->execute([
         $_POST['firstName'], $_POST['lastName'], $_POST['age'], $_POST['email'],
@@ -163,8 +174,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                         editBtn.click();
                         <?php
                     }
-                ?> 
-            </script>
+                ?>
+            </>
         <?php } ?>
     </div>
     <div class="footerDiv">
