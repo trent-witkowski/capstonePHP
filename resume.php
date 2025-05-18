@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 
     // Handle Education
     $eduIds = $_POST['educationId'] ?? [];
-    $institutions = $_POST['institution'] ?? [];
+    $institutions = $_POST['institutionName'] ?? [];
     $degrees = $_POST['degree'] ?? [];
     $fields = $_POST['fieldOfStudy'] ?? [];
     $starts = $_POST['startDate'] ?? [];
@@ -173,7 +173,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         <input type="hidden" name="resumeId" value="<?= htmlspecialchars($selectedResumeId) ?>">
 
         <div class="infoTitle">
-            <h2>Resume Sections</h2>
             <button type="button" class="editBtn"><img src="garbage/pencil.png" alt="Edit"></button>
         </div>
 
