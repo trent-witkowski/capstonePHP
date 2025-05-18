@@ -34,7 +34,7 @@ try {
     include 'error.html.php';
     throw $ex;
 }
-
+$errMsg = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
     $username = sanitizeString(INPUT_POST, 'signUpUsername');
     $password = sanitizeString(INPUT_POST, 'signUpPassword');
@@ -64,11 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
                 header("Location: userAccount.php?pageType=view");
                 exit();
             } else {
-                echo "<p style='text-align:center; color:red;'>Account creation failed. Oh no, try again!</p>";
+                $errMsg = "Account creation failed. Oh no, try again!";
             }
         }
     } else {
-        echo "<p style='text-align:center; color:red;'>Please fill out all fields.</p>";
+        $errMsg =  "Please fill out all fields.";
     }
 }
 
@@ -88,10 +88,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
             header("Location: userAccount.php?pageType=view");
             exit();
         } else {
-            echo "<p style='text-align:center; color:red;'>Incorrect username or password.</p>";
+            $errMsg =  "Incorrect username or password.";
         }
     } else {
-        echo "<p style='text-align:center; color:red;'>Please fill out all fields.</p>";
+        $errMsg =  "Please fill out all fields.";
     }
 }
 ?>
@@ -133,14 +133,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     ?>
 <!--        HTML START-->
         <div class="loginDiv">
-            <form action="<?= htmlspecialchars($thisPage) ?>" method="post">
+            <form action="<?= htmlspecialchars($thisPage) ?>?pageType=login" method="post">
                 <h2>Login</h2>
                 <label for="loginUsername" class="inputLbl">Username: </label>
                 <input type="text" name="loginUsername" id="loginUsername">
                 <br><br>
                 <label for="loginPassword" class="inputLbl">Password: </label>
                 <input type="text" name="loginPassword" id="loginPassword">
-                <br><br>
+                <br>
+                <p style='text-align:center; color:red;'><?= $errMsg ?></p>
                 <input type="submit" value="Login" name="login">
             </form>
             <br>
@@ -170,7 +171,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                         <option value="0">Business</option>
                     </select>
                 </div>
-                <br><br>
+                <br>
+                <p style='text-align:center; color:red;'><?= $errMsg ?></p>
                 <div>
                     <input type="submit" value="Sign Up" name="signUp">
                 </div>
