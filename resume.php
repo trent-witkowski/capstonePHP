@@ -120,6 +120,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 </head>
 
 <body>
+    <div class="banner">
+        <h1>Resumate</h1>
+        <span>
+            <?php if (isset($_SESSION['userID'])): ?>
+                <a href="index.php?logout=true">Log Out</a>
+            <?php else: ?>
+                <a href="login.php?pageType=login">Login/Sign up</a>
+            <?php endif; ?>
+        </span>
+    </div>
+    <div class="navDiv">
+        <table class="navTable">
+            <tbody>
+                <tr>
+                    <td></td>
+                    <td class="navCell">
+                        <span><a href="index.php">Home</a></span>
+                    </td>
+                    <td class="navCell">
+                        <span><a href="help.php">Help</a></span>
+                    </td>
+                    <td class="navCell">
+                        <span><a href="resume.php?pageType=view">Resume</a></span>
+                    </td>
+                    <td colspan="2" class="navCell">
+                        <span><a href="userAccount.php?pageType=view">Account</a></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
     <?php
     $stmt = $pdo->prepare("SELECT userFirstName, userLastName FROM User WHERE userid = ?");
     $stmt->execute([$userID]);
@@ -212,6 +244,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
         </div>
     </form>
 
+    <div class="footerDiv">
+        <p>Copyright 2025<span>&copy;</span>Resumate</p>
+        <span><a href="#">totalyReal@resumate.com</a></span>
+    </div>
 </body>
 
 </html>
