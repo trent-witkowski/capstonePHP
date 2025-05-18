@@ -62,10 +62,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     for ($i = 0; $i < count($institutions); $i++) {
         $id = $eduIds[$i];
         if ($id) {
-            $update = $pdo->prepare("UPDATE Education SET institutionName=?, Degree=?, fieldOfStudy=?, startDate=?, endDate=? WHERE educationId=?");
+            $update = $pdo->prepare("UPDATE Education SET institutionName=?, degree=?, fieldOfStudy=?, startDate=?, endDate=? WHERE educationId=?");
             $update->execute([$institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i], $id]);
         } else {
-            $insert = $pdo->prepare("INSERT INTO Education (resumeId, institutionName, Degree, fieldOfStudy, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
+            $insert = $pdo->prepare("INSERT INTO Education (resumeId, institutionName, degree, fieldOfStudy, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
             $insert->execute([$selectedResumeId, $institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i]]);
         }
     }
@@ -187,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             <?php
             $eduCount = count($educations) ?: 1;
             for ($i = 0; $i < $eduCount; $i++):
-                $edu = $educations[$i] ?? ['educationId' => '', 'institutionName' => '', 'Degree' => '', 'fieldOfStudy' => '', 'startDate' => '', 'endDate' => ''];
+                $edu = $educations[$i] ?? ['educationId' => '', 'institutionName' => '', 'degree' => '', 'fieldOfStudy' => '', 'startDate' => '', 'endDate' => ''];
             ?>
                 <div class="educationBlock">
                     <input type="hidden" name="educationId[]" value="<?= htmlspecialchars($edu['educationId']) ?>">
