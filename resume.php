@@ -184,26 +184,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             </div>
 
             <?php
-            $eduCount = count($educations) ?: 1;
-            for ($i = 0; $i < $eduCount; $i++):
-                $edu = $educations[$i] ?? ['educationId' => '', 'institutionName' => '', 'degree' => '', 'fieldOfStudy' => '', 'startDate' => '', 'endDate' => ''];
+            while($row = $eduStmt->fetch()) {
             ?>
                 <div class="educationBlock">
-                    <input type="hidden" name="educationId[]" value="<?= htmlspecialchars($edu['educationId']) ?>">
+                    <input type="hidden" name="educationId[]" value="<?= htmlspecialchars($row['educationId']) ?>">
                     <label>Institution</label>
-                    <input type="text" name="institution[]" value="<?= htmlspecialchars($edu['institutionName']) ?>" readonly>
+                    <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly>
                     <label>Degree</label>
-                    <input type="text" name="degree[]" value="<?= htmlspecialchars($edu['degree']) ?>" readonly>
+                    <input type="text" name="degree[]" value="<?= htmlspecialchars($row['degree']) ?>" readonly>
                     <label>Field of Study</label>
-                    <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($edu['fieldOfStudy']) ?>" readonly>
+                    <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($row['fieldOfStudy']) ?>" readonly>
                     <label>Start Date</label>
-                    <input type="date" name="startDate[]" value="<?= $edu['startDate'] ?>" readonly>
+                    <input type="date" name="startDate[]" value="<?= $row['startDate'] ?>" readonly>
                     <label>End Date</label>
-                    <input type="date" name="endDate[]" value="<?= $edu['endDate'] ?>" readonly>
+                    <input type="date" name="endDate[]" value="<?= $row['endDate'] ?>" readonly>
                     <button type="button" class="removeBtn">Remove</button>
                     <hr>
                 </div>
-            <?php endfor; ?>
+            <?php } ?>
         </div>
 
         <!-- === WORK SECTION === -->
@@ -214,26 +212,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             </div>
 
             <?php
-            $workCount = count($workHistory) ?: 1;
-            for ($i = 0; $i < $workCount; $i++):
-                $job = $workHistory[$i] ?? ['workId' => '', 'jobTitle' => '', 'companyName' => '', 'jobDescription' => '', 'startDate' => '', 'endDate' => ''];
+            while($row = $workStmt->fetch()) {
             ?>
                 <div class="workBlock">
-                    <input type="hidden" name="workId[]" value="<?= htmlspecialchars($job['workId']) ?>">
+                    <input type="hidden" name="workId[]" value="<?= htmlspecialchars($row['workId']) ?>">
                     <label>Job Title</label>
-                    <input type="text" name="jobTitle[]" value="<?= htmlspecialchars($job['jobTitle']) ?>" readonly>
+                    <input type="text" name="jobTitle[]" value="<?= htmlspecialchars($row['jobTitle']) ?>" readonly>
                     <label>Company Name</label>
-                    <input type="text" name="companyName[]" value="<?= htmlspecialchars($job['companyName']) ?>" readonly>
+                    <input type="text" name="companyName[]" value="<?= htmlspecialchars($row['companyName']) ?>" readonly>
                     <label>Job Description</label>
-                    <textarea name="jobDescription[]" readonly><?= htmlspecialchars($job['jobDescription']) ?></textarea>
+                    <textarea name="jobDescription[]" readonly><?= htmlspecialchars($row['jobDescription']) ?></textarea>
                     <label>Start Date</label>
-                    <input type="date" name="workStartDate[]" value="<?= $job['startDate'] ?>" readonly>
+                    <input type="date" name="workStartDate[]" value="<?= $row['startDate'] ?>" readonly>
                     <label>End Date</label>
-                    <input type="date" name="workEndDate[]" value="<?= $job['endDate'] ?>" readonly>
+                    <input type="date" name="workEndDate[]" value="<?= $row['endDate'] ?>" readonly>
                     <button type="button" class="removeBtn">Remove</button>
                     <hr>
                 </div>
-            <?php endfor; ?>
+            <?php } ?>
         </div>
 
         <!-- SUBMIT -->
