@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
 
     // Handle Education
     $eduIds = $_POST['educationId'] ?? [];
-    $institutions = $_POST['institutionName'] ?? [];
+    $institutions = $_POST['institution'] ?? [];
     $degrees = $_POST['degree'] ?? [];
     $fields = $_POST['fieldOfStudy'] ?? [];
     $starts = $_POST['startDate'] ?? [];
@@ -75,8 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $jobTitles = $_POST['jobTitle'] ?? [];
     $companies = $_POST['companyName'] ?? [];
     $descs = $_POST['jobDescription'] ?? [];
-    $wstarts = $_POST['startDate'] ?? [];
-    $wends = $_POST['endDate'] ?? [];
+    $wstarts = $_POST['workStartDate'] ?? [];
+    $wends = $_POST['workEndDate'] ?? [];
 
     $existingWorkStmt = $pdo->prepare("SELECT workId FROM Work WHERE resumeId = ?");
     $existingWorkStmt->execute([$selectedResumeId]);
@@ -227,9 +227,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                     <label>Job Description</label>
                     <textarea name="jobDescription[]" readonly><?= htmlspecialchars($job['jobDescription']) ?></textarea>
                     <label>Start Date</label>
-                    <input type="date" name="startDate[]" value="<?= $job['startDate'] ?>" readonly>
+                    <input type="date" name="workStartDate[]" value="<?= $job['startDate'] ?>" readonly>
                     <label>End Date</label>
-                    <input type="date" name="endDate[]" value="<?= $job['endDate'] ?>" readonly>
+                    <input type="date" name="workEndDate[]" value="<?= $job['endDate'] ?>" readonly>
                     <button type="button" class="removeBtn">Remove</button>
                     <hr>
                 </div>
