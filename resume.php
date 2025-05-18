@@ -194,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                     <label>Institution</label>
                     <input type="text" name="institution[]" value="<?= htmlspecialchars($edu['institutionName']) ?>" readonly>
                     <label>Degree</label>
-                    <input type="text" name="degree[]" value="<?= htmlspecialchars($edu['Degree']) ?>" readonly>
+                    <input type="text" name="degree[]" value="<?= htmlspecialchars($edu['degree']) ?>" readonly>
                     <label>Field of Study</label>
                     <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($edu['fieldOfStudy']) ?>" readonly>
                     <label>Start Date</label>
