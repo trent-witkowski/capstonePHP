@@ -548,7 +548,6 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                 $query = "SELECT * FROM Education WHERE resumeId = '" . $row['resumeId'] . "'";
                 $eduStmt = callQuery($pdo, $query, "Error fetching user's with resumes information");
                 $eduCheck = $eduStmt->fetch();
-                echo $eduCheck['institutionName'];
                 if ($eduCheck['institutionName'] == "" || $eduCheck['institutionName'] == "Sample University") {
                     continue;
                 } else {
