@@ -37,7 +37,7 @@ if (isset($_GET['logout'])) {
     <div class="navDiv">
         <table class="navTable">
             <tbody>
-                <!--            This is the nav, painted by using a table-->
+                <!--            NAV           -->
                 <tr>
                     <td></td>
                     <td class="navCell">
@@ -47,10 +47,10 @@ if (isset($_GET['logout'])) {
                         <span><a href="help.php">Help</a></span>
                     </td>
                     <td class="navCell">
-                        <span><a href="resume.php?pageType=view">Resume</a></span>
+                        <span><a href="resume.php">Resume</a></span>
                     </td>
                     <td colspan="2" class="navCell">
-                        <span><a href="userAccount.php?pageType=view">Account</a></span>
+                        <span><a href="userAccount.php">Account</a></span>
                     </td>
                 </tr>
             </tbody>
@@ -133,10 +133,6 @@ if (isset($_GET['logout'])) {
         </div>
         <!--            HTML END  -->
         <?php
-        ?>
-        <!--            HTML START-->
-        <!--            HTML END  -->
-        <?php
         // TODO
         //      check to see if user is signed in when clicking the "Get STarted!" btn.
         //      If yes they either go to user account or resume browsing depending on type of account.
@@ -152,6 +148,19 @@ if (isset($_GET['logout'])) {
         <p>Copyright 2025<span>&copy;</span>Resumate</p>
         <span><a href="#">totalyReal@resumate.com</a></span>
     </div>
-</body>
+<script>
 
+    let navLinks = document.querySelectorAll(".navTable a");
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            <?php
+            $_SESSION['prevPage'] = 'home';
+            ?>
+            window.location.href = link.href;
+        });
+    });
+</script>
+</body>
 </html>

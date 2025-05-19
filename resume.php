@@ -196,7 +196,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                         <span><a href="resume.php">Resume</a></span>
                     </td>
                     <td colspan="2" class="navCell">
-                        <span><a href="userAccount.php?pageType=view">Account</a></span>
+                        <span><a href="userAccount.php">Account</a></span>
                     </td>
                 </tr>
             </tbody>
@@ -431,6 +431,21 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 ?>
     <script>
+        let navLinks = document.querySelectorAll(".navTable a");
+    
+        navLinks.forEach(link => {
+            link.addEventListener('click', e => {
+                e.preventDefault();
+                <?php
+                if ($_SESSION['userType'] == 0) {
+                    $_SESSION['prevPage'] = 'browse';
+                } else {
+                    $_SESSION['prevPage'] = 'resume';
+                }
+                ?>
+                window.location.href = link.href;
+            });
+        });
     <?php if (isset($_SESSION['userType']) && $_SESSION['userType'] == '1') { ?>
         let originalValues = [];
 

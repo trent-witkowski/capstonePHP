@@ -84,8 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                     <td></td>
                     <td class="navCell"><span><a href="index.php">Home</a></span></td>
                     <td class="navCell"><span><a href="help.php">Help</a></span></td>
-                    <td class="navCell"><span><a href="resume.php?pageType=view">Resume</a></span></td>
-                    <td colspan="2" class="navCell"><span><a href="userAccount.php?pageType=view">Account</a></span></td>
+                    <td class="navCell"><span><a href="resume.php">Resume</a></span></td>
+                    <td colspan="2" class="navCell"><span><a href="userAccount.php">Account</a></span></td>
                 </tr>
             </tbody>
         </table>
@@ -149,6 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             let cancelBtn = document.querySelector(".cancelBtn");
             let btnDiv = document.querySelector(".btnDiv");
             let inputs = document.querySelectorAll("input[type='text']");
+            let navLinks = document.querySelectorAll(".navTable a");
             let originalValues = {};
 
             editBtn.addEventListener("click", () => {
@@ -168,6 +169,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                 btnDiv.style.display = "none";
                 editBtn.style.display = "inline-block";
             });
+            
+            navLinks.forEach(link => {
+               link.addEventListener('click', e => {
+                   e.preventDefault();
+                    <?php
+                    $_SESSION['prevPage'] = 'userAccount';
+                    ?>
+                   window.location.href = link.href;
+               });
+            });
+            
+            
             
             <?php
             if (isset($_SESSION['prevPage']) && $_SESSION['prevPage'] == "signUp") {
