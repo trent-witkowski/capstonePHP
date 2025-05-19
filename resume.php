@@ -399,7 +399,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 										?><div class="educationBlock">
                       <input type="hidden" name="educationId[]" value="<?= htmlspecialchars($row['educationId']) ?>">
                       <button type="button" class="editEducationBtn"><img src="garbage/pencil.png" alt="Edit"></button>
-                      <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <button type="button" class="removeEducationBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <label>Institution</label><br>
                       <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
                       <label>Degree</label><br>
@@ -431,7 +431,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 										?><div class="hobbiesBlock">
                       <input type="hidden" name="hobbiesId[]" value="<?= htmlspecialchars($row['hobbieId']) ?>">
                       <button type="button" class="editHobbiesBtn"><img src="garbage/pencil.png" alt="Edit"></button>
-                      <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <button type="button" class="removeHobbiesBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
@@ -455,7 +455,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 										?><div class="projectsBlock">
                       <input type="hidden" name="projectsId[]" value="<?= htmlspecialchars($row['projectId']) ?>">
                       <button type="button" class="editProjectsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
-                      <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <button type="button" class="removeProjectsBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
@@ -479,7 +479,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 										?><div class="skillsBlock">
                       <input type="hidden" name="skillsId[]" value="<?= htmlspecialchars($row['skillId']) ?>">
                       <button type="button" class="editSkillsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
-                      <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <button type="button" class="removeSkillBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <label>Skill</label><br>
                       <input type="text" name="skill[]" value="<?= htmlspecialchars($row['skill']) ?>" readonly><br>
                       <label>Proficiency Level</label><br>
@@ -508,7 +508,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 										?><div class="workHistoryBlock">
                       <input type="hidden" name="workHistoryId[]" value="<?= htmlspecialchars($row['workId']) ?>">
                       <button type="button" class="editWorkHistoryBtn"><img src="garbage/pencil.png" alt="Edit"></button>
-                      <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <button type="button" class="removeWorkBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <label>Job Title</label><br>
                       <input type="text" name="jobTitle[]" value="<?= htmlspecialchars($row['jobTitle']) ?>" readonly><br>
                       <label>Company</label><br>
@@ -695,7 +695,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                     let blocks = container.querySelectorAll(`.${blockClass}`);
                     if (blocks.length > 1) {
                         block.remove();
-
+  
                     } else {
                         block.querySelectorAll('input, textarea').forEach(input => {
                             if (input.type === 'hidden') {
@@ -709,7 +709,50 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                     document.querySelector('#educationSubmit').style.display = "block";
                 };
             });
+            
             // 'ADD MORE' BUTTONS
+            document.querySelector('#addEducationBtn').addEventListener('click', () => {
+                let container = document.querySelector('#educationSection');
+                let first = container.querySelector('.educationBlock');
+                let clone = first.cloneNode(true);
+
+                clone.querySelectorAll('input').forEach(input => {
+                    input.value = '';
+                    input.removeAttribute('readonly');
+                });
+                document.querySelector('#educationSubmit').style.display = "block";
+                clone.querySelector('input[name="educationId[]"]').value = ''; // clear ID
+                container.appendChild(clone);
+                createRemoveButton('#educationSection', 'educationBlock');
+            });
+            document.querySelector('#addHobbiesBtn').addEventListener('click', () => {
+                let container = document.querySelector('#hobbiesSection');
+                let first = container.querySelector('.hobbiesBlock');
+                let clone = first.cloneNode(true);
+
+                clone.querySelectorAll('input').forEach(input => {
+                    input.value = '';
+                    input.removeAttribute('readonly');
+                });
+                document.querySelector('#educationSubmit').style.display = "block";
+                clone.querySelector('input[name="educationId[]"]').value = ''; // clear ID
+                container.appendChild(clone);
+                createRemoveButton('#educationSection', 'educationBlock');
+            });
+            document.querySelector('#addEducationBtn').addEventListener('click', () => {
+                let container = document.querySelector('#educationSection');
+                let first = container.querySelector('.educationBlock');
+                let clone = first.cloneNode(true);
+
+                clone.querySelectorAll('input').forEach(input => {
+                    input.value = '';
+                    input.removeAttribute('readonly');
+                });
+                document.querySelector('#educationSubmit').style.display = "block";
+                clone.querySelector('input[name="educationId[]"]').value = ''; // clear ID
+                container.appendChild(clone);
+                createRemoveButton('#educationSection', 'educationBlock');
+            });
             document.querySelector('#addEducationBtn').addEventListener('click', () => {
                 let container = document.querySelector('#educationSection');
                 let first = container.querySelector('.educationBlock');
