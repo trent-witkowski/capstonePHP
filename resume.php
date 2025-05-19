@@ -214,11 +214,23 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
         $userStmt = callQuery($pdo, $query, "Unable to retrieve user's personal information.");
         $user = $userStmt->fetch();
         $fullName = $user ? $user['userFirstName'] . ' ' . $user['userLastName'] : "Unknown";
-    
-        $query = "SELECT * FROM Education WHERE resumeId =  '$resumeId'";
-        $eduStmt = callQuery($pdo, $query, "Error fetching user's education information");
-    
-        $query = "SELECT * FROM Work WHERE resumeId = '$resumeId'";
+			
+		$query = "SELECT * FROM Education WHERE resumeId =  '$resumeId'";
+		$eduStmt = callQuery($pdo, $query, "Error fetching user's education information");
+		
+		
+		$query = "SELECT * FROM Hobbies WHERE resumeId =  '$resumeId'";
+		$hobbyStmt = callQuery($pdo, $query, "Error fetching user's hobby information");
+		
+		
+		$query = "SELECT * FROM Projects WHERE resumeId =  '$resumeId'";
+		$projectStmt = callQuery($pdo, $query, "Error fetching user's project information");
+		
+		
+		$query = "SELECT * FROM skill WHERE resumeId =  '$resumeId'";
+		$skillStmt = callQuery($pdo, $query, "Error fetching user's skill information");
+		
+		$query = "SELECT * FROM Work WHERE resumeId = '$resumeId'";
         $workStmt = callQuery($pdo, $query, "Error fetching user's work history");
     ?>
 
@@ -265,21 +277,12 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                     </div>
 									
 									<?php
-									while($row = $eduStmt->fetch()) {
+									while($row = $hobbyStmt->fetch()) {
 										?><div class="hobbiesBlock">
                       <input type="hidden" name="hobbiesId[]" value="<?= htmlspecialchars($row['hobbiesId']) ?>">
                       <button type="button" class="editHobbiesBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
-                      <label>Institution</label><br>
-                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
-                      <label>Degree</label><br>
-                      <input type="text" name="degree[]" value="<?= htmlspecialchars($row['degree']) ?>" readonly><br>
-                      <label>Field of Study</label><br>
-                      <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($row['fieldOfStudy']) ?>" readonly><br>
-                      <label>Start Date</label><br>
-                      <input type="date" name="startDate[]" value="<?= $row['startDate'] ?>" readonly><br>
-                      <label>End Date</label><br>
-                      <input type="date" name="endDate[]" value="<?= $row['endDate'] ?>" readonly><br>
+                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
 									<?php } ?>
@@ -297,21 +300,12 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                     </div>
 									
 									<?php
-									while($row = $eduStmt->fetch()) {
+									while($row = $projectStmt->fetch()) {
 										?><div class="projectsBlock">
                       <input type="hidden" name="projectsId[]" value="<?= htmlspecialchars($row['projectsId']) ?>">
                       <button type="button" class="editProjectsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
-                      <label>Institution</label><br>
-                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
-                      <label>Degree</label><br>
-                      <input type="text" name="degree[]" value="<?= htmlspecialchars($row['degree']) ?>" readonly><br>
-                      <label>Field of Study</label><br>
-                      <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($row['fieldOfStudy']) ?>" readonly><br>
-                      <label>Start Date</label><br>
-                      <input type="date" name="startDate[]" value="<?= $row['startDate'] ?>" readonly><br>
-                      <label>End Date</label><br>
-                      <input type="date" name="endDate[]" value="<?= $row['endDate'] ?>" readonly><br>
+                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
 									<?php } ?>
@@ -329,21 +323,17 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                     </div>
 									
 									<?php
-									while($row = $eduStmt->fetch()) {
+									while($row = $skillStmt->fetch()) {
 										?><div class="skillsBlock">
                       <input type="hidden" name="skillsId[]" value="<?= htmlspecialchars($row['skillsId']) ?>">
                       <button type="button" class="editSkillsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
-                      <label>Institution</label><br>
-                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
-                      <label>Degree</label><br>
-                      <input type="text" name="degree[]" value="<?= htmlspecialchars($row['degree']) ?>" readonly><br>
-                      <label>Field of Study</label><br>
-                      <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($row['fieldOfStudy']) ?>" readonly><br>
+                      <label>Skill</label><br>
+                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['skill']) ?>" readonly><br>
+                      <label>Proficiency Level</label><br>
+                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['proficiency']) ?>" readonly><br>
                       <label>Start Date</label><br>
-                      <input type="date" name="startDate[]" value="<?= $row['startDate'] ?>" readonly><br>
-                      <label>End Date</label><br>
-                      <input type="date" name="endDate[]" value="<?= $row['endDate'] ?>" readonly><br>
+                      <input type="date" name="institution[]" value="<?= htmlspecialchars($row['startDate']) ?>" readonly><br>
                       <br>
                       </div><br><br>
 									<?php } ?>
@@ -361,17 +351,17 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                     </div>
 									
 									<?php
-									while($row = $eduStmt->fetch()) {
+									while($row = $workStmt->fetch()) {
 										?><div class="workHistoryBlock">
                       <input type="hidden" name="workHistoryId[]" value="<?= htmlspecialchars($row['workHistoryId']) ?>">
                       <button type="button" class="editWorkHistoryBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
-                      <label>Institution</label><br>
-                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
-                      <label>Degree</label><br>
-                      <input type="text" name="degree[]" value="<?= htmlspecialchars($row['degree']) ?>" readonly><br>
-                      <label>Field of Study</label><br>
-                      <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($row['fieldOfStudy']) ?>" readonly><br>
+                      <label>Job Title</label><br>
+                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['jobTitle']) ?>" readonly><br>
+                      <label>Company</label><br>
+                      <input type="text" name="degree[]" value="<?= htmlspecialchars($row['companyName']) ?>" readonly><br>
+                      <label>Job Description</label><br>
+                      <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($row['jobDescription']) ?>" readonly><br>
                       <label>Start Date</label><br>
                       <input type="date" name="startDate[]" value="<?= $row['startDate'] ?>" readonly><br>
                       <label>End Date</label><br>
