@@ -35,7 +35,6 @@ if (isset($_GET['logout'])) {
 <div class="navDiv">
 	<table class="navTable">
 		<tbody>
-		<!--            This is the nav, painted by using a table-->
 		<tr>
 			<td></td>
 			<td class="navCell">
@@ -60,7 +59,7 @@ if (isset($_GET['logout'])) {
 </div>
 <div class="footerDiv">
     <p>Copyright 2025<span>&copy;</span>Resumate</p>
-    <span><a href="#">totalyReal@resumate.com</a></span>
+    <span><a href="mailto:totalyReal@resumate.com">totalyReal@resumate.com</a></span>
 </div>
 </body>
 </html>

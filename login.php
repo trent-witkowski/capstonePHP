@@ -56,11 +56,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
             $stmt->execute([$username, $password]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($user) {
-				$_SESSION['userID']   = $user['userid'];
-				$_SESSION['userName'] = $user['userName'];
+                $_SESSION['userID']   = $user['userid'];
+                $_SESSION['userName'] = $user['userName'];
                 $_SESSION['userType'] = $user['userType'];
                 $_SESSION['prevPage'] = 'signUp';
-                
+            
+                $resumeStmt = $pdo->prepare("INSERT INTO Resume (userId, mainContext, createdOn, updatedOn) VALUES (?, ?, NOW(), NOW())");
+                $resumeStmt->execute([$user['userid'], 'New Resume']);
+            
                 header("Location: userAccount.php?pageType=view");
                 exit();
             } else {
