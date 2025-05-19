@@ -279,7 +279,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									<?php
 									while($row = $hobbyStmt->fetch()) {
 										?><div class="hobbiesBlock">
-                      <input type="hidden" name="hobbiesId[]" value="<?= htmlspecialchars($row['hobbiesId']) ?>">
+                      <input type="hidden" name="hobbiesId[]" value="<?= htmlspecialchars($row['hobbieId']) ?>">
                       <button type="button" class="editHobbiesBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <input type="text" name="institution[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
@@ -302,7 +302,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									<?php
 									while($row = $projectStmt->fetch()) {
 										?><div class="projectsBlock">
-                      <input type="hidden" name="projectsId[]" value="<?= htmlspecialchars($row['projectsId']) ?>">
+                      <input type="hidden" name="projectsId[]" value="<?= htmlspecialchars($row['projectId']) ?>">
                       <button type="button" class="editProjectsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <input type="text" name="institution[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
@@ -325,7 +325,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									<?php
 									while($row = $skillStmt->fetch()) {
 										?><div class="skillsBlock">
-                      <input type="hidden" name="skillsId[]" value="<?= htmlspecialchars($row['skillsId']) ?>">
+                      <input type="hidden" name="skillsId[]" value="<?= htmlspecialchars($row['skillId']) ?>">
                       <button type="button" class="editSkillsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <label>Skill</label><br>
@@ -353,7 +353,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									<?php
 									while($row = $workStmt->fetch()) {
 										?><div class="workHistoryBlock">
-                      <input type="hidden" name="workHistoryId[]" value="<?= htmlspecialchars($row['workHistoryId']) ?>">
+                      <input type="hidden" name="workHistoryId[]" value="<?= htmlspecialchars($row['workId']) ?>">
                       <button type="button" class="editWorkHistoryBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <label>Job Title</label><br>
