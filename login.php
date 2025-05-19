@@ -139,10 +139,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                     <span><a href="help.php">Help</a></span>
                 </td>
                 <td class="navCell">
-                    <span><a href="resume.php?pageType=view">Resume</a></span>
+                    <span><a href="resume.php">Resume</a></span>
                 </td>
                 <td colspan="2" class="navCell">
-                    <span><a href="userAccount.php?pageType=view">Account</a></span>
+                    <span><a href="userAccount.php">Account</a></span>
                 </td>
             </tr>
             </tbody>
