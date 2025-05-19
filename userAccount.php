@@ -179,7 +179,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             }
             if (isset($_SESSION['userType']) && $_SESSION['userType'] == 0) {
                 ?>
-                console.log('whatever0');
                 document.querySelectorAll('.userOnly').forEach(e => {
                     e.style.display = "none";
                 });
