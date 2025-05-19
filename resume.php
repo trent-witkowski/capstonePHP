@@ -52,73 +52,172 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 	$resume = callQuery($pdo, $query, "Error retrieving user's resume information. ")->fetch();
 	$resumeId = $resume['resumeId'];
  
-	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-		
-		// Handle Education
-		$eduIds = $_POST['educationId'] ?? [];
-		$institutions = $_POST['institution'] ?? [];
-		$degrees = $_POST['degree'] ?? [];
-		$fields = $_POST['fieldOfStudy'] ?? [];
-		$starts = $_POST['startDate'] ?? [];
-		$ends = $_POST['endDate'] ?? [];
-		
-		$existingEduStmt = $pdo->prepare("SELECT educationId FROM Education WHERE resumeId = ?");
-		$existingEduStmt->execute([$resumeId]);
-		$existingEduIds = $existingEduStmt->fetchAll(PDO::FETCH_COLUMN);
-		
-		$postedEduIds = array_filter($eduIds);
-		$toDelete = array_diff($existingEduIds, $postedEduIds);
-		
-		foreach ($toDelete as $id) {
-			$del = $pdo->prepare("DELETE FROM Education WHERE educationId = ?");
-			$del->execute([$id]);
-		}
-		
-		for ($i = 0; $i < count($institutions); $i++) {
-			$id = $eduIds[$i];
-			if ($id) {
-				$update = $pdo->prepare("UPDATE Education SET institutionName=?, degree=?, fieldOfStudy=?, startDate=?, endDate=? WHERE educationId=?");
-				$update->execute([$institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i], $id]);
-			} else {
-				$insert = $pdo->prepare("INSERT INTO Education (resumeId, institutionName, degree, fieldOfStudy, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
-				$insert->execute([$resumeId, $institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i]]);
-			}
-		}
-		
-		// Handle Work
-		$workIds = $_POST['workId'] ?? [];
-		$jobTitles = $_POST['jobTitle'] ?? [];
-		$companies = $_POST['companyName'] ?? [];
-		$descs = $_POST['jobDescription'] ?? [];
-		$wstarts = $_POST['workStartDate'] ?? [];
-		$wends = $_POST['workEndDate'] ?? [];
-		
-		$existingWorkStmt = $pdo->prepare("SELECT workId FROM Work WHERE resumeId = ?");
-		$existingWorkStmt->execute([$resumeId]);
-		$existingWorkIds = $existingWorkStmt->fetchAll(PDO::FETCH_COLUMN);
-		
-		$postedWorkIds = array_filter($workIds);
-		$toDeleteWork = array_diff($existingWorkIds, $postedWorkIds);
-		
-		foreach ($toDeleteWork as $id) {
-			$del = $pdo->prepare("DELETE FROM Work WHERE workId = ?");
-			$del->execute([$id]);
-		}
-		
-		for ($i = 0; $i < count($jobTitles); $i++) {
-			$id = $workIds[$i];
-			if ($id) {
-				$update = $pdo->prepare("UPDATE Work SET jobTitle=?, companyName=?, jobDescription=?, startDate=?, endDate=? WHERE workId=?");
-				$update->execute([$jobTitles[$i], $companies[$i], $descs[$i], $wstarts[$i], $wends[$i], $id]);
-			} else {
-				$insert = $pdo->prepare("INSERT INTO Work (resumeId, jobTitle, companyName, jobDescription, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
-				$insert->execute([$resumeId, $jobTitles[$i], $companies[$i], $descs[$i], $wstarts[$i], $wends[$i]]);
-			}
-		}
-		
-		header("Location: resume.php?pageType=view&resumeId=$resumeId");
-		exit();
-	}
+	if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+        // === Handle Education Section ===
+        if (isset($_POST['educationSubmit'])) {
+            $eduIds = $_POST['educationId'] ?? [];
+            $institutions = $_POST['institution'] ?? [];
+            $degrees = $_POST['degree'] ?? [];
+            $fields = $_POST['fieldOfStudy'] ?? [];
+            $starts = $_POST['startDate'] ?? [];
+            $ends = $_POST['endDate'] ?? [];
+
+            $existingEduStmt = $pdo->prepare("SELECT educationId FROM Education WHERE resumeId = ?");
+            $existingEduStmt->execute([$resumeId]);
+            $existingEduIds = $existingEduStmt->fetchAll(PDO::FETCH_COLUMN);
+
+            $postedEduIds = array_filter($eduIds);
+            $toDelete = array_diff($existingEduIds, $postedEduIds);
+
+            foreach ($toDelete as $id) {
+                $del = $pdo->prepare("DELETE FROM Education WHERE educationId = ?");
+                $del->execute([$id]);
+            }
+
+            for ($i = 0; $i < count($institutions); $i++) {
+                $id = $eduIds[$i];
+                if ($id) {
+                    $update = $pdo->prepare("UPDATE Education SET institutionName=?, degree=?, fieldOfStudy=?, startDate=?, endDate=? WHERE educationId=?");
+                    $update->execute([$institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i], $id]);
+                } else {
+                    $insert = $pdo->prepare("INSERT INTO Education (resumeId, institutionName, degree, fieldOfStudy, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
+                    $insert->execute([$resumeId, $institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i]]);
+                }
+            }
+
+            header("Location: resume.php?pageType=view&resumeId=$resumeId");
+            exit();
+        }
+
+        // === Handle Work Section ===
+        if (isset($_POST['workSubmit'])) {
+            $workIds = $_POST['workHistoryId'] ?? [];
+            $jobTitles = $_POST['institution'] ?? [];
+            $companies = $_POST['degree'] ?? [];
+            $descs = $_POST['fieldOfStudy'] ?? [];
+            $starts = $_POST['startDate'] ?? [];
+            $ends = $_POST['endDate'] ?? [];
+
+            $existingStmt = $pdo->prepare("SELECT workId FROM Work WHERE resumeId = ?");
+            $existingStmt->execute([$resumeId]);
+            $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
+
+            $postedIds = array_filter($workIds);
+            $toDelete = array_diff($existingIds, $postedIds);
+            foreach ($toDelete as $id) {
+                $del = $pdo->prepare("DELETE FROM Work WHERE workId = ?");
+                $del->execute([$id]);
+            }
+
+            for ($i = 0; $i < count($jobTitles); $i++) {
+                $id = $workIds[$i];
+                if ($id) {
+                    $update = $pdo->prepare("UPDATE Work SET jobTitle=?, companyName=?, jobDescription=?, startDate=?, endDate=? WHERE workId=?");
+                    $update->execute([$jobTitles[$i], $companies[$i], $descs[$i], $starts[$i], $ends[$i], $id]);
+                } else {
+                    $insert = $pdo->prepare("INSERT INTO Work (resumeId, jobTitle, companyName, jobDescription, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
+                    $insert->execute([$resumeId, $jobTitles[$i], $companies[$i], $descs[$i], $starts[$i], $ends[$i]]);
+                }
+            }
+
+            header("Location: resume.php?pageType=view&resumeId=$resumeId");
+            exit();
+        }
+
+        if (isset($_POST['hobbiesSubmit'])) {
+        $hobbieIds = $_POST['hobbiesId'] ?? [];
+        $descriptions = $_POST['description'] ?? [];
+
+        $existingStmt = $pdo->prepare("SELECT hobbieId FROM Hobbies WHERE resumeId = ?");
+        $existingStmt->execute([$resumeId]);
+        $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
+
+        $postedIds = array_filter($hobbieIds);
+        $toDelete = array_diff($existingIds, $postedIds);
+        foreach ($toDelete as $id) {
+            $del = $pdo->prepare("DELETE FROM Hobbies WHERE hobbieId = ?");
+            $del->execute([$id]);
+        }
+
+        for ($i = 0; $i < count($descriptions); $i++) {
+            $id = $hobbieIds[$i];
+            if ($id) {
+                $update = $pdo->prepare("UPDATE Hobbies SET description = ? WHERE hobbieId = ?");
+                $update->execute([$descriptions[$i], $id]);
+            } else {
+                $insert = $pdo->prepare("INSERT INTO Hobbies (resumeId, description) VALUES (?, ?)");
+                $insert->execute([$resumeId, $descriptions[$i]]);
+            }
+        }
+
+        header("Location: resume.php?pageType=view&resumeId=$resumeId");
+        exit();
+        }
+
+        if (isset($_POST['projectsSubmit'])) {
+        $projectIds = $_POST['projectsId'] ?? [];
+        $descriptions = $_POST['description'] ?? [];
+
+        $existingStmt = $pdo->prepare("SELECT projectId FROM Projects WHERE resumeId = ?");
+        $existingStmt->execute([$resumeId]);
+        $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
+
+        $postedIds = array_filter($projectIds);
+        $toDelete = array_diff($existingIds, $postedIds);
+        foreach ($toDelete as $id) {
+            $del = $pdo->prepare("DELETE FROM Projects WHERE projectId = ?");
+            $del->execute([$id]);
+        }
+
+        for ($i = 0; $i < count($descriptions); $i++) {
+            $id = $projectIds[$i];
+            if ($id) {
+                $update = $pdo->prepare("UPDATE Projects SET description = ? WHERE projectId = ?");
+                $update->execute([$descriptions[$i], $id]);
+            } else {
+                $insert = $pdo->prepare("INSERT INTO Projects (resumeId, description) VALUES (?, ?)");
+                $insert->execute([$resumeId, $descriptions[$i]]);
+            }
+        }
+
+        header("Location: resume.php?pageType=view&resumeId=$resumeId");
+        exit();
+        }
+
+        if (isset($_POST['skillSubmit'])) {
+        $skillIds = $_POST['skillsId'] ?? [];
+        $skills = $_POST['skill'] ?? [];
+        $proficiencies = $_POST['proficiency'] ?? [];
+        $starts = $_POST['startDate'] ?? [];
+
+        $existingStmt = $pdo->prepare("SELECT skillId FROM skill WHERE resumeId = ?");
+        $existingStmt->execute([$resumeId]);
+        $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
+
+        $postedIds = array_filter($skillIds);
+        $toDelete = array_diff($existingIds, $postedIds);
+        foreach ($toDelete as $id) {
+            $del = $pdo->prepare("DELETE FROM skill WHERE skillId = ?");
+            $del->execute([$id]);
+        }
+
+        for ($i = 0; $i < count($skills); $i++) {
+            $id = $skillIds[$i];
+            if ($id) {
+                $update = $pdo->prepare("UPDATE skill SET skill = ?, proficiency = ?, startDate = ? WHERE skillId = ?");
+                $update->execute([$skills[$i], $proficiencies[$i], $starts[$i], $id]);
+            } else {
+                $insert = $pdo->prepare("INSERT INTO skill (resumeId, skill, proficiency, startDate) VALUES (?, ?, ?, ?)");
+                $insert->execute([$resumeId, $skills[$i], $proficiencies[$i], $starts[$i]]);
+            }
+        }
+
+        header("Location: resume.php?pageType=view&resumeId=$resumeId");
+        exit();
+        }
+
+    }
 	
 	
 	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
