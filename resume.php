@@ -30,112 +30,128 @@ try {
 
 $userID = $_SESSION['userID'] ?? null;
 if (!$userID) {
-    header("Location: login.php?pageType=login");
-    exit();
+	header("Location: login.php?pageType=login");
+	exit();
 }
 
-$query = "SELECT resumeId FROM Resume WHERE userId = '$userID'";
-$resume = callQuery($pdo, $query, "Error retrieving user's resume information. ")->fetch();
-$resumeId = $resume['resumeId'];
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-
-    // Handle Education
-    $eduIds = $_POST['educationId'] ?? [];
-    $institutions = $_POST['institution'] ?? [];
-    $degrees = $_POST['degree'] ?? [];
-    $fields = $_POST['fieldOfStudy'] ?? [];
-    $starts = $_POST['startDate'] ?? [];
-    $ends = $_POST['endDate'] ?? [];
-
-    $existingEduStmt = $pdo->prepare("SELECT educationId FROM Education WHERE resumeId = ?");
-    $existingEduStmt->execute([$resumeId]);
-    $existingEduIds = $existingEduStmt->fetchAll(PDO::FETCH_COLUMN);
-
-    $postedEduIds = array_filter($eduIds);
-    $toDelete = array_diff($existingEduIds, $postedEduIds);
-
-    foreach ($toDelete as $id) {
-        $del = $pdo->prepare("DELETE FROM Education WHERE educationId = ?");
-        $del->execute([$id]);
-    }
-
-    for ($i = 0; $i < count($institutions); $i++) {
-        $id = $eduIds[$i];
-        if ($id) {
-            $update = $pdo->prepare("UPDATE Education SET institutionName=?, degree=?, fieldOfStudy=?, startDate=?, endDate=? WHERE educationId=?");
-            $update->execute([$institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i], $id]);
-        } else {
-            $insert = $pdo->prepare("INSERT INTO Education (resumeId, institutionName, degree, fieldOfStudy, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
-            $insert->execute([$resumeId, $institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i]]);
-        }
-    }
-
-    // Handle Work
-    $workIds = $_POST['workId'] ?? [];
-    $jobTitles = $_POST['jobTitle'] ?? [];
-    $companies = $_POST['companyName'] ?? [];
-    $descs = $_POST['jobDescription'] ?? [];
-    $wstarts = $_POST['workStartDate'] ?? [];
-    $wends = $_POST['workEndDate'] ?? [];
-
-    $existingWorkStmt = $pdo->prepare("SELECT workId FROM Work WHERE resumeId = ?");
-    $existingWorkStmt->execute([$resumeId]);
-    $existingWorkIds = $existingWorkStmt->fetchAll(PDO::FETCH_COLUMN);
-
-    $postedWorkIds = array_filter($workIds);
-    $toDeleteWork = array_diff($existingWorkIds, $postedWorkIds);
-
-    foreach ($toDeleteWork as $id) {
-        $del = $pdo->prepare("DELETE FROM Work WHERE workId = ?");
-        $del->execute([$id]);
-    }
-
-    for ($i = 0; $i < count($jobTitles); $i++) {
-        $id = $workIds[$i];
-        if ($id) {
-            $update = $pdo->prepare("UPDATE Work SET jobTitle=?, companyName=?, jobDescription=?, startDate=?, endDate=? WHERE workId=?");
-            $update->execute([$jobTitles[$i], $companies[$i], $descs[$i], $wstarts[$i], $wends[$i], $id]);
-        } else {
-            $insert = $pdo->prepare("INSERT INTO Work (resumeId, jobTitle, companyName, jobDescription, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
-            $insert->execute([$resumeId, $jobTitles[$i], $companies[$i], $descs[$i], $wstarts[$i], $wends[$i]]);
-        }
-    }
-
-    header("Location: resume.php?pageType=view&resumeId=$resumeId");
-    exit();
+if (isset($_SESSION['userType']) && $_SESSION['userType'] == 1) {
+    $_SESSION['resumeView'] = 'resume';
+} else {
+   if (!isset($_SESSION['resumeView']) || !isset($_SESSION['prevPage']) || $_SESSION['prevPage'] != 'userBrowse') {
+		 $_SESSION['resumeView'] = 'browse';
+   }
 }
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
-
-// Handle Education
-	$eduIds = $_POST['educationId'] ?? [];
-	$institutions = $_POST['institution'] ?? [];
-	$degrees = $_POST['degree'] ?? [];
-	$fields = $_POST['fieldOfStudy'] ?? [];
-	$starts = $_POST['startDate'] ?? [];
-	$ends = $_POST['endDate'] ?? [];
-	
-	$existingEduStmt = $pdo->prepare("SELECT educationId FROM Education WHERE resumeId = ?");
-	$existingEduStmt->execute([$resumeId]);
-	$existingEduIds = $existingEduStmt->fetchAll(PDO::FETCH_COLUMN);
-	
-	$postedEduIds = array_filter($eduIds);
-	$toDelete = array_diff($existingEduIds, $postedEduIds);
-	
-	foreach ($toDelete as $id) {
-		$del = $pdo->prepare("DELETE FROM Education WHERE educationId = ?");
-		$del->execute([$id]);
+if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
+    if (isset($_SESSION['userType']) && $_SESSION['userType'] == 1) {
+        $query = "SELECT resumeId FROM Resume WHERE userId = '$userID'";
+    } else {
+        
+        $query = "SELECT resumeId FROM Resume WHERE userId = '" . ltrim($_GET['resume'], 'user') . "'";
+    }
+	$resume = callQuery($pdo, $query, "Error retrieving user's resume information. ")->fetch();
+	$resumeId = $resume['resumeId'];
+ 
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
+		
+		// Handle Education
+		$eduIds = $_POST['educationId'] ?? [];
+		$institutions = $_POST['institution'] ?? [];
+		$degrees = $_POST['degree'] ?? [];
+		$fields = $_POST['fieldOfStudy'] ?? [];
+		$starts = $_POST['startDate'] ?? [];
+		$ends = $_POST['endDate'] ?? [];
+		
+		$existingEduStmt = $pdo->prepare("SELECT educationId FROM Education WHERE resumeId = ?");
+		$existingEduStmt->execute([$resumeId]);
+		$existingEduIds = $existingEduStmt->fetchAll(PDO::FETCH_COLUMN);
+		
+		$postedEduIds = array_filter($eduIds);
+		$toDelete = array_diff($existingEduIds, $postedEduIds);
+		
+		foreach ($toDelete as $id) {
+			$del = $pdo->prepare("DELETE FROM Education WHERE educationId = ?");
+			$del->execute([$id]);
+		}
+		
+		for ($i = 0; $i < count($institutions); $i++) {
+			$id = $eduIds[$i];
+			if ($id) {
+				$update = $pdo->prepare("UPDATE Education SET institutionName=?, degree=?, fieldOfStudy=?, startDate=?, endDate=? WHERE educationId=?");
+				$update->execute([$institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i], $id]);
+			} else {
+				$insert = $pdo->prepare("INSERT INTO Education (resumeId, institutionName, degree, fieldOfStudy, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
+				$insert->execute([$resumeId, $institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i]]);
+			}
+		}
+		
+		// Handle Work
+		$workIds = $_POST['workId'] ?? [];
+		$jobTitles = $_POST['jobTitle'] ?? [];
+		$companies = $_POST['companyName'] ?? [];
+		$descs = $_POST['jobDescription'] ?? [];
+		$wstarts = $_POST['workStartDate'] ?? [];
+		$wends = $_POST['workEndDate'] ?? [];
+		
+		$existingWorkStmt = $pdo->prepare("SELECT workId FROM Work WHERE resumeId = ?");
+		$existingWorkStmt->execute([$resumeId]);
+		$existingWorkIds = $existingWorkStmt->fetchAll(PDO::FETCH_COLUMN);
+		
+		$postedWorkIds = array_filter($workIds);
+		$toDeleteWork = array_diff($existingWorkIds, $postedWorkIds);
+		
+		foreach ($toDeleteWork as $id) {
+			$del = $pdo->prepare("DELETE FROM Work WHERE workId = ?");
+			$del->execute([$id]);
+		}
+		
+		for ($i = 0; $i < count($jobTitles); $i++) {
+			$id = $workIds[$i];
+			if ($id) {
+				$update = $pdo->prepare("UPDATE Work SET jobTitle=?, companyName=?, jobDescription=?, startDate=?, endDate=? WHERE workId=?");
+				$update->execute([$jobTitles[$i], $companies[$i], $descs[$i], $wstarts[$i], $wends[$i], $id]);
+			} else {
+				$insert = $pdo->prepare("INSERT INTO Work (resumeId, jobTitle, companyName, jobDescription, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
+				$insert->execute([$resumeId, $jobTitles[$i], $companies[$i], $descs[$i], $wstarts[$i], $wends[$i]]);
+			}
+		}
+		
+		header("Location: resume.php?pageType=view&resumeId=$resumeId");
+		exit();
 	}
 	
-	for ($i = 0; $i < count($institutions); $i++) {
-		$id = $eduIds[$i];
-		if ($id) {
-			$update = $pdo->prepare("UPDATE Education SET institutionName=?, degree=?, fieldOfStudy=?, startDate=?, endDate=? WHERE educationId=?");
-			$update->execute([$institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i], $id]);
-		} else {
-			$insert = $pdo->prepare("INSERT INTO Education (resumeId, institutionName, degree, fieldOfStudy, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
-			$insert->execute([$resumeId, $institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i]]);
+	
+	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+
+// Handle Education
+		$eduIds = $_POST['educationId'] ?? [];
+		$institutions = $_POST['institution'] ?? [];
+		$degrees = $_POST['degree'] ?? [];
+		$fields = $_POST['fieldOfStudy'] ?? [];
+		$starts = $_POST['startDate'] ?? [];
+		$ends = $_POST['endDate'] ?? [];
+		
+		$existingEduStmt = $pdo->prepare("SELECT educationId FROM Education WHERE resumeId = ?");
+		$existingEduStmt->execute([$resumeId]);
+		$existingEduIds = $existingEduStmt->fetchAll(PDO::FETCH_COLUMN);
+		
+		$postedEduIds = array_filter($eduIds);
+		$toDelete = array_diff($existingEduIds, $postedEduIds);
+		
+		foreach ($toDelete as $id) {
+			$del = $pdo->prepare("DELETE FROM Education WHERE educationId = ?");
+			$del->execute([$id]);
+		}
+		
+		for ($i = 0; $i < count($institutions); $i++) {
+			$id = $eduIds[$i];
+			if ($id) {
+				$update = $pdo->prepare("UPDATE Education SET institutionName=?, degree=?, fieldOfStudy=?, startDate=?, endDate=? WHERE educationId=?");
+				$update->execute([$institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i], $id]);
+			} else {
+				$insert = $pdo->prepare("INSERT INTO Education (resumeId, institutionName, degree, fieldOfStudy, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
+				$insert->execute([$resumeId, $institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i]]);
+			}
 		}
 	}
 }
@@ -177,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                         <span><a href="help.php">Help</a></span>
                     </td>
                     <td class="navCell">
-                        <span><a href="resume.php?pageType=view">Resume</a></span>
+                        <span><a href="resume.php">Resume</a></span>
                     </td>
                     <td colspan="2" class="navCell">
                         <span><a href="userAccount.php?pageType=view">Account</a></span>
@@ -186,25 +202,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             </tbody>
         </table>
     </div>
-
+    
     <?php
-    $query = "SELECT userFirstName, userLastName FROM User WHERE userid = '$userID'";
-    $userStmt = callQuery($pdo, $query, "Unable to retrieve user's personal information.");
-    $user = $userStmt->fetch();
-    $fullName = $user ? $user['userFirstName'] . ' ' . $user['userLastName'] : "Unknown";
-
-    $query = "SELECT * FROM Education WHERE resumeId =  '$resumeId'";
-    $eduStmt = callQuery($pdo, $query, "Error fetching user's education information");
-
-    $query = "SELECT * FROM Work WHERE resumeId = '$resumeId'";
-    $workStmt = callQuery($pdo, $query, "Error fetching user's work history");
+    if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
+        
+        if ($_SESSION['userType'] == 1) {
+            $query = "SELECT userFirstName, userLastName FROM User WHERE userid = '$userID'";
+        } else {
+            $query = "SELECT userFirstName, userLastName FROM User WHERE userid = '" . ltrim($_GET['resume'], 'user') . "'";
+        }
+        $userStmt = callQuery($pdo, $query, "Unable to retrieve user's personal information.");
+        $user = $userStmt->fetch();
+        $fullName = $user ? $user['userFirstName'] . ' ' . $user['userLastName'] : "Unknown";
+    
+        $query = "SELECT * FROM Education WHERE resumeId =  '$resumeId'";
+        $eduStmt = callQuery($pdo, $query, "Error fetching user's education information");
+    
+        $query = "SELECT * FROM Work WHERE resumeId = '$resumeId'";
+        $workStmt = callQuery($pdo, $query, "Error fetching user's work history");
     ?>
 
     <h1>Viewing <?= htmlspecialchars($fullName) ?>'s Resume</h1>
         <input type="hidden" name="resumeId" value="<?= htmlspecialchars($resumeId) ?>">
-
-        <div class="infoTitle">
-        </div>
+        
         <div id="resumeInfoMain" class="resumeInfo">
             <form method="post">
                 <div id="educationSection" class="resumeInfo">
@@ -273,8 +293,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
                 <input type="submit" name="submit" value="Submit">
                 <button type="button" class="cancelBtn">Cancel</button>
             </div>
+            <div class="rightBtnDiv">
+                <button type="button" class="backBtn" style="display: none;"></button>
+            </div>
         </div>
         <!-- === EDUCATION SECTION === -->
+<?php } else if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'browse') {
+			$query = "SELECT * FROM Resume GROUP BY resumeId";
+			$resumeStmt = callQuery($pdo, $query, "Error fetching user's with resumes information");
+      ?>
+        <div class="browseDiv">
+            <div>
+                <?php
+                while($row = $resumeStmt->fetch()) {
+                    $query = "SELECT * FROM User WHERE userId = '" . $row['userId'] . "'";
+                    $browseUser = callQuery($pdo, $query, "Error fetching user's information")->fetch();
+                ?><span><a id="user<?=$browseUser['userid']?>" class="browseUser" href="#" ><?php echo $browseUser['userFIrstName'] . " " . $browseUser['userLastName'] ?></a></span><br><?php
+                }
+                
+                ?>
+            </div>
+        </div>
+        
+        
+        
+        
+        
+	<?php } else {
+	            // This will be an error or reroute because the session var is missing somehow
+    
+    } ?>
         
 
     <div class="footerDiv">
@@ -285,108 +333,143 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
 
 </html>
 
-<script>
-    let originalValues = [];
+<?php
+if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
+?>
+    <script>
+    <?php if (isset($_SESSION['userType']) && $_SESSION['userType'] == '1') { ?>
+        let originalValues = [];
 
-    function storeOriginalValues() {
-        originalValues = [];
-        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
-            originalValues.push({
-                element: input,
-                value: input.value
+        function storeOriginalValues() {
+            originalValues = [];
+            document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+                originalValues.push({
+                    element: input,
+                    value: input.value
+                });
             });
+        }
+
+        function restoreOriginalValues() {
+            originalValues.forEach(item => {
+                item.element.value = item.value;
+            });
+        }
+
+        document.querySelector('.editBtn').addEventListener('click', () => {
+            storeOriginalValues();
+            document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+                input.removeAttribute('readonly');
+            });
+            document.querySelector('.btnDiv').style.display = 'block';
+            document.querySelector('.editBtn').style.display = 'none';
+            document.querySelector('#educationSubmit').style.display = "block";
         });
-    }
 
-    function restoreOriginalValues() {
-        originalValues.forEach(item => {
-            item.element.value = item.value;
+        document.querySelector('.cancelBtn').addEventListener('click', () => {
+            restoreOriginalValues();
+            document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+                input.setAttribute('readonly', true);
+            });
+            document.querySelector('.btnDiv').style.display = 'none';
+            document.querySelector('.editBtn').style.display = 'inline-block';
+            document.querySelector('#educationSubmit').style.display = "none";
         });
-    }
 
-    document.querySelector('.editBtn').addEventListener('click', () => {
-        storeOriginalValues();
-        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
-            input.removeAttribute('readonly');
-        });
-        document.querySelector('.btnDiv').style.display = 'block';
-        document.querySelector('.editBtn').style.display = 'none';
-        document.querySelector('#educationSubmit').style.display = "block";
-    });
-
-    document.querySelector('.cancelBtn').addEventListener('click', () => {
-        restoreOriginalValues();
-        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
-            input.setAttribute('readonly', true);
-        });
-        document.querySelector('.btnDiv').style.display = 'none';
-        document.querySelector('.editBtn').style.display = 'inline-block';
-        document.querySelector('#educationSubmit').style.display = "none";
-    });
-
-    function createRemoveButton(containerSelector, blockClass) {
-        document.querySelectorAll(`${containerSelector} .${blockClass}`).forEach(block => {
-            let btn = block.querySelector('.removeBtn');
-            if (!btn) {
-                btn = document.createElement('button');
-                btn.type = 'button';
-                btn.textContent = 'Remove';
-                btn.classList.add('removeBtn');
-                block.appendChild(btn);
-            }
-
-            btn.onclick = () => {
-                let container = document.querySelector(containerSelector);
-                let blocks = container.querySelectorAll(`.${blockClass}`);
-                if (blocks.length > 1) {
-                    block.remove();
-                    
-                } else {
-                    block.querySelectorAll('input, textarea').forEach(input => {
-                        if (input.type === 'hidden') {
-                            input.value = '';
-                        } else {
-                            input.value = '';
-                        }
-                    });
-                    
+        function createRemoveButton(containerSelector, blockClass) {
+            document.querySelectorAll(`${containerSelector} .${blockClass}`).forEach(block => {
+                let btn = block.querySelector('.removeBtn');
+                if (!btn) {
+                    btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.textContent = 'Remove';
+                    btn.classList.add('removeBtn');
+                    block.appendChild(btn);
                 }
+
+                btn.onclick = () => {
+                    let container = document.querySelector(containerSelector);
+                    let blocks = container.querySelectorAll(`.${blockClass}`);
+                    if (blocks.length > 1) {
+                        block.remove();
+
+                    } else {
+                        block.querySelectorAll('input, textarea').forEach(input => {
+                            if (input.type === 'hidden') {
+                                input.value = '';
+                            } else {
+                                input.value = '';
+                            }
+                        });
+
+                    }
+                    document.querySelector('#educationSubmit').style.display = "block";
+                };
+            });
+            // 'ADD MORE' BUTTONS
+            document.querySelector('#addEducationBtn').addEventListener('click', () => {
+                let container = document.querySelector('#educationSection');
+                let first = container.querySelector('.educationBlock');
+                let clone = first.cloneNode(true);
+
+                clone.querySelectorAll('input').forEach(input => {
+                    input.value = '';
+                    input.removeAttribute('readonly');
+                });
                 document.querySelector('#educationSubmit').style.display = "block";
-            };
-        });
-    }
-    // 'ADD MORE' BUTTONS
-    document.querySelector('#addEducationBtn').addEventListener('click', () => {
-        let container = document.querySelector('#educationSection');
-        let first = container.querySelector('.educationBlock');
-        let clone = first.cloneNode(true);
+                clone.querySelector('input[name="educationId[]"]').value = ''; // clear ID
+                container.appendChild(clone);
+                createRemoveButton('#educationSection', 'educationBlock');
+            });
 
-        clone.querySelectorAll('input').forEach(input => {
-            input.value = '';
-            input.removeAttribute('readonly');
+            document.querySelector('#addWorkBtn').addEventListener('click', () => {
+                let container = document.querySelector('#workSection');
+                let first = container.querySelector('.workBlock');
+                let clone = first.cloneNode(true);
+
+                clone.querySelectorAll('input, textarea').forEach(input => {
+                    input.value = '';
+                    input.removeAttribute('readonly');
+                });
+
+                clone.querySelector('input[name="workId[]"]').value = ''; // clear ID
+                container.appendChild(clone);
+                createRemoveButton('#workSection', 'workBlock');
+            });
+
+            // Attach remove buttons to all blocks on initial page load
+            createRemoveButton('#educationSection', 'educationBlock');
+            createRemoveButton('#workSection', 'workBlock');
+        }
+        <?php
+        } else {
+        ?>
+            document.querySelectorAll('#resumeInfoMain button').forEach(e => {
+                e.style.display = 'none';
+            });
+        <?php
+        }
+        ?>
+    </script>
+<?php
+} else if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'browse') {
+?>
+
+<script>
+    // BROWSE VIEW Scripts
+    $browseLinks = document.querySelectorAll('.browseUser');
+    $browseLinks.forEach(link => {
+        link.addEventListener('click', e => {
+            e.preventDefault();
+            <?php
+            $_SESSION['resumeView'] = 'resume';
+            $_SESSION['prevPage'] = 'userBrowse';
+            ?>
+            window.location.href = 'resume.php?resume=' + link.id;
+            //window.location.reload();
         });
-        document.querySelector('#educationSubmit').style.display = "block";
-        clone.querySelector('input[name="educationId[]"]').value = ''; // clear ID
-        container.appendChild(clone);
-        createRemoveButton('#educationSection', 'educationBlock');
     });
-
-    document.querySelector('#addWorkBtn').addEventListener('click', () => {
-        let container = document.querySelector('#workSection');
-        let first = container.querySelector('.workBlock');
-        let clone = first.cloneNode(true);
-
-        clone.querySelectorAll('input, textarea').forEach(input => {
-            input.value = '';
-            input.removeAttribute('readonly');
-        });
-
-        clone.querySelector('input[name="workId[]"]').value = ''; // clear ID
-        container.appendChild(clone);
-        createRemoveButton('#workSection', 'workBlock');
-    });
-
-    // Attach remove buttons to all blocks on initial page load
-    createRemoveButton('#educationSection', 'educationBlock');
-    createRemoveButton('#workSection', 'workBlock');
 </script>
+<?php
+}
+?>
