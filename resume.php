@@ -312,7 +312,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 					while($row = $eduStmt->fetch()) {
 					?><div class="educationBlock">
                       <input type="hidden" name="educationId[]" value="<?= htmlspecialchars($row['educationId']) ?>">
-                      <button type="button" class="editEducationBtn"><img src="garbage/pencil.png" alt="Edit"></button><br>
+                      <button type="button" class="editEducationBtn editBtn"><img src="garbage/pencil.png" alt="Edit" style="display: none;"></button><br>
                       <label>Institution</label><br>
                       <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
                       <label>Degree</label><br>
@@ -345,7 +345,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									while($row = $hobbyStmt->fetch()) {
 										?><div class="hobbiesBlock">
                       <input type="hidden" name="hobbieId[]" value="<?= htmlspecialchars($row['hobbieId']) ?>">
-                      <button type="button" class="editHobbiesBtn"><img src="garbage/pencil.png" alt="Edit"></button><br>
+                      <button type="button" class="editHobbiesBtn editBtn"><img src="garbage/pencil.png" alt="Edit" style="display: none;"></button><br>
                       <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
@@ -369,7 +369,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									while($row = $projectStmt->fetch()) {
 										?><div class="projectsBlock">
                       <input type="hidden" name="projectId[]" value="<?= htmlspecialchars($row['projectId']) ?>">
-                      <button type="button" class="editProjectsBtn"><img src="garbage/pencil.png" alt="Edit"></button><br>
+                      <button type="button" class="editProjectsBtn editBtn"><img src="garbage/pencil.png" alt="Edit" style="display: none;"></button><br>
                       <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
@@ -393,7 +393,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									while($row = $skillStmt->fetch()) {
 										?><div class="skillBlock">
                       <input type="hidden" name="skillId[]" value="<?= htmlspecialchars($row['skillId']) ?>">
-                      <button type="button" class="editSkillsBtn"><img src="garbage/pencil.png" alt="Edit"></button><br>
+                      <button type="button" class="editSkillsBtn editBtn"><img src="garbage/pencil.png" alt="Edit" style="display: none;"></button><br>
                       <label>Skill</label><br>
                       <input type="text" name="skill[]" value="<?= htmlspecialchars($row['skill']) ?>" readonly><br>
                       <label>Proficiency Level</label><br>
@@ -422,7 +422,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									while($row = $workStmt->fetch()) {
 										?><div class="workBlock">
                       <input type="hidden" name="workId[]" value="<?= htmlspecialchars($row['workId']) ?>">
-                      <button type="button" class="editWorkBtn"><img src="garbage/pencil.png" alt="Edit"></button><br>
+                      <button type="button" class="editWorkBtn editBtn"><img src="garbage/pencil.png" alt="Edit" style="display: none;"></button><br>
                       <label>Job Title</label><br>
                       <input type="text" name="jobTitle[]" value="<?= htmlspecialchars($row['jobTitle']) ?>" readonly><br>
                       <label>Company</label><br>
@@ -487,7 +487,8 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 ?>
     <script>
         let navLinks = document.querySelectorAll(".navTable a");
-    
+        let editBtns = document.querySelectorAll(".resumeInfo .editBtn:first-child");
+        
         navLinks.forEach(link => {
             link.addEventListener('click', e => {
                 e.preventDefault();
@@ -501,6 +502,11 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                 window.location.href = link.href;
             });
         });
+        editBtns.forEach(e => {
+            e.style.display = 'block';
+        })
+        
+        
     <?php if (isset($_SESSION['userType']) && $_SESSION['userType'] == '1') { ?>
         let originalValues = [];
 
@@ -631,6 +637,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             });
 
             clone.querySelector('input[name="workId[]"]').value = ''; // clear ID
+            clone.querySelectorAll('.editBtn');
             container.appendChild(clone);
         });
         
