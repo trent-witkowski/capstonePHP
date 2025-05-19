@@ -63,6 +63,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signUp'])) {
             
                 $resumeStmt = $pdo->prepare("INSERT INTO Resume (userId, mainContext, createdOn, updatedOn) VALUES (?, ?, NOW(), NOW())");
                 $resumeStmt->execute([$user['userid'], 'New Resume']);
+                $newResumeId = $pdo->lastInsertId();
+
+                $pdo->prepare("INSERT INTO Education (resumeId, institutionName, degree, fieldOfStudy, startDate, endDate) 
+                            VALUES (?, 'Sample University', 'Bachelor of Science', 'Computer Science', '2020-08-01', '2024-05-01')")
+                    ->execute([$newResumeId]);
+
+                $pdo->prepare("INSERT INTO Work (resumeId, jobTitle, companyName, jobDescription, startDate, endDate) 
+                            VALUES (?, 'Software Intern', 'Tech Corp', 'Worked on frontend development using React.', '2023-06-01', '2023-08-31')")
+                    ->execute([$newResumeId]);
+
+                $pdo->prepare("INSERT INTO Hobbies (resumeId, description) VALUES (?, 'Playing guitar')")
+                    ->execute([$newResumeId]);
+
+                $pdo->prepare("INSERT INTO Projects (resumeId, description) VALUES (?, 'Personal portfolio website')")
+                    ->execute([$newResumeId]);
+
+                $pdo->prepare("INSERT INTO skill (resumeId, skill, proficiency, startDate) 
+                            VALUES (?, 'HTML/CSS', 'Intermediate', '2022-01-01')")
+                    ->execute([$newResumeId]);
             
                 header("Location: userAccount.php?pageType=view");
                 exit();
