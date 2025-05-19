@@ -266,6 +266,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									<?php } ?>
 
                 </div>
+                <input type="submit" value="educationSubmit" name="educationSubmit" style="display: none;" disabled>
                 <input id="educationSubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
 
@@ -288,6 +289,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									<?php } ?>
 
                 </div>
+                <input type="submit" value="hobbiesSubmit" name="hobbiesSubmit" style="display: none;" disabled>
                 <input id="hobbiesSubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
 
@@ -311,6 +313,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									<?php } ?>
 
                 </div>
+                <input type="submit" value="projectsSubmit" name="projectsSubmit" style="display: none;" disabled>
                 <input id="projectsSubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
 
@@ -339,6 +342,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									<?php } ?>
 
                 </div>
+                <input type="submit" value="skillSubmit" name="skillSubmit" style="display: none;" disabled>
                 <input id="skillsSubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
 
@@ -371,6 +375,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									<?php } ?>
 
                 </div>
+                <input type="submit" value="workSubmit" name="workSubmit" style="display: none;" disabled>
                 <input id="workHistorySubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
             <!-- SUBMIT -->
