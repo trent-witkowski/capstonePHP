@@ -217,91 +217,6 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
         header("Location: resume.php?pageType=view&resumeId=$resumeId");
         exit();
         }
-
-        if (isset($_POST['deleteEducation'])) {
-        $eduIds = $_POST['educationId'] ?? [];
-
-        $existingStmt = $pdo->prepare("SELECT educationId FROM Education WHERE resumeId = ?");
-        $existingStmt->execute([$resumeId]);
-        $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
-
-        $toDelete = array_diff($existingIds, array_filter($eduIds));
-        foreach ($toDelete as $id) {
-            $del = $pdo->prepare("DELETE FROM Education WHERE educationId = ?");
-            $del->execute([$id]);
-        }
-
-        header("Location: resume.php?pageType=view&resumeId=$resumeId");
-        exit();
-        }
-
-        if (isset($_POST['deleteWork'])) {
-            $workIds = $_POST['workHistoryId'] ?? [];
-
-            $existingStmt = $pdo->prepare("SELECT workId FROM Work WHERE resumeId = ?");
-            $existingStmt->execute([$resumeId]);
-            $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
-
-            $toDelete = array_diff($existingIds, array_filter($workIds));
-            foreach ($toDelete as $id) {
-                $del = $pdo->prepare("DELETE FROM Work WHERE workId = ?");
-                $del->execute([$id]);
-            }
-
-            header("Location: resume.php?pageType=view&resumeId=$resumeId");
-            exit();
-        }
-
-        if (isset($_POST['deleteHobbies'])) {
-            $hobbieIds = $_POST['hobbiesId'] ?? [];
-
-            $existingStmt = $pdo->prepare("SELECT hobbieId FROM Hobbies WHERE resumeId = ?");
-            $existingStmt->execute([$resumeId]);
-            $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
-
-            $toDelete = array_diff($existingIds, array_filter($hobbieIds));
-            foreach ($toDelete as $id) {
-                $del = $pdo->prepare("DELETE FROM Hobbies WHERE hobbieId = ?");
-                $del->execute([$id]);
-            }
-
-            header("Location: resume.php?pageType=view&resumeId=$resumeId");
-            exit();
-        }
-
-        if (isset($_POST['deleteProjects'])) {
-            $projectIds = $_POST['projectsId'] ?? [];
-
-            $existingStmt = $pdo->prepare("SELECT projectId FROM Projects WHERE resumeId = ?");
-            $existingStmt->execute([$resumeId]);
-            $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
-
-            $toDelete = array_diff($existingIds, array_filter($projectIds));
-            foreach ($toDelete as $id) {
-                $del = $pdo->prepare("DELETE FROM Projects WHERE projectId = ?");
-                $del->execute([$id]);
-            }
-
-            header("Location: resume.php?pageType=view&resumeId=$resumeId");
-            exit();
-        }
-
-        if (isset($_POST['deleteSkill'])) {
-            $skillIds = $_POST['skillsId'] ?? [];
-
-            $existingStmt = $pdo->prepare("SELECT skillId FROM skill WHERE resumeId = ?");
-            $existingStmt->execute([$resumeId]);
-            $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
-
-            $toDelete = array_diff($existingIds, array_filter($skillIds));
-            foreach ($toDelete as $id) {
-                $del = $pdo->prepare("DELETE FROM skill WHERE skillId = ?");
-                $del->execute([$id]);
-            }
-
-            header("Location: resume.php?pageType=view&resumeId=$resumeId");
-            exit();
-        }
     }
 }
 ?>
@@ -393,13 +308,11 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                         <h3>Education</h3>
                         <button type="button" id="addEducationBtn"><img src="garbage/plus.png" alt="Add"></button>
                     </div>
-									
-									<?php
-                                    $i = 0;
-									while($row = $eduStmt->fetch()) {
-										?><div class="educationBlock<?=$i?>">
+					<?php
+					while($row = $eduStmt->fetch()) {
+					?><div class="educationBlock">
                       <input type="hidden" name="educationId[]" value="<?= htmlspecialchars($row['educationId']) ?>">
-                      <button type="button" class="editEducationBtn<?=$i?>"><img src="garbage/pencil.png" alt="Edit"></button><br>
+                      <button type="button" class="editEducationBtn"><img src="garbage/pencil.png" alt="Edit"></button><br>
                       <label>Institution</label><br>
                       <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
                       <label>Degree</label><br>
@@ -413,7 +326,6 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                       <br>
                       </div><br><br>
 									<?php
-                                    $i = $i + 1;
                                     }
                                     ?>
 
@@ -437,7 +349,8 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                       <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
-									<?php } ?>
+									<?php
+                                    } ?>
 
                 </div>
                 <input type="hidden" value="hobbiesSubmit" name="hobbiesSubmit">
@@ -460,7 +373,8 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                       <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
-									<?php } ?>
+									<?php } 
+                                ?>
 
                 </div>
                 <input type="hidden" value="projectsSubmit" name="projectsSubmit">
@@ -488,7 +402,8 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                       <input type="date" name="startDate[]" value="<?= htmlspecialchars($row['startDate']) ?>" readonly><br>
                       <br>
                       </div><br><br>
-									<?php } ?>
+									<?php } 
+                                ?>
 
                 </div>
                 <input type="hidden" value="skillSubmit" name="skillSubmit">
@@ -740,7 +655,6 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
     </script>
 <?php
 } else if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'browse') {
-
 ?>
 
 <script>
