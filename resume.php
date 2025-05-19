@@ -395,11 +395,11 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                     </div>
 									
 									<?php
+                                    $i = 0;
 									while($row = $eduStmt->fetch()) {
-										?><div class="educationBlock">
+										?><div class="educationBlock<?=$i?>">
                       <input type="hidden" name="educationId[]" value="<?= htmlspecialchars($row['educationId']) ?>">
-                      <button type="button" class="editEducationBtn"><img src="garbage/pencil.png" alt="Edit"></button>
-                      <button type="button" class="removeEducationBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <button type="button" class="editEducationBtn<?=$i?>"><img src="garbage/pencil.png" alt="Edit"></button><br>
                       <label>Institution</label><br>
                       <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
                       <label>Degree</label><br>
@@ -412,7 +412,10 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                       <input type="date" name="endDate[]" value="<?= $row['endDate'] ?>" readonly><br>
                       <br>
                       </div><br><br>
-									<?php } ?>
+									<?php
+                                    $i = $i + 1;
+                                    }
+                                    ?>
 
                 </div>
                 <input type="hidden" value="educationSubmit" name="educationSubmit">
@@ -430,8 +433,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									while($row = $hobbyStmt->fetch()) {
 										?><div class="hobbiesBlock">
                       <input type="hidden" name="hobbieId[]" value="<?= htmlspecialchars($row['hobbieId']) ?>">
-                      <button type="button" class="editHobbiesBtn"><img src="garbage/pencil.png" alt="Edit"></button>
-                      <button type="button" class="removeHobbiesBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <button type="button" class="editHobbiesBtn"><img src="garbage/pencil.png" alt="Edit"></button><br>
                       <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
@@ -454,8 +456,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									while($row = $projectStmt->fetch()) {
 										?><div class="projectsBlock">
                       <input type="hidden" name="projectId[]" value="<?= htmlspecialchars($row['projectId']) ?>">
-                      <button type="button" class="editProjectsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
-                      <button type="button" class="removeProjectsBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <button type="button" class="editProjectsBtn"><img src="garbage/pencil.png" alt="Edit"></button><br>
                       <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
@@ -471,15 +472,14 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                 <div id="skillSection" class="resumeInfo">
                     <div class="fieldDiv">
                         <h3>Skills</h3>
-                        <button type="button" id="addSkillsBtn"><img src="garbage/plus.png" alt="Add"></button>
+                        <button type="button" id="addSkillBtn"><img src="garbage/plus.png" alt="Add"></button>
                     </div>
 									
 									<?php
 									while($row = $skillStmt->fetch()) {
 										?><div class="skillBlock">
                       <input type="hidden" name="skillId[]" value="<?= htmlspecialchars($row['skillId']) ?>">
-                      <button type="button" class="editSkillsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
-                      <button type="button" class="removeSkillBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <button type="button" class="editSkillsBtn"><img src="garbage/pencil.png" alt="Edit"></button><br>
                       <label>Skill</label><br>
                       <input type="text" name="skill[]" value="<?= htmlspecialchars($row['skill']) ?>" readonly><br>
                       <label>Proficiency Level</label><br>
@@ -507,8 +507,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									while($row = $workStmt->fetch()) {
 										?><div class="workBlock">
                       <input type="hidden" name="workId[]" value="<?= htmlspecialchars($row['workId']) ?>">
-                      <button type="button" class="editWorkBtn"><img src="garbage/pencil.png" alt="Edit"></button>
-                      <button type="button" class="removeWorkBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <button type="button" class="editWorkBtn"><img src="garbage/pencil.png" alt="Edit"></button><br>
                       <label>Job Title</label><br>
                       <input type="text" name="jobTitle[]" value="<?= htmlspecialchars($row['jobTitle']) ?>" readonly><br>
                       <label>Company</label><br>
@@ -555,15 +554,9 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             
             ?>
     </div>
-        
-        
-        
-        
-        
-	<?php } else {
-	            // This will be an error or reroute because the session var is missing somehow
-    
-    } ?>
+	<?php
+    }
+    ?>
         
 
     <div class="footerDiv">
@@ -611,7 +604,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                 item.element.value = item.value;
             });
         }
-
+        
         document.querySelector('.editEducationBtn').addEventListener('click', () => {
             storeOriginalValues();
             document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
@@ -648,121 +641,14 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             document.querySelector('#skillsSubmit').style.display = "block";
         });
 
-        document.querySelector('.editWorkHistoryBtn').addEventListener('click', () => {
+        document.querySelector('.editWorkBtn').addEventListener('click', () => {
             storeOriginalValues();
             document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
                 input.removeAttribute('readonly');
             });
-            document.querySelector('.editWorkHistoryBtn').style.display = 'none';
-            document.querySelector('#workHistorySubmit').style.display = "block";
-        });
-
-
-
-        document.querySelector('.removeEducationBtn').onclick = () => {
-            let container = document.querySelector('.educationSection');
-            let blocks = container.querySelectorAll(`.educationBlock`);
-            blocks.forEach(block => {
-                if (blocks.length > 1) {
-                    block.remove();
-
-                } else {
-                    block.querySelectorAll('input, textarea').forEach(input => {
-                        if (input.type === 'hidden') {
-                            input.value = '';
-                        } else {
-                            input.value = '';
-                        }
-                    });
-
-                }
-            });
-            document.querySelector('#educationSubmit').style.display = "block";
-        };
-        
-        document.querySelector('.removeHobbiesBtn').onclick = () => {
-            let container = document.querySelector('.hobbiesSection');
-            let blocks = container.querySelectorAll(`.hobbiesBlock`);
-            blocks.forEach(block => {
-                if (blocks.length > 1) {
-                    block.remove();
-
-                } else {
-                    block.querySelectorAll('input, textarea').forEach(input => {
-                        if (input.type === 'hidden') {
-                            input.value = '';
-                        } else {
-                            input.value = '';
-                        }
-                    });
-
-                }
-            });
-            document.querySelector('#hobbiesSubmit').style.display = "block";
-        };
-        
-        document.querySelector('.removeProjectsBtn').onclick = () => {
-            let container = document.querySelector('.projectsSection');
-            let blocks = container.querySelectorAll(`.projectsBlock`);
-            blocks.forEach(block => {
-                if (blocks.length > 1) {
-                    block.remove();
-
-                } else {
-                    block.querySelectorAll('input, textarea').forEach(input => {
-                        if (input.type === 'hidden') {
-                            input.value = '';
-                        } else {
-                            input.value = '';
-                        }
-                    });
-
-                }
-            });
-            document.querySelector('#projectsSubmit').style.display = "block";
-        };
-        
-        document.querySelector('.removeSkillBtn').onclick = () => {
-            let container = document.querySelector('.skillSection');
-            let blocks = container.querySelectorAll(`.skillBlock`);
-            blocks.forEach(block => {
-                if (blocks.length > 1) {
-                    block.remove();
-
-                } else {
-                    block.querySelectorAll('input, textarea').forEach(input => {
-                        if (input.type === 'hidden') {
-                            input.value = '';
-                        } else {
-                            input.value = '';
-                        }
-                    });
-
-                }
-            });
-            document.querySelector('#skillSubmit').style.display = "block";
-        };
-        
-        document.querySelector('.removeWorkBtn').onclick = () => {
-            let container = document.querySelector('.workSection');
-            let blocks = container.querySelectorAll(`.workBlock`);
-            blocks.forEach(block => {
-                if (blocks.length > 1) {
-                    block.remove();
-
-                } else {
-                    block.querySelectorAll('input, textarea').forEach(input => {
-                        if (input.type === 'hidden') {
-                            input.value = '';
-                        } else {
-                            input.value = '';
-                        }
-                    });
-
-                }
-            });
+            document.querySelector('.editWorkBtn').style.display = 'none';
             document.querySelector('#workSubmit').style.display = "block";
-        };
+        });
             
         // 'ADD MORE' BUTTONS
         document.querySelector('#addEducationBtn').addEventListener('click', () => {
@@ -776,8 +662,8 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             });
             document.querySelector('#educationSubmit').style.display = "block";
             clone.querySelector('input[name="educationId[]"]').value = ''; // clear ID
+            
             container.appendChild(clone);
-            createRemoveButton('#educationSection', 'educationBlock');
         });
         document.querySelector('#addHobbiesBtn').addEventListener('click', () => {
             let container = document.querySelector('#hobbiesSection');
@@ -791,7 +677,6 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             document.querySelector('#hobbiesSubmit').style.display = "block";
             clone.querySelector('input[name="hobbieId[]"]').value = ''; // clear ID
             container.appendChild(clone);
-            createRemoveButton('#hobbiesSection', 'hobbiesBlock');
         });
         document.querySelector('#addProjectsBtn').addEventListener('click', () => {
             let container = document.querySelector('#projectsSection');
@@ -805,7 +690,6 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             document.querySelector('#projectsSubmit').style.display = "block";
             clone.querySelector('input[name="projectId[]"]').value = ''; // clear ID
             container.appendChild(clone);
-            createRemoveButton('#projectsSection', 'projectsBlock');
         });
         document.querySelector('#addSkillBtn').addEventListener('click', () => {
             let container = document.querySelector('#skillSection');
@@ -819,7 +703,6 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             document.querySelector('#skillSubmit').style.display = "block";
             clone.querySelector('input[name="skillId[]"]').value = ''; // clear ID
             container.appendChild(clone);
-            createRemoveButton('#skillSection', 'skillBlock');
         });
 
         document.querySelector('#addWorkBtn').addEventListener('click', () => {
@@ -834,7 +717,6 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 
             clone.querySelector('input[name="workId[]"]').value = ''; // clear ID
             container.appendChild(clone);
-            createRemoveButton('#workSection', 'workBlock');
         });
         
         <?php
@@ -858,11 +740,6 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
     </script>
 <?php
 } else if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'browse') {
-    setupRemoveButtons('#educationSection', 'educationBlock', '#educationSubmit');
-    setupRemoveButtons('#hobbiesSection', 'hobbiesBlock', '#hobbiesSubmit');
-    setupRemoveButtons('#projectsSection', 'projectsBlock', '#projectsSubmit');
-    setupRemoveButtons('#skillsSection', 'skillsBlock', '#skillsSubmit');
-    setupRemoveButtons('#workHistorySection', 'workHistoryBlock', '#workHistorySubmit');
 
 ?>
 
