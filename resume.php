@@ -492,7 +492,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 
                 </div>
                 <input type="hidden" value="skillSubmit" name="skillSubmit">
-                <input id="skillsSubmit" type="submit" value="Submit" name="submit" style="display: none;">
+                <input id="skillSubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
 
 
@@ -675,8 +675,16 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
                 input.setAttribute('readonly', true);
             });
-            document.querySelector('.editBtn').style.display = 'inline-block';
+            document.querySelector('.editEducationBtn').style.display = 'inline-block';
+            document.querySelector('.editHobbiesBtn').style.display = 'inline-block';
+            document.querySelector('.editProjectsBtn').style.display = 'inline-block';
+            document.querySelector('.editSkillsBtn').style.display = 'inline-block';
+            document.querySelector('.editWorkBtn').style.display = 'inline-block';
             document.querySelector('#educationSubmit').style.display = "none";
+            document.querySelector('#hobbiesSubmit').style.display = "none";
+            document.querySelector('#projectsSubmit').style.display = "none";
+            document.querySelector('#skillSubmit').style.display = "none";
+            document.querySelector('#workSubmit').style.display = "none";
         });
 
         function createRemoveButton(containerSelector, blockClass) {
