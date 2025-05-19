@@ -237,7 +237,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									while($row = $eduStmt->fetch()) {
 										?><div class="educationBlock">
                       <input type="hidden" name="educationId[]" value="<?= htmlspecialchars($row['educationId']) ?>">
-                      <button type="button" class="editBtn"><img src="garbage/pencil.png" alt="Edit"></button>
+                      <button type="button" class="editEducationBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <label>Institution</label><br>
                       <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
@@ -257,47 +257,141 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                 <input id="educationSubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
 
-            <!-- === WORK SECTION === -->
-            <div id="workSection" class="resumeInfo">
-                <div class="fieldDiv">
-                    <h3>Work Experience</h3>
-                    <button type="button" id="addWorkBtn">Add More</button>
-                </div>
-							
-							<?php
-							while($row = $workStmt->fetch()) {
-								?>
-                  <div class="workBlock">
-                      <form method="post">
-                          <input type="hidden" name="workId[]" value="<?= htmlspecialchars($row['workId']) ?>">
-                          <label>Job Title</label>
-                          <input type="text" name="jobTitle[]" value="<?= htmlspecialchars($row['jobTitle']) ?>" readonly>
-                          <label>Company Name</label>
-                          <input type="text" name="companyName[]" value="<?= htmlspecialchars($row['companyName']) ?>" readonly>
-                          <label>Job Description</label>
-                          <textarea name="jobDescription[]" readonly><?= htmlspecialchars($row['jobDescription']) ?></textarea>
-                          <label>Start Date</label>
-                          <input type="date" name="workStartDate[]" value="<?= $row['startDate'] ?>" readonly>
-                          <label>End Date</label>
-                          <input type="date" name="workEndDate[]" value="<?= $row['endDate'] ?>" readonly>
-                          <button type="button" class="removeBtn">Remove</button>
-                          <br>
-                          <input type="submit" value="Submit" name="submit">
-                      </form>
-                  </div>
-							<?php } ?>
-            </div>
+            <form method="post">
+                <div id="hobbiesSection" class="resumeInfo">
+                    <div class="fieldDiv">
+                        <h3>Hobbies</h3>
+                        <button type="button" id="addHobbiesBtn"><img src="garbage/plus.png" alt="Add"></button>
+                    </div>
+									
+									<?php
+									while($row = $eduStmt->fetch()) {
+										?><div class="hobbiesBlock">
+                      <input type="hidden" name="hobbiesId[]" value="<?= htmlspecialchars($row['hobbiesId']) ?>">
+                      <button type="button" class="editHobbiesBtn"><img src="garbage/pencil.png" alt="Edit"></button>
+                      <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <label>Institution</label><br>
+                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
+                      <label>Degree</label><br>
+                      <input type="text" name="degree[]" value="<?= htmlspecialchars($row['degree']) ?>" readonly><br>
+                      <label>Field of Study</label><br>
+                      <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($row['fieldOfStudy']) ?>" readonly><br>
+                      <label>Start Date</label><br>
+                      <input type="date" name="startDate[]" value="<?= $row['startDate'] ?>" readonly><br>
+                      <label>End Date</label><br>
+                      <input type="date" name="endDate[]" value="<?= $row['endDate'] ?>" readonly><br>
+                      <br>
+                      </div><br><br>
+									<?php } ?>
 
+                </div>
+                <input id="hobbiesSubmit" type="submit" value="Submit" name="submit" style="display: none;">
+            </form>
+
+
+            <form method="post">
+                <div id="projectsSection" class="resumeInfo">
+                    <div class="fieldDiv">
+                        <h3>Projects</h3>
+                        <button type="button" id="addProjectsBtn"><img src="garbage/plus.png" alt="Add"></button>
+                    </div>
+									
+									<?php
+									while($row = $eduStmt->fetch()) {
+										?><div class="projectsBlock">
+                      <input type="hidden" name="projectsId[]" value="<?= htmlspecialchars($row['projectsId']) ?>">
+                      <button type="button" class="editProjectsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
+                      <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <label>Institution</label><br>
+                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
+                      <label>Degree</label><br>
+                      <input type="text" name="degree[]" value="<?= htmlspecialchars($row['degree']) ?>" readonly><br>
+                      <label>Field of Study</label><br>
+                      <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($row['fieldOfStudy']) ?>" readonly><br>
+                      <label>Start Date</label><br>
+                      <input type="date" name="startDate[]" value="<?= $row['startDate'] ?>" readonly><br>
+                      <label>End Date</label><br>
+                      <input type="date" name="endDate[]" value="<?= $row['endDate'] ?>" readonly><br>
+                      <br>
+                      </div><br><br>
+									<?php } ?>
+
+                </div>
+                <input id="projectsSubmit" type="submit" value="Submit" name="submit" style="display: none;">
+            </form>
+
+
+            <form method="post">
+                <div id="skillsSection" class="resumeInfo">
+                    <div class="fieldDiv">
+                        <h3>Skills</h3>
+                        <button type="button" id="addSkillsBtn"><img src="garbage/plus.png" alt="Add"></button>
+                    </div>
+									
+									<?php
+									while($row = $eduStmt->fetch()) {
+										?><div class="skillsBlock">
+                      <input type="hidden" name="skillsId[]" value="<?= htmlspecialchars($row['skillsId']) ?>">
+                      <button type="button" class="editSkillsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
+                      <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <label>Institution</label><br>
+                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
+                      <label>Degree</label><br>
+                      <input type="text" name="degree[]" value="<?= htmlspecialchars($row['degree']) ?>" readonly><br>
+                      <label>Field of Study</label><br>
+                      <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($row['fieldOfStudy']) ?>" readonly><br>
+                      <label>Start Date</label><br>
+                      <input type="date" name="startDate[]" value="<?= $row['startDate'] ?>" readonly><br>
+                      <label>End Date</label><br>
+                      <input type="date" name="endDate[]" value="<?= $row['endDate'] ?>" readonly><br>
+                      <br>
+                      </div><br><br>
+									<?php } ?>
+
+                </div>
+                <input id="skillsSubmit" type="submit" value="Submit" name="submit" style="display: none;">
+            </form>
+
+
+            <form method="post">
+                <div id="workHistorySection" class="resumeInfo">
+                    <div class="fieldDiv">
+                        <h3>Work History</h3>
+                        <button type="button" id="addWorkHistoryBtn"><img src="garbage/plus.png" alt="Add"></button>
+                    </div>
+									
+									<?php
+									while($row = $eduStmt->fetch()) {
+										?><div class="workHistoryBlock">
+                      <input type="hidden" name="workHistoryId[]" value="<?= htmlspecialchars($row['workHistoryId']) ?>">
+                      <button type="button" class="editWorkHistoryBtn"><img src="garbage/pencil.png" alt="Edit"></button>
+                      <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
+                      <label>Institution</label><br>
+                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
+                      <label>Degree</label><br>
+                      <input type="text" name="degree[]" value="<?= htmlspecialchars($row['degree']) ?>" readonly><br>
+                      <label>Field of Study</label><br>
+                      <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($row['fieldOfStudy']) ?>" readonly><br>
+                      <label>Start Date</label><br>
+                      <input type="date" name="startDate[]" value="<?= $row['startDate'] ?>" readonly><br>
+                      <label>End Date</label><br>
+                      <input type="date" name="endDate[]" value="<?= $row['endDate'] ?>" readonly><br>
+                      <br>
+                      </div><br><br>
+									<?php } ?>
+
+                </div>
+                <input id="workHistorySubmit" type="submit" value="Submit" name="submit" style="display: none;">
+            </form>
             <!-- SUBMIT -->
             <div class="btnDiv" style="display: none;">
                 <input type="submit" name="submit" value="Submit">
                 <button type="button" class="cancelBtn">Cancel</button>
             </div>
             <div class="rightBtnDiv">
-                <button type="button" class="backBtn" style="display: none;"></button>
+                <button type="button" class="backBtn" style="display: none;">Back</button>
             </div>
         </div>
-        <!-- === EDUCATION SECTION === -->
 <?php } else if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'browse') {
 			$query = "SELECT * FROM Resume GROUP BY resumeId";
 			$resumeStmt = callQuery($pdo, $query, "Error fetching user's with resumes information");
@@ -356,22 +450,63 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             });
         }
 
-        document.querySelector('.editBtn').addEventListener('click', () => {
-            storeOriginalValues();
-            document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
-                input.removeAttribute('readonly');
-            });
-            document.querySelector('.btnDiv').style.display = 'block';
-            document.querySelector('.editBtn').style.display = 'none';
-            document.querySelector('#educationSubmit').style.display = "block";
+    document.querySelector('.editEducationBtn').addEventListener('click', () => {
+        storeOriginalValues();
+        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+            input.removeAttribute('readonly');
         });
+        document.querySelector('.btnDiv').style.display = 'block';
+        document.querySelector('.editEducationBtn').style.display = 'none';
+        document.querySelector('#educationSubmit').style.display = "block";
+    });
+
+    document.querySelector('.editHobbiesBtn').addEventListener('click', () => {
+        storeOriginalValues();
+        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+            input.removeAttribute('readonly');
+        });
+        document.querySelector('.btnDiv').style.display = 'block';
+        document.querySelector('.editHobbiesBtn').style.display = 'none';
+        document.querySelector('#hobbiesSubmit').style.display = "block";
+    });
+
+    document.querySelector('.editProjectsBtn').addEventListener('click', () => {
+        storeOriginalValues();
+        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+            input.removeAttribute('readonly');
+        });
+        document.querySelector('.btnDiv').style.display = 'block';
+        document.querySelector('.editProjectsBtn').style.display = 'none';
+        document.querySelector('#projectsSubmit').style.display = "block";
+    });
+
+    document.querySelector('.editSkillsBtn').addEventListener('click', () => {
+        storeOriginalValues();
+        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+            input.removeAttribute('readonly');
+        });
+        document.querySelector('.btnDiv').style.display = 'block';
+        document.querySelector('.editSkillsBtn').style.display = 'none';
+        document.querySelector('#skillsSubmit').style.display = "block";
+    });
+
+    document.querySelector('.editWorkHistoryBtn').addEventListener('click', () => {
+        storeOriginalValues();
+        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+            input.removeAttribute('readonly');
+        });
+        document.querySelector('.btnDiv').style.display = 'block';
+        document.querySelector('.editWorkHistoryBtn').style.display = 'none';
+        document.querySelector('#workHistorySubmit').style.display = "block";
+    });
+
+    
 
         document.querySelector('.cancelBtn').addEventListener('click', () => {
             restoreOriginalValues();
             document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
                 input.setAttribute('readonly', true);
             });
-            document.querySelector('.btnDiv').style.display = 'none';
             document.querySelector('.editBtn').style.display = 'inline-block';
             document.querySelector('#educationSubmit').style.display = "none";
         });
@@ -447,6 +582,15 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             document.querySelectorAll('#resumeInfoMain button').forEach(e => {
                 e.style.display = 'none';
             });
+            let backBtn = document.querySelector('.backBtn');
+            backBtn.style.display = 'block';
+            backBtn.addEventListener('click', e => {
+                <?php
+                $_SESSION['resumeView'] = 'browse';
+                $_SESSION['prevPage'] = 'viewResume';
+                ?>
+                window.location.href = "resume.php";
+            });
         <?php
         }
         ?>
@@ -466,7 +610,6 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             $_SESSION['prevPage'] = 'userBrowse';
             ?>
             window.location.href = 'resume.php?resume=' + link.id;
-            //window.location.reload();
         });
     });
 </script>
