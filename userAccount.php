@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
                 <input type="text" name="country" id="editCountry" value="<?= htmlspecialchars($user['country']) ?>" readonly>
                 <br>
                 <label for="editState" id="editStateLbl">State</label>
-                <input type="text" name="state" id="editState" value="<?= htmlspecialchars($user['state']) ?>" readonly>
+                <input type="text" name="state" id="editState" maxlength="2" value="<?= htmlspecialchars($user['state']) ?>" readonly>
                 <br>
                 <label for="editZip" id="editZipLbl">Zip Code</label>
                 <input type="text" name="zip" id="editZip" value="<?= htmlspecialchars($user['zip']) ?>" readonly>
