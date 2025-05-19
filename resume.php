@@ -429,7 +429,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									<?php
 									while($row = $hobbyStmt->fetch()) {
 										?><div class="hobbiesBlock">
-                      <input type="hidden" name="hobbiesId[]" value="<?= htmlspecialchars($row['hobbieId']) ?>">
+                      <input type="hidden" name="hobbieId[]" value="<?= htmlspecialchars($row['hobbieId']) ?>">
                       <button type="button" class="editHobbiesBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeHobbiesBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
@@ -453,7 +453,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									<?php
 									while($row = $projectStmt->fetch()) {
 										?><div class="projectsBlock">
-                      <input type="hidden" name="projectsId[]" value="<?= htmlspecialchars($row['projectId']) ?>">
+                      <input type="hidden" name="projectId[]" value="<?= htmlspecialchars($row['projectId']) ?>">
                       <button type="button" class="editProjectsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeProjectsBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
@@ -468,7 +468,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 
 
             <form method="post">
-                <div id="skillsSection" class="resumeInfo">
+                <div id="skillSection" class="resumeInfo">
                     <div class="fieldDiv">
                         <h3>Skills</h3>
                         <button type="button" id="addSkillsBtn"><img src="garbage/plus.png" alt="Add"></button>
@@ -476,8 +476,8 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									
 									<?php
 									while($row = $skillStmt->fetch()) {
-										?><div class="skillsBlock">
-                      <input type="hidden" name="skillsId[]" value="<?= htmlspecialchars($row['skillId']) ?>">
+										?><div class="skillBlock">
+                      <input type="hidden" name="skillId[]" value="<?= htmlspecialchars($row['skillId']) ?>">
                       <button type="button" class="editSkillsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeSkillBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <label>Skill</label><br>
@@ -497,17 +497,17 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 
 
             <form method="post">
-                <div id="workHistorySection" class="resumeInfo">
+                <div id="workSection" class="resumeInfo">
                     <div class="fieldDiv">
                         <h3>Work History</h3>
-                        <button type="button" id="addWorkHistoryBtn"><img src="garbage/plus.png" alt="Add"></button>
+                        <button type="button" id="addWorkBtn"><img src="garbage/plus.png" alt="Add"></button>
                     </div>
 									
 									<?php
 									while($row = $workStmt->fetch()) {
-										?><div class="workHistoryBlock">
-                      <input type="hidden" name="workHistoryId[]" value="<?= htmlspecialchars($row['workId']) ?>">
-                      <button type="button" class="editWorkHistoryBtn"><img src="garbage/pencil.png" alt="Edit"></button>
+										?><div class="workBlock">
+                      <input type="hidden" name="workId[]" value="<?= htmlspecialchars($row['workId']) ?>">
+                      <button type="button" class="editWorkBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeWorkBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <label>Job Title</label><br>
                       <input type="text" name="jobTitle[]" value="<?= htmlspecialchars($row['jobTitle']) ?>" readonly><br>
@@ -525,7 +525,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 
                 </div>
                 <input type="hidden" value="workSubmit" name="workSubmit">
-                <input id="workHistorySubmit" type="submit" value="Submit" name="submit" style="display: none;">
+                <input id="workSubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
             <!-- SUBMIT -->
             <div class="btnDiv" style="display: none;">
@@ -734,38 +734,38 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                     input.value = '';
                     input.removeAttribute('readonly');
                 });
-                document.querySelector('#educationSubmit').style.display = "block";
-                clone.querySelector('input[name="educationId[]"]').value = ''; // clear ID
+                document.querySelector('#hobbiesSubmit').style.display = "block";
+                clone.querySelector('input[name="hobbieId[]"]').value = ''; // clear ID
                 container.appendChild(clone);
-                createRemoveButton('#educationSection', 'educationBlock');
+                createRemoveButton('#hobbiesSection', 'hobbiesBlock');
             });
-            document.querySelector('#addEducationBtn').addEventListener('click', () => {
-                let container = document.querySelector('#educationSection');
-                let first = container.querySelector('.educationBlock');
+            document.querySelector('#addProjectsBtn').addEventListener('click', () => {
+                let container = document.querySelector('#projectsSection');
+                let first = container.querySelector('.projectsBlock');
                 let clone = first.cloneNode(true);
 
                 clone.querySelectorAll('input').forEach(input => {
                     input.value = '';
                     input.removeAttribute('readonly');
                 });
-                document.querySelector('#educationSubmit').style.display = "block";
-                clone.querySelector('input[name="educationId[]"]').value = ''; // clear ID
+                document.querySelector('#projectsSubmit').style.display = "block";
+                clone.querySelector('input[name="projectId[]"]').value = ''; // clear ID
                 container.appendChild(clone);
-                createRemoveButton('#educationSection', 'educationBlock');
+                createRemoveButton('#projectsSection', 'projectsBlock');
             });
-            document.querySelector('#addEducationBtn').addEventListener('click', () => {
-                let container = document.querySelector('#educationSection');
-                let first = container.querySelector('.educationBlock');
+            document.querySelector('#addSkillBtn').addEventListener('click', () => {
+                let container = document.querySelector('#skillSection');
+                let first = container.querySelector('.skillBlock');
                 let clone = first.cloneNode(true);
 
                 clone.querySelectorAll('input').forEach(input => {
                     input.value = '';
                     input.removeAttribute('readonly');
                 });
-                document.querySelector('#educationSubmit').style.display = "block";
-                clone.querySelector('input[name="educationId[]"]').value = ''; // clear ID
+                document.querySelector('#skillSubmit').style.display = "block";
+                clone.querySelector('input[name="skillId[]"]').value = ''; // clear ID
                 container.appendChild(clone);
-                createRemoveButton('#educationSection', 'educationBlock');
+                createRemoveButton('#skillSection', 'skillBlock');
             });
 
             document.querySelector('#addWorkBtn').addEventListener('click', () => {
@@ -785,6 +785,9 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 
             // Attach remove buttons to all blocks on initial page load
             createRemoveButton('#educationSection', 'educationBlock');
+            createRemoveButton('#hobbiesSection', 'hobbiesBlock');
+            createRemoveButton('#projectsSection', 'projectBlock');
+            createRemoveButton('#skillSection', 'skillBlock');
             createRemoveButton('#workSection', 'workBlock');
         }
         <?php
