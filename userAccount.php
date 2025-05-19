@@ -186,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
             if (isset($_SESSION['prevPage']) && $_SESSION['prevPage'] == "signUp") {
             ?>
                 editBtn.click();
-                document.querySelector('#editAge').value = null;
+                document.querySelector('#editAge').value = originalValues['age'];
                 cancelBtn.style.display = "none";
             <?php
             }
