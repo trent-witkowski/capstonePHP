@@ -612,6 +612,21 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             });
         }
 
+        function setupRemoveButtons(sectionSelector, blockClass, submitButtonId) {
+            document.querySelectorAll(`${sectionSelector} .${blockClass} .removeBtn`).forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const block = btn.closest(`.${blockClass}`);
+                    const hiddenInput = block.querySelector('input[type="hidden"]');
+                    if (hiddenInput) {
+                        hiddenInput.value = '';
+                    }
+                    block.remove();
+                    document.querySelector(submitButtonId).style.display = 'block';
+                });
+            });
+        }
+
+
         function restoreOriginalValues() {
             originalValues.forEach(item => {
                 item.element.value = item.value;
@@ -819,6 +834,12 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
     </script>
 <?php
 } else if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'browse') {
+    setupRemoveButtons('#educationSection', 'educationBlock', '#educationSubmit');
+    setupRemoveButtons('#hobbiesSection', 'hobbiesBlock', '#hobbiesSubmit');
+    setupRemoveButtons('#projectsSection', 'projectsBlock', '#projectsSubmit');
+    setupRemoveButtons('#skillsSection', 'skillsBlock', '#skillsSubmit');
+    setupRemoveButtons('#workHistorySection', 'workHistoryBlock', '#workHistorySubmit');
+
 ?>
 
 <script>
