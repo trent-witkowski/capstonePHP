@@ -12,7 +12,7 @@ if (isset($_GET['logout'])) {
 
 ini_set('display_errors', '1');
 error_reporting(-1);
-
+print_r($_POST);
 require 'sanitize.php';
 require 'callQuery.php';
 
@@ -126,6 +126,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
         }
 
         if (isset($_POST['hobbiesSubmit'])) {
+            echo "hobby sumbitted";
         $hobbieIds = $_POST['hobbiesId'] ?? [];
         $descriptions = $_POST['description'] ?? [];
 
@@ -365,7 +366,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									<?php } ?>
 
                 </div>
-                <input type="submit" value="educationSubmit" name="educationSubmit" style="display: none;" disabled>
+                <input type="hidden" value="educationSubmit" name="educationSubmit">
                 <input id="educationSubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
 
@@ -382,13 +383,13 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                       <input type="hidden" name="hobbiesId[]" value="<?= htmlspecialchars($row['hobbieId']) ?>">
                       <button type="button" class="editHobbiesBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
-                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
+                      <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
 									<?php } ?>
 
                 </div>
-                <input type="submit" value="hobbiesSubmit" name="hobbiesSubmit" style="display: none;" disabled>
+                <input type="hidden" value="hobbiesSubmit" name="hobbiesSubmit">
                 <input id="hobbiesSubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
 
@@ -406,13 +407,13 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                       <input type="hidden" name="projectsId[]" value="<?= htmlspecialchars($row['projectId']) ?>">
                       <button type="button" class="editProjectsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
-                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
+                      <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
 									<?php } ?>
 
                 </div>
-                <input type="submit" value="projectsSubmit" name="projectsSubmit" style="display: none;" disabled>
+                <input type="hidden" value="projectsSubmit" name="projectsSubmit">
                 <input id="projectsSubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
 
@@ -431,17 +432,17 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                       <button type="button" class="editSkillsBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <label>Skill</label><br>
-                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['skill']) ?>" readonly><br>
+                      <input type="text" name="skill[]" value="<?= htmlspecialchars($row['skill']) ?>" readonly><br>
                       <label>Proficiency Level</label><br>
-                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['proficiency']) ?>" readonly><br>
+                      <input type="text" name="proficiency[]" value="<?= htmlspecialchars($row['proficiency']) ?>" readonly><br>
                       <label>Start Date</label><br>
-                      <input type="date" name="institution[]" value="<?= htmlspecialchars($row['startDate']) ?>" readonly><br>
+                      <input type="date" name="startDate[]" value="<?= htmlspecialchars($row['startDate']) ?>" readonly><br>
                       <br>
                       </div><br><br>
 									<?php } ?>
 
                 </div>
-                <input type="submit" value="skillSubmit" name="skillSubmit" style="display: none;" disabled>
+                <input type="hidden" value="skillSubmit" name="skillSubmit">
                 <input id="skillsSubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
 
@@ -460,13 +461,13 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                       <button type="button" class="editWorkHistoryBtn"><img src="garbage/pencil.png" alt="Edit"></button>
                       <button type="button" class="removeBtn"><img src="garbage/can.png" alt="Delete"></button><br>
                       <label>Job Title</label><br>
-                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['jobTitle']) ?>" readonly><br>
+                      <input type="text" name="jobTitle[]" value="<?= htmlspecialchars($row['jobTitle']) ?>" readonly><br>
                       <label>Company</label><br>
-                      <input type="text" name="degree[]" value="<?= htmlspecialchars($row['companyName']) ?>" readonly><br>
+                      <input type="text" name="companyName[]" value="<?= htmlspecialchars($row['companyName']) ?>" readonly><br>
                       <label>Job Description</label><br>
                       <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($row['jobDescription']) ?>" readonly><br>
                       <label>Start Date</label><br>
-                      <input type="date" name="startDate[]" value="<?= $row['startDate'] ?>" readonly><br>
+                      <input type="date" name="jobDescription[]" value="<?= $row['startDate'] ?>" readonly><br>
                       <label>End Date</label><br>
                       <input type="date" name="endDate[]" value="<?= $row['endDate'] ?>" readonly><br>
                       <br>
@@ -474,7 +475,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 									<?php } ?>
 
                 </div>
-                <input type="submit" value="workSubmit" name="workSubmit" style="display: none;" disabled>
+                <input type="hidden" value="workSubmit" name="workSubmit">
                 <input id="workHistorySubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
             <!-- SUBMIT -->
