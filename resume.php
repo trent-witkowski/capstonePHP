@@ -527,11 +527,6 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                 <input type="hidden" value="workSubmit" name="workSubmit">
                 <input id="workSubmit" type="submit" value="Submit" name="submit" style="display: none;">
             </form>
-            <!-- SUBMIT -->
-            <div class="btnDiv" style="display: none;">
-                <input type="submit" name="submit" value="Submit">
-                <button type="button" class="cancelBtn">Cancel</button>
-            </div>
             <div class="rightBtnDiv">
                 <button type="button" class="backBtn" style="display: none;">Back</button>
             </div>
@@ -611,207 +606,237 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             });
         }
 
-        function setupRemoveButtons(sectionSelector, blockClass, submitButtonId) {
-            document.querySelectorAll(`${sectionSelector} .${blockClass} .removeBtn`).forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const block = btn.closest(`.${blockClass}`);
-                    const hiddenInput = block.querySelector('input[type="hidden"]');
-                    if (hiddenInput) {
-                        hiddenInput.value = '';
-                    }
-                    block.remove();
-                    document.querySelector(submitButtonId).style.display = 'block';
-                });
-            });
-        }
-
-
         function restoreOriginalValues() {
             originalValues.forEach(item => {
                 item.element.value = item.value;
             });
         }
 
-    document.querySelector('.editEducationBtn').addEventListener('click', () => {
-        storeOriginalValues();
-        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
-            input.removeAttribute('readonly');
-        });
-        document.querySelector('.btnDiv').style.display = 'block';
-        document.querySelector('.editEducationBtn').style.display = 'none';
-        document.querySelector('#educationSubmit').style.display = "block";
-    });
-
-    document.querySelector('.editHobbiesBtn').addEventListener('click', () => {
-        storeOriginalValues();
-        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
-            input.removeAttribute('readonly');
-        });
-        document.querySelector('.btnDiv').style.display = 'block';
-        document.querySelector('.editHobbiesBtn').style.display = 'none';
-        document.querySelector('#hobbiesSubmit').style.display = "block";
-    });
-
-    document.querySelector('.editProjectsBtn').addEventListener('click', () => {
-        storeOriginalValues();
-        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
-            input.removeAttribute('readonly');
-        });
-        document.querySelector('.btnDiv').style.display = 'block';
-        document.querySelector('.editProjectsBtn').style.display = 'none';
-        document.querySelector('#projectsSubmit').style.display = "block";
-    });
-
-    document.querySelector('.editSkillsBtn').addEventListener('click', () => {
-        storeOriginalValues();
-        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
-            input.removeAttribute('readonly');
-        });
-        document.querySelector('.btnDiv').style.display = 'block';
-        document.querySelector('.editSkillsBtn').style.display = 'none';
-        document.querySelector('#skillsSubmit').style.display = "block";
-    });
-
-    document.querySelector('.editWorkHistoryBtn').addEventListener('click', () => {
-        storeOriginalValues();
-        document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
-            input.removeAttribute('readonly');
-        });
-        document.querySelector('.btnDiv').style.display = 'block';
-        document.querySelector('.editWorkHistoryBtn').style.display = 'none';
-        document.querySelector('#workHistorySubmit').style.display = "block";
-    });
-
-    
-
-        document.querySelector('.cancelBtn').addEventListener('click', () => {
-            restoreOriginalValues();
+        document.querySelector('.editEducationBtn').addEventListener('click', () => {
+            storeOriginalValues();
             document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
-                input.setAttribute('readonly', true);
+                input.removeAttribute('readonly');
             });
-            document.querySelector('.editEducationBtn').style.display = 'inline-block';
-            document.querySelector('.editHobbiesBtn').style.display = 'inline-block';
-            document.querySelector('.editProjectsBtn').style.display = 'inline-block';
-            document.querySelector('.editSkillsBtn').style.display = 'inline-block';
-            document.querySelector('.editWorkBtn').style.display = 'inline-block';
-            document.querySelector('#educationSubmit').style.display = "none";
-            document.querySelector('#hobbiesSubmit').style.display = "none";
-            document.querySelector('#projectsSubmit').style.display = "none";
-            document.querySelector('#skillSubmit').style.display = "none";
-            document.querySelector('#workSubmit').style.display = "none";
+            document.querySelector('.editEducationBtn').style.display = 'none';
+            document.querySelector('#educationSubmit').style.display = "block";
         });
 
-        function createRemoveButton(containerSelector, blockClass) {
-            document.querySelectorAll(`${containerSelector} .${blockClass}`).forEach(block => {
-                let btn = block.querySelector('.removeBtn');
-                if (!btn) {
-                    btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.textContent = 'Remove';
-                    btn.classList.add('removeBtn');
-                    block.appendChild(btn);
+        document.querySelector('.editHobbiesBtn').addEventListener('click', () => {
+            storeOriginalValues();
+            document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+                input.removeAttribute('readonly');
+            });
+            document.querySelector('.editHobbiesBtn').style.display = 'none';
+            document.querySelector('#hobbiesSubmit').style.display = "block";
+        });
+
+        document.querySelector('.editProjectsBtn').addEventListener('click', () => {
+            storeOriginalValues();
+            document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+                input.removeAttribute('readonly');
+            });
+            document.querySelector('.editProjectsBtn').style.display = 'none';
+            document.querySelector('#projectsSubmit').style.display = "block";
+        });
+
+        document.querySelector('.editSkillsBtn').addEventListener('click', () => {
+            storeOriginalValues();
+            document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+                input.removeAttribute('readonly');
+            });
+            document.querySelector('.editSkillsBtn').style.display = 'none';
+            document.querySelector('#skillsSubmit').style.display = "block";
+        });
+
+        document.querySelector('.editWorkHistoryBtn').addEventListener('click', () => {
+            storeOriginalValues();
+            document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
+                input.removeAttribute('readonly');
+            });
+            document.querySelector('.editWorkHistoryBtn').style.display = 'none';
+            document.querySelector('#workHistorySubmit').style.display = "block";
+        });
+
+
+
+        document.querySelector('.removeEducationBtn').onclick = () => {
+            let container = document.querySelector('.educationSection');
+            let blocks = container.querySelectorAll(`.educationBlock`);
+            blocks.forEach(block => {
+                if (blocks.length > 1) {
+                    block.remove();
+
+                } else {
+                    block.querySelectorAll('input, textarea').forEach(input => {
+                        if (input.type === 'hidden') {
+                            input.value = '';
+                        } else {
+                            input.value = '';
+                        }
+                    });
+
                 }
-
-                btn.onclick = () => {
-                    let container = document.querySelector(containerSelector);
-                    let blocks = container.querySelectorAll(`.${blockClass}`);
-                    if (blocks.length > 1) {
-                        block.remove();
-  
-                    } else {
-                        block.querySelectorAll('input, textarea').forEach(input => {
-                            if (input.type === 'hidden') {
-                                input.value = '';
-                            } else {
-                                input.value = '';
-                            }
-                        });
-
-                    }
-                    document.querySelector('#educationSubmit').style.display = "block";
-                };
             });
+            document.querySelector('#educationSubmit').style.display = "block";
+        };
+        
+        document.querySelector('.removeHobbiesBtn').onclick = () => {
+            let container = document.querySelector('.hobbiesSection');
+            let blocks = container.querySelectorAll(`.hobbiesBlock`);
+            blocks.forEach(block => {
+                if (blocks.length > 1) {
+                    block.remove();
+
+                } else {
+                    block.querySelectorAll('input, textarea').forEach(input => {
+                        if (input.type === 'hidden') {
+                            input.value = '';
+                        } else {
+                            input.value = '';
+                        }
+                    });
+
+                }
+            });
+            document.querySelector('#hobbiesSubmit').style.display = "block";
+        };
+        
+        document.querySelector('.removeProjectsBtn').onclick = () => {
+            let container = document.querySelector('.projectsSection');
+            let blocks = container.querySelectorAll(`.projectsBlock`);
+            blocks.forEach(block => {
+                if (blocks.length > 1) {
+                    block.remove();
+
+                } else {
+                    block.querySelectorAll('input, textarea').forEach(input => {
+                        if (input.type === 'hidden') {
+                            input.value = '';
+                        } else {
+                            input.value = '';
+                        }
+                    });
+
+                }
+            });
+            document.querySelector('#projectsSubmit').style.display = "block";
+        };
+        
+        document.querySelector('.removeSkillBtn').onclick = () => {
+            let container = document.querySelector('.skillSection');
+            let blocks = container.querySelectorAll(`.skillBlock`);
+            blocks.forEach(block => {
+                if (blocks.length > 1) {
+                    block.remove();
+
+                } else {
+                    block.querySelectorAll('input, textarea').forEach(input => {
+                        if (input.type === 'hidden') {
+                            input.value = '';
+                        } else {
+                            input.value = '';
+                        }
+                    });
+
+                }
+            });
+            document.querySelector('#skillSubmit').style.display = "block";
+        };
+        
+        document.querySelector('.removeWorkBtn').onclick = () => {
+            let container = document.querySelector('.workSection');
+            let blocks = container.querySelectorAll(`.workBlock`);
+            blocks.forEach(block => {
+                if (blocks.length > 1) {
+                    block.remove();
+
+                } else {
+                    block.querySelectorAll('input, textarea').forEach(input => {
+                        if (input.type === 'hidden') {
+                            input.value = '';
+                        } else {
+                            input.value = '';
+                        }
+                    });
+
+                }
+            });
+            document.querySelector('#workSubmit').style.display = "block";
+        };
             
-            // 'ADD MORE' BUTTONS
-            document.querySelector('#addEducationBtn').addEventListener('click', () => {
-                let container = document.querySelector('#educationSection');
-                let first = container.querySelector('.educationBlock');
-                let clone = first.cloneNode(true);
+        // 'ADD MORE' BUTTONS
+        document.querySelector('#addEducationBtn').addEventListener('click', () => {
+            let container = document.querySelector('#educationSection');
+            let first = container.querySelector('.educationBlock');
+            let clone = first.cloneNode(true);
 
-                clone.querySelectorAll('input').forEach(input => {
-                    input.value = '';
-                    input.removeAttribute('readonly');
-                });
-                document.querySelector('#educationSubmit').style.display = "block";
-                clone.querySelector('input[name="educationId[]"]').value = ''; // clear ID
-                container.appendChild(clone);
-                createRemoveButton('#educationSection', 'educationBlock');
+            clone.querySelectorAll('input').forEach(input => {
+                input.value = '';
+                input.removeAttribute('readonly');
             });
-            document.querySelector('#addHobbiesBtn').addEventListener('click', () => {
-                let container = document.querySelector('#hobbiesSection');
-                let first = container.querySelector('.hobbiesBlock');
-                let clone = first.cloneNode(true);
-
-                clone.querySelectorAll('input').forEach(input => {
-                    input.value = '';
-                    input.removeAttribute('readonly');
-                });
-                document.querySelector('#hobbiesSubmit').style.display = "block";
-                clone.querySelector('input[name="hobbieId[]"]').value = ''; // clear ID
-                container.appendChild(clone);
-                createRemoveButton('#hobbiesSection', 'hobbiesBlock');
-            });
-            document.querySelector('#addProjectsBtn').addEventListener('click', () => {
-                let container = document.querySelector('#projectsSection');
-                let first = container.querySelector('.projectsBlock');
-                let clone = first.cloneNode(true);
-
-                clone.querySelectorAll('input').forEach(input => {
-                    input.value = '';
-                    input.removeAttribute('readonly');
-                });
-                document.querySelector('#projectsSubmit').style.display = "block";
-                clone.querySelector('input[name="projectId[]"]').value = ''; // clear ID
-                container.appendChild(clone);
-                createRemoveButton('#projectsSection', 'projectsBlock');
-            });
-            document.querySelector('#addSkillBtn').addEventListener('click', () => {
-                let container = document.querySelector('#skillSection');
-                let first = container.querySelector('.skillBlock');
-                let clone = first.cloneNode(true);
-
-                clone.querySelectorAll('input').forEach(input => {
-                    input.value = '';
-                    input.removeAttribute('readonly');
-                });
-                document.querySelector('#skillSubmit').style.display = "block";
-                clone.querySelector('input[name="skillId[]"]').value = ''; // clear ID
-                container.appendChild(clone);
-                createRemoveButton('#skillSection', 'skillBlock');
-            });
-
-            document.querySelector('#addWorkBtn').addEventListener('click', () => {
-                let container = document.querySelector('#workSection');
-                let first = container.querySelector('.workBlock');
-                let clone = first.cloneNode(true);
-
-                clone.querySelectorAll('input, textarea').forEach(input => {
-                    input.value = '';
-                    input.removeAttribute('readonly');
-                });
-
-                clone.querySelector('input[name="workId[]"]').value = ''; // clear ID
-                container.appendChild(clone);
-                createRemoveButton('#workSection', 'workBlock');
-            });
-
-            // Attach remove buttons to all blocks on initial page load
+            document.querySelector('#educationSubmit').style.display = "block";
+            clone.querySelector('input[name="educationId[]"]').value = ''; // clear ID
+            container.appendChild(clone);
             createRemoveButton('#educationSection', 'educationBlock');
+        });
+        document.querySelector('#addHobbiesBtn').addEventListener('click', () => {
+            let container = document.querySelector('#hobbiesSection');
+            let first = container.querySelector('.hobbiesBlock');
+            let clone = first.cloneNode(true);
+
+            clone.querySelectorAll('input').forEach(input => {
+                input.value = '';
+                input.removeAttribute('readonly');
+            });
+            document.querySelector('#hobbiesSubmit').style.display = "block";
+            clone.querySelector('input[name="hobbieId[]"]').value = ''; // clear ID
+            container.appendChild(clone);
             createRemoveButton('#hobbiesSection', 'hobbiesBlock');
-            createRemoveButton('#projectsSection', 'projectBlock');
+        });
+        document.querySelector('#addProjectsBtn').addEventListener('click', () => {
+            let container = document.querySelector('#projectsSection');
+            let first = container.querySelector('.projectsBlock');
+            let clone = first.cloneNode(true);
+
+            clone.querySelectorAll('input').forEach(input => {
+                input.value = '';
+                input.removeAttribute('readonly');
+            });
+            document.querySelector('#projectsSubmit').style.display = "block";
+            clone.querySelector('input[name="projectId[]"]').value = ''; // clear ID
+            container.appendChild(clone);
+            createRemoveButton('#projectsSection', 'projectsBlock');
+        });
+        document.querySelector('#addSkillBtn').addEventListener('click', () => {
+            let container = document.querySelector('#skillSection');
+            let first = container.querySelector('.skillBlock');
+            let clone = first.cloneNode(true);
+
+            clone.querySelectorAll('input').forEach(input => {
+                input.value = '';
+                input.removeAttribute('readonly');
+            });
+            document.querySelector('#skillSubmit').style.display = "block";
+            clone.querySelector('input[name="skillId[]"]').value = ''; // clear ID
+            container.appendChild(clone);
             createRemoveButton('#skillSection', 'skillBlock');
+        });
+
+        document.querySelector('#addWorkBtn').addEventListener('click', () => {
+            let container = document.querySelector('#workSection');
+            let first = container.querySelector('.workBlock');
+            let clone = first.cloneNode(true);
+
+            clone.querySelectorAll('input, textarea').forEach(input => {
+                input.value = '';
+                input.removeAttribute('readonly');
+            });
+
+            clone.querySelector('input[name="workId[]"]').value = ''; // clear ID
+            container.appendChild(clone);
             createRemoveButton('#workSection', 'workBlock');
-        }
+        });
+        
         <?php
         } else {
         ?>
