@@ -218,42 +218,91 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
         exit();
         }
 
-    }
-	
-	
-	if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
+        if (isset($_POST['deleteEducation'])) {
+        $eduIds = $_POST['educationId'] ?? [];
 
-// Handle Education
-		$eduIds = $_POST['educationId'] ?? [];
-		$institutions = $_POST['institution'] ?? [];
-		$degrees = $_POST['degree'] ?? [];
-		$fields = $_POST['fieldOfStudy'] ?? [];
-		$starts = $_POST['startDate'] ?? [];
-		$ends = $_POST['endDate'] ?? [];
-		
-		$existingEduStmt = $pdo->prepare("SELECT educationId FROM Education WHERE resumeId = ?");
-		$existingEduStmt->execute([$resumeId]);
-		$existingEduIds = $existingEduStmt->fetchAll(PDO::FETCH_COLUMN);
-		
-		$postedEduIds = array_filter($eduIds);
-		$toDelete = array_diff($existingEduIds, $postedEduIds);
-		
-		foreach ($toDelete as $id) {
-			$del = $pdo->prepare("DELETE FROM Education WHERE educationId = ?");
-			$del->execute([$id]);
-		}
-		
-		for ($i = 0; $i < count($institutions); $i++) {
-			$id = $eduIds[$i];
-			if ($id) {
-				$update = $pdo->prepare("UPDATE Education SET institutionName=?, degree=?, fieldOfStudy=?, startDate=?, endDate=? WHERE educationId=?");
-				$update->execute([$institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i], $id]);
-			} else {
-				$insert = $pdo->prepare("INSERT INTO Education (resumeId, institutionName, degree, fieldOfStudy, startDate, endDate) VALUES (?, ?, ?, ?, ?, ?)");
-				$insert->execute([$resumeId, $institutions[$i], $degrees[$i], $fields[$i], $starts[$i], $ends[$i]]);
-			}
-		}
-	}
+        $existingStmt = $pdo->prepare("SELECT educationId FROM Education WHERE resumeId = ?");
+        $existingStmt->execute([$resumeId]);
+        $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
+
+        $toDelete = array_diff($existingIds, array_filter($eduIds));
+        foreach ($toDelete as $id) {
+            $del = $pdo->prepare("DELETE FROM Education WHERE educationId = ?");
+            $del->execute([$id]);
+        }
+
+        header("Location: resume.php?pageType=view&resumeId=$resumeId");
+        exit();
+        }
+
+        if (isset($_POST['deleteWork'])) {
+            $workIds = $_POST['workHistoryId'] ?? [];
+
+            $existingStmt = $pdo->prepare("SELECT workId FROM Work WHERE resumeId = ?");
+            $existingStmt->execute([$resumeId]);
+            $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
+
+            $toDelete = array_diff($existingIds, array_filter($workIds));
+            foreach ($toDelete as $id) {
+                $del = $pdo->prepare("DELETE FROM Work WHERE workId = ?");
+                $del->execute([$id]);
+            }
+
+            header("Location: resume.php?pageType=view&resumeId=$resumeId");
+            exit();
+        }
+
+        if (isset($_POST['deleteHobbies'])) {
+            $hobbieIds = $_POST['hobbiesId'] ?? [];
+
+            $existingStmt = $pdo->prepare("SELECT hobbieId FROM Hobbies WHERE resumeId = ?");
+            $existingStmt->execute([$resumeId]);
+            $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
+
+            $toDelete = array_diff($existingIds, array_filter($hobbieIds));
+            foreach ($toDelete as $id) {
+                $del = $pdo->prepare("DELETE FROM Hobbies WHERE hobbieId = ?");
+                $del->execute([$id]);
+            }
+
+            header("Location: resume.php?pageType=view&resumeId=$resumeId");
+            exit();
+        }
+
+        if (isset($_POST['deleteProjects'])) {
+            $projectIds = $_POST['projectsId'] ?? [];
+
+            $existingStmt = $pdo->prepare("SELECT projectId FROM Projects WHERE resumeId = ?");
+            $existingStmt->execute([$resumeId]);
+            $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
+
+            $toDelete = array_diff($existingIds, array_filter($projectIds));
+            foreach ($toDelete as $id) {
+                $del = $pdo->prepare("DELETE FROM Projects WHERE projectId = ?");
+                $del->execute([$id]);
+            }
+
+            header("Location: resume.php?pageType=view&resumeId=$resumeId");
+            exit();
+        }
+
+        if (isset($_POST['deleteSkill'])) {
+            $skillIds = $_POST['skillsId'] ?? [];
+
+            $existingStmt = $pdo->prepare("SELECT skillId FROM skill WHERE resumeId = ?");
+            $existingStmt->execute([$resumeId]);
+            $existingIds = $existingStmt->fetchAll(PDO::FETCH_COLUMN);
+
+            $toDelete = array_diff($existingIds, array_filter($skillIds));
+            foreach ($toDelete as $id) {
+                $del = $pdo->prepare("DELETE FROM skill WHERE skillId = ?");
+                $del->execute([$id]);
+            }
+
+            header("Location: resume.php?pageType=view&resumeId=$resumeId");
+            exit();
+        }
+    }
 }
 ?>
 
