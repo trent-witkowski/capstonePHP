@@ -12,7 +12,7 @@ if (isset($_GET['logout'])) {
 
 ini_set('display_errors', '1');
 error_reporting(-1);
-print_r($_POST);
+
 require 'sanitize.php';
 require 'callQuery.php';
 
@@ -37,7 +37,7 @@ if (!$userID) {
 if (isset($_SESSION['userType']) && $_SESSION['userType'] == 1) {
     $_SESSION['resumeView'] = 'resume';
 } else {
-   if (!isset($_SESSION['resumeView']) || !isset($_SESSION['prevPage']) || $_SESSION['prevPage'] != 'userBrowse') {
+   if (!isset($_SESSION['resumeView']) || !isset($_SESSION['prevPage']) || $_SESSION['prevPage'] != 'userBrowse' || !isset($_GET['resume'])) {
 		 $_SESSION['resumeView'] = 'browse';
    }
 }
@@ -539,33 +539,28 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 <?php } else if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'browse') {
 			$query = "SELECT * FROM Resume GROUP BY resumeId";
 			$resumeStmt = callQuery($pdo, $query, "Error fetching user's with resumes information");
-			
-			
-			$query = "SELECT * FROM Education GROUP BY resumeId";
-			$eduStmt = callQuery($pdo, $query, "Error fetching user's with resumes information");
-            $eduCheck = $eduStmt-fetch();
             
       ?>
-        <div class="browseDiv">
-            <div>
-                <?php
-                while($row = $resumeStmt->fetch()) {
-                    $query = "SELECT * FROM Education GROUP BY resumeId";
-                    $eduStmt = callQuery($pdo, $query, "Error fetching user's with resumes information");
-                    $eduCheck = $eduStmt-fetch();
-                    if ($eduCheck['institutionName'] == "" || $eduCheck['institutionName'] == "Sample University") {
-                        continue;
-                    } else {
-						$query = "SELECT * FROM User WHERE userId = '" . $row['userId'] . "'";
-						$browseUser = callQuery($pdo, $query, "Error fetching user's information")->fetch();
-                    }
-                    
-                ?><span><a id="user<?=$browseUser['userid']?>" class="browseUser" href="#" ><?php echo $browseUser['userFIrstName'] . " " . $browseUser['userLastName'] ?></a></span><br><?php
+    <div class="browseDiv">
+      <h2>Browsing Users</h2>
+            <?php
+            while($row = $resumeStmt->fetch()) {
+                $query = "SELECT * FROM Education WHERE resumeId = '" . $row['resumeId'] . "'";
+                $eduStmt = callQuery($pdo, $query, "Error fetching user's with resumes information");
+                $eduCheck = $eduStmt->fetch();
+                echo $eduCheck['institutionName'];
+                if ($eduCheck['institutionName'] == "" || $eduCheck['institutionName'] == "Sample University") {
+                    continue;
+                } else {
+                    $query = "SELECT * FROM User WHERE userId = '" . $row['userId'] . "'";
+                    $browseUser = callQuery($pdo, $query, "Error fetching user's information")->fetch();
                 }
                 
-                ?>
-            </div>
-        </div>
+            ?><span><a id="user<?=$browseUser['userid']?>" class="browseUser" href="#" ><?php echo $browseUser['userFIrstName'] . " " . $browseUser['userLastName'] ?></a></span><br><?php
+            }
+            
+            ?>
+    </div>
         
         
         

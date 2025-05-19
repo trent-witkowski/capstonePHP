@@ -55,7 +55,16 @@ body {
     box-shadow: 1px 1px 2px black;
 }
 
-.browseUser {
-    
+.browseDiv {
+    padding: 15px;
+}
+
+.browseDiv span {
+
+}
+
+.browseDiv a {
+    color:  dimgrey;
+    text-decoration: none;
 }
 
