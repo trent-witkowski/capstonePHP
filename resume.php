@@ -187,7 +187,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
         }
 
         if (isset($_POST['skillSubmit'])) {
-        $skillIds = $_POST['skillsId'] ?? [];
+        $skillIds = $_POST['skillId'] ?? [];
         $skills = $_POST['skill'] ?? [];
         $proficiencies = $_POST['proficiency'] ?? [];
         $starts = $_POST['startDate'] ?? [];
@@ -202,7 +202,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             $del = $pdo->prepare("DELETE FROM skill WHERE skillId = ?");
             $del->execute([$id]);
         }
-
+        
         for ($i = 0; $i < count($skills); $i++) {
             $id = $skillIds[$i];
             if ($id) {
@@ -228,7 +228,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Resume</title>
     <link rel="stylesheet" href="css/resume.css">
     <link rel="stylesheet" href="css/header.css">
     <link rel="stylesheet" href="css/footer.css">
@@ -307,22 +307,22 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                     <div class="fieldDiv">
                         <h3>Education</h3>
                         <button type="button" id="addEducationBtn"><img src="garbage/plus.png" alt="Add"></button>
+                        <button type="button" class="editEducationBtn editBtn"><img src="garbage/pencil.png" alt="Edit"></button><br>
                     </div>
 					<?php
 					while($row = $eduStmt->fetch()) {
-					?><div class="educationBlock">
-                      <input type="hidden" name="educationId[]" value="<?= htmlspecialchars($row['educationId']) ?>">
-                      <button type="button" class="editEducationBtn editBtn"><img src="garbage/pencil.png" alt="Edit" style="display: none;"></button><br>
+					?><div class="educationBlock blockDiv">
+                      <input type="hidden" name="educationId[]" placeholder="<?= htmlspecialchars($row['educationId']) ?>">
                       <label>Institution</label><br>
-                      <input type="text" name="institution[]" value="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
+                      <input type="text" name="institution[]" placeholder="<?= htmlspecialchars($row['institutionName']) ?>" readonly><br>
                       <label>Degree</label><br>
-                      <input type="text" name="degree[]" value="<?= htmlspecialchars($row['degree']) ?>" readonly><br>
+                      <input type="text" name="degree[]" placeholder="<?= htmlspecialchars($row['degree']) ?>" readonly><br>
                       <label>Field of Study</label><br>
-                      <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($row['fieldOfStudy']) ?>" readonly><br>
+                      <input type="text" name="fieldOfStudy[]" placeholder="<?= htmlspecialchars($row['fieldOfStudy']) ?>" readonly><br>
                       <label>Start Date</label><br>
-                      <input type="date" name="startDate[]" value="<?= $row['startDate'] ?>" readonly><br>
+                      <input type="date" name="startDate[]" placeholder="<?= $row['startDate'] ?>" value="<?= $row['startDate'] ?>" disabled><br>
                       <label>End Date</label><br>
-                      <input type="date" name="endDate[]" value="<?= $row['endDate'] ?>" readonly><br>
+                      <input type="date" name="endDate[]" placeholder="<?= $row['endDate'] ?>" value="<?= $row['endDate'] ?>" disabled><br>
                       <br>
                       </div><br><br>
 									<?php
@@ -331,7 +331,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 
                 </div>
                 <input type="hidden" value="educationSubmit" name="educationSubmit">
-                <input id="educationSubmit" type="submit" value="Submit" name="submit" style="display: none;">
+                <input id="educationSubmit" type="submit" placeholder="Submit" value="Submit" name="submit" style="display: none;">
             </form>
 
             <form method="post">
@@ -339,14 +339,14 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                     <div class="fieldDiv">
                         <h3>Hobbies</h3>
                         <button type="button" id="addHobbiesBtn"><img src="garbage/plus.png" alt="Add"></button>
+                        <button type="button" class="editHobbiesBtn editBtn"><img src="garbage/pencil.png" alt="Edit"></button><br>
                     </div>
 									
 									<?php
 									while($row = $hobbyStmt->fetch()) {
-										?><div class="hobbiesBlock">
-                      <input type="hidden" name="hobbieId[]" value="<?= htmlspecialchars($row['hobbieId']) ?>">
-                      <button type="button" class="editHobbiesBtn editBtn"><img src="garbage/pencil.png" alt="Edit" style="display: none;"></button><br>
-                      <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
+										?><div class="hobbiesBlock blockDiv">
+                      <input type="hidden" name="hobbieId[]" placeholder="<?= htmlspecialchars($row['hobbieId']) ?>">
+                      <input type="text" name="description[]" placeholder="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
 									<?php
@@ -354,7 +354,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 
                 </div>
                 <input type="hidden" value="hobbiesSubmit" name="hobbiesSubmit">
-                <input id="hobbiesSubmit" type="submit" value="Submit" name="submit" style="display: none;">
+                <input id="hobbiesSubmit" type="submit" placeholder="Submit" value="Submit" name="submit" style="display: none;">
             </form>
 
 
@@ -363,14 +363,14 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                     <div class="fieldDiv">
                         <h3>Projects</h3>
                         <button type="button" id="addProjectsBtn"><img src="garbage/plus.png" alt="Add"></button>
+                        <button type="button" class="editProjectsBtn editBtn""><img src="garbage/pencil.png" alt="Edit"></button><br>
                     </div>
 									
 									<?php
 									while($row = $projectStmt->fetch()) {
-										?><div class="projectsBlock">
-                      <input type="hidden" name="projectId[]" value="<?= htmlspecialchars($row['projectId']) ?>">
-                      <button type="button" class="editProjectsBtn editBtn"><img src="garbage/pencil.png" alt="Edit" style="display: none;"></button><br>
-                      <input type="text" name="description[]" value="<?= htmlspecialchars($row['description']) ?>" readonly><br>
+										?><div class="projectsBlock blockDiv">
+                      <input type="hidden" name="projectId[]" placeholder="<?= htmlspecialchars($row['projectId']) ?>">
+                      <input type="text" name="description[]" placeholder="<?= htmlspecialchars($row['description']) ?>" readonly><br>
                       <br>
                       </div><br><br>
 									<?php } 
@@ -378,7 +378,7 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 
                 </div>
                 <input type="hidden" value="projectsSubmit" name="projectsSubmit">
-                <input id="projectsSubmit" type="submit" value="Submit" name="submit" style="display: none;">
+                <input id="projectsSubmit" type="submit" placeholder="Submit" value="Submit" name="submit" style="display: none;">
             </form>
 
 
@@ -387,59 +387,67 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                     <div class="fieldDiv">
                         <h3>Skills</h3>
                         <button type="button" id="addSkillBtn"><img src="garbage/plus.png" alt="Add"></button>
+                        <button type="button" class="editSkillsBtn editBtn""><img src="garbage/pencil.png" alt="Edit"></button><br>
                     </div>
 									
 									<?php
+                                    $selectedProficiency = 'Beginner';
 									while($row = $skillStmt->fetch()) {
-										?><div class="skillBlock">
-                      <input type="hidden" name="skillId[]" value="<?= htmlspecialchars($row['skillId']) ?>">
-                      <button type="button" class="editSkillsBtn editBtn"><img src="garbage/pencil.png" alt="Edit" style="display: none;"></button><br>
+										?><div class="skillBlock blockDiv">
+                      <input type="hidden" name="skillId[]" placeholder="<?= htmlspecialchars($row['skillId']) ?>">
                       <label>Skill</label><br>
-                      <input type="text" name="skill[]" value="<?= htmlspecialchars($row['skill']) ?>" readonly><br>
+                      <input type="text" name="skill[]" placeholder="<?= htmlspecialchars($row['skill']) ?>" readonly><br>
                       <label>Proficiency Level</label><br>
-                      <input type="text" name="proficiency[]" value="<?= htmlspecialchars($row['proficiency']) ?>" readonly><br>
+                      <select id="proficiencySelect" name="proficiency[]" class="<?= htmlspecialchars($row['proficiency']) ?>" disabled>
+                          <option value="" disabled hidden>Please Select...</option>
+                          <option value="Beginner" selected>Beginner</option>
+                          <option value="Intermediate">Intermediate</option>
+                          <option value="Proficient">Advanced</option>
+                          <option value="Expert">Expert</option>
+                      </select><br>
                       <label>Start Date</label><br>
-                      <input type="date" name="startDate[]" value="<?= htmlspecialchars($row['startDate']) ?>" readonly><br>
+                      <input type="date" name="startDate[]" placeholder="<?= htmlspecialchars($row['startDate']) ?>" value="<?= $row['startDate'] ?>" disabled><br>
                       <br>
                       </div><br><br>
-									<?php } 
+									<?php
+                                    }
                                 ?>
 
                 </div>
                 <input type="hidden" value="skillSubmit" name="skillSubmit">
-                <input id="skillSubmit" type="submit" value="Submit" name="submit" style="display: none;">
+                <input id="skillSubmit" type="submit" placeholder="Submit" value="Submit" name="submit" style="display: none;">
             </form>
-
+            
 
             <form method="post">
                 <div id="workSection" class="resumeInfo">
                     <div class="fieldDiv">
                         <h3>Work History</h3>
                         <button type="button" id="addWorkBtn"><img src="garbage/plus.png" alt="Add"></button>
+                        <button type="button" class="editWorkBtn editBtn""><img src="garbage/pencil.png" alt="Edit"></button><br>
                     </div>
 									
 									<?php
 									while($row = $workStmt->fetch()) {
-										?><div class="workBlock">
-                      <input type="hidden" name="workId[]" value="<?= htmlspecialchars($row['workId']) ?>">
-                      <button type="button" class="editWorkBtn editBtn"><img src="garbage/pencil.png" alt="Edit" style="display: none;"></button><br>
+										?><div class="workBlock blockDiv">
+                      <input type="hidden" name="workId[]" placeholder="<?= htmlspecialchars($row['workId']) ?>">
                       <label>Job Title</label><br>
-                      <input type="text" name="jobTitle[]" value="<?= htmlspecialchars($row['jobTitle']) ?>" readonly><br>
+                      <input type="text" name="jobTitle[]" placeholder="<?= htmlspecialchars($row['jobTitle']) ?>" readonly><br>
                       <label>Company</label><br>
-                      <input type="text" name="companyName[]" value="<?= htmlspecialchars($row['companyName']) ?>" readonly><br>
+                      <input type="text" name="companyName[]" placeholder="<?= htmlspecialchars($row['companyName']) ?>" readonly><br>
                       <label>Job Description</label><br>
-                      <input type="text" name="fieldOfStudy[]" value="<?= htmlspecialchars($row['jobDescription']) ?>" readonly><br>
+                      <input type="text" name="jobDescription[]" placeholder="<?= htmlspecialchars($row['jobDescription']) ?>" readonly><br>
                       <label>Start Date</label><br>
-                      <input type="date" name="jobDescription[]" value="<?= $row['startDate'] ?>" readonly><br>
+                      <input type="date" name="startDate[]" placeholder="<?= $row['startDate'] ?>" value="<?= $row['startDate'] ?>" disabled><br>
                       <label>End Date</label><br>
-                      <input type="date" name="endDate[]" value="<?= $row['endDate'] ?>" readonly><br>
+                      <input type="date" name="endDate[]" placeholder="<?= $row['endDate'] ?>" value="<?= $row['endDate'] ?>" disabled><br>
                       <br>
                       </div><br><br>
 									<?php } ?>
 
                 </div>
                 <input type="hidden" value="workSubmit" name="workSubmit">
-                <input id="workSubmit" type="submit" value="Submit" name="submit" style="display: none;">
+                <input id="workSubmit" type="submit" placeholder="Submit" value="Submit" name="submit" style="display: none;">
             </form>
             <div class="rightBtnDiv">
                 <button type="button" class="backBtn" style="display: none;">Back</button>
@@ -487,7 +495,9 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
 ?>
     <script>
         let navLinks = document.querySelectorAll(".navTable a");
-        let editBtns = document.querySelectorAll(".resumeInfo .editBtn:first-child");
+        let editBtns = document.querySelectorAll(".blockDiv > .editBtn:first-child");
+        let proficiencySelect = document.querySelector("#proficiencySelect");
+        let proficiencyOptions = proficiencySelect.querySelectorAll("option");
         
         navLinks.forEach(link => {
             link.addEventListener('click', e => {
@@ -502,9 +512,24 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
                 window.location.href = link.href;
             });
         });
+        
         editBtns.forEach(e => {
             e.style.display = 'block';
         })
+        
+        proficiencyOptions.forEach(option => {
+            console.log(option.value);
+            console.log(proficiencySelect.className);
+            if (option.value === proficiencySelect.className) {
+                option.selected = true;
+            } else {
+                option.selected = false;
+            }
+        })
+        
+        
+        
+        
         
         
     <?php if (isset($_SESSION['userType']) && $_SESSION['userType'] == '1') { ?>
@@ -515,14 +540,14 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
                 originalValues.push({
                     element: input,
-                    value: input.value
+                    placeholder: input.placeholder
                 });
             });
         }
 
         function restoreOriginalValues() {
             originalValues.forEach(item => {
-                item.element.value = item.value;
+                item.element.placeholder = item.placeholder;
             });
         }
         
@@ -530,6 +555,9 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             storeOriginalValues();
             document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
                 input.removeAttribute('readonly');
+                input.removeAttribute('disabled');
+                input.value = input.placeholder;
+                input.placeholder = "";
             });
             document.querySelector('.editEducationBtn').style.display = 'none';
             document.querySelector('#educationSubmit').style.display = "block";
@@ -539,6 +567,8 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             storeOriginalValues();
             document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
                 input.removeAttribute('readonly');
+                input.value = input.placeholder;
+                input.placeholder = "";
             });
             document.querySelector('.editHobbiesBtn').style.display = 'none';
             document.querySelector('#hobbiesSubmit').style.display = "block";
@@ -548,6 +578,8 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             storeOriginalValues();
             document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
                 input.removeAttribute('readonly');
+                input.value = input.placeholder;
+                input.placeholder = "";
             });
             document.querySelector('.editProjectsBtn').style.display = 'none';
             document.querySelector('#projectsSubmit').style.display = "block";
@@ -557,15 +589,23 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             storeOriginalValues();
             document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
                 input.removeAttribute('readonly');
+                input.removeAttribute('disabled');
+                input.value = input.placeholder;
+                input.placeholder = "";
             });
+
+            document.querySelector('.resumeInfo select').removeAttribute('disabled');
             document.querySelector('.editSkillsBtn').style.display = 'none';
-            document.querySelector('#skillsSubmit').style.display = "block";
+            document.querySelector('#skillSubmit').style.display = "block";
         });
 
         document.querySelector('.editWorkBtn').addEventListener('click', () => {
             storeOriginalValues();
             document.querySelectorAll('.resumeInfo input, .resumeInfo textarea').forEach(input => {
                 input.removeAttribute('readonly');
+                input.removeAttribute('disabled');
+                input.value = input.placeholder;
+                input.placeholder = "";
             });
             document.querySelector('.editWorkBtn').style.display = 'none';
             document.querySelector('#workSubmit').style.display = "block";
@@ -578,11 +618,11 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             let clone = first.cloneNode(true);
 
             clone.querySelectorAll('input').forEach(input => {
-                input.value = '';
+                input.placeholder = '';
                 input.removeAttribute('readonly');
             });
             document.querySelector('#educationSubmit').style.display = "block";
-            clone.querySelector('input[name="educationId[]"]').value = ''; // clear ID
+            clone.querySelector('input[name="educationId[]"]').placeholder = ''; // clear ID
             
             container.appendChild(clone);
         });
@@ -592,11 +632,11 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             let clone = first.cloneNode(true);
 
             clone.querySelectorAll('input').forEach(input => {
-                input.value = '';
+                input.placeholder = '';
                 input.removeAttribute('readonly');
             });
             document.querySelector('#hobbiesSubmit').style.display = "block";
-            clone.querySelector('input[name="hobbieId[]"]').value = ''; // clear ID
+            clone.querySelector('input[name="hobbieId[]"]').placeholder = ''; // clear ID
             container.appendChild(clone);
         });
         document.querySelector('#addProjectsBtn').addEventListener('click', () => {
@@ -605,11 +645,11 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             let clone = first.cloneNode(true);
 
             clone.querySelectorAll('input').forEach(input => {
-                input.value = '';
+                input.placeholder = '';
                 input.removeAttribute('readonly');
             });
             document.querySelector('#projectsSubmit').style.display = "block";
-            clone.querySelector('input[name="projectId[]"]').value = ''; // clear ID
+            clone.querySelector('input[name="projectId[]"]').placeholder = ''; // clear ID
             container.appendChild(clone);
         });
         document.querySelector('#addSkillBtn').addEventListener('click', () => {
@@ -618,11 +658,13 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             let clone = first.cloneNode(true);
 
             clone.querySelectorAll('input').forEach(input => {
-                input.value = '';
+                input.placeholder = '';
                 input.removeAttribute('readonly');
             });
+
+            document.querySelector('.resumeInfo select').removeAttribute('disabled');
             document.querySelector('#skillSubmit').style.display = "block";
-            clone.querySelector('input[name="skillId[]"]').value = ''; // clear ID
+            clone.querySelector('input[name="skillId[]"]').placeholder = ''; // clear ID
             container.appendChild(clone);
         });
 
@@ -632,11 +674,11 @@ if (isset($_SESSION['resumeView']) && $_SESSION['resumeView'] == 'resume') {
             let clone = first.cloneNode(true);
 
             clone.querySelectorAll('input, textarea').forEach(input => {
-                input.value = '';
+                input.placeholder = '';
                 input.removeAttribute('readonly');
             });
 
-            clone.querySelector('input[name="workId[]"]').value = ''; // clear ID
+            clone.querySelector('input[name="workId[]"]').placeholder = ''; // clear ID
             clone.querySelectorAll('.editBtn');
             container.appendChild(clone);
         });

@@ -21,6 +21,11 @@ if (isset($_GET['logout'])) {
     exit();
 }
 
+if (isset($_SESSION["userID"])) {
+	header("Location: userAccount.php");
+	exit();
+}
+
 ini_set('display_errors', '1');
 error_reporting(-1);
 

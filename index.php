@@ -71,7 +71,7 @@ if (isset($_GET['logout'])) {
             <form action="resume.php" method="post">
                 <button class="button-19" type="submit">Begin Viewing Candidates</button>
             </form>
-            <form action="login.php?pageType=signUp" method="post">
+            <form action="resume.php" method="post">
                 <button class="button-19" type="submit">Begin Creating Resume</button>
             </form>
         </div>
